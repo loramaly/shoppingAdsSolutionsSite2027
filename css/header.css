@@ -1,0 +1,400 @@
+/* ==========================================================================
+   HEADER · sticky bar, chapter menu (hamburger), side rail
+   --------------------------------------------------------------------------
+   The bar is always visible. Its "Chapters" button opens the same menu on
+   every screen: a dropdown panel on desktop, a full-height sheet on phones.
+   JS (navigation.js) toggles .is-open / aria-expanded and tracks the
+   current chapter.
+   ========================================================================== */
+
+/* ---------- Bar ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding-top: env(safe-area-inset-top, 0px);
+  transition: background-color .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+/* Gets a solid, blurred background once the page has scrolled */
+.site-header.is-scrolled,
+.site-header.is-open {
+  background-color: rgba(17, 19, 32, .95);
+  border-bottom-color: var(--line);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+.site-header__bar {
+  padding-left: calc(var(--gutter) + 8px);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: var(--header-h);
+}
+
+/* Official logo (assets/logos/logoShopping.svg).
+   The file is a 377×257 canvas: the wordmark sits in a band at y 56–140 and
+   the rest is room for its purple glow. The link is sized to the wordmark only
+   (--logo-scale), and the image hangs outside it so the glow can spill freely. */
+.logo {
+  --logo-scale: .7;
+  position: relative;
+  flex: 0 0 auto;
+  display: block;
+  width: calc(377px * var(--logo-scale));
+  height: calc(84px * var(--logo-scale));
+  border-radius: 8px;
+}
+
+.logo img {
+  position: absolute;
+  left: 0;
+  top: calc(-56px * var(--logo-scale));
+  width: calc(377px * var(--logo-scale));
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
+/* "03 · Other weeks" readout: tells the reader where they are */
+.site-header__chapter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding-left: 20px;
+  border-left: 1px solid var(--line-2);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.site-header.is-scrolled .site-header__chapter { opacity: 1; }
+
+.site-header__num { color: var(--orange-2); }
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* ---------- Hamburger / "Chapters" button ---------- */
+/* Icon-only hamburger (its name, "Chapters", is read by screen readers) */
+.menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;                          /* no frame: just the three lines */
+  border-radius: 10px;
+  background: none;
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.menu-toggle:hover { background: rgba(255, 255, 255, .08); }
+
+.menu-toggle__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.menu-toggle__icon {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 12px;
+}
+
+.menu-toggle__icon i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform .3s ease, opacity .2s ease, top .3s ease;
+}
+
+.menu-toggle__icon i:nth-child(1) { top: 0; }
+.menu-toggle__icon i:nth-child(2) { top: 5px; }
+.menu-toggle__icon i:nth-child(3) { top: 10px; }
+
+/* Hamburger morphs into a close "×" */
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(1) { top: 5px; transform: rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(2) { opacity: 0; }
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(3) { top: 5px; transform: rotate(-45deg); }
+
+/* ---------- Menu panel ---------- */
+.site-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  border-bottom: 1px solid var(--line);
+  background: rgba(17, 19, 32, .97);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, .45);
+  /* closed: invisible, out of the tab order, out of the a11y tree */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+}
+
+.site-header.is-open .site-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition: opacity .25s ease, transform .25s ease, visibility 0s;
+}
+
+.site-menu__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+  padding-block: 28px 36px;
+}
+
+.site-menu__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-menu__list a {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  color: var(--fg);
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease;
+}
+
+.site-menu__list a:hover { background: rgba(255, 255, 255, .06); }
+
+.site-menu__list a[aria-current="true"] {
+  background: linear-gradient(100deg, rgba(225, 86, 155, .16), rgba(242, 137, 58, .12));
+  color: #fff;
+}
+
+.site-menu__num {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--fg-3);
+}
+
+.site-menu__list a[aria-current="true"] .site-menu__num { color: var(--orange-2); }
+
+.site-menu__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--panel);
+}
+
+.site-menu__foot .btn { width: 100%; }
+
+.site-menu__note {
+  font-size: 14px;
+  color: var(--fg-3);
+  text-align: center;
+}
+
+/* Dimmed page behind the menu (click to close) */
+.site-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(8, 9, 16, .55);
+}
+
+/* ---------- Side rail (very wide screens only) ----------
+   Sits on its own dark glass plate, so it reads the same over dark boards,
+   photos and the bright orange closing section. Labels are always legible;
+   hover only adds emphasis. */
+.rail {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  z-index: 30;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 20px;
+  background: rgba(17, 19, 32, .82);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 24px 60px rgba(8, 9, 16, .45);
+  /* Hidden until the first scroll, then rises into place (navigation.js) */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(calc(-50% + 24px));
+  transition: opacity .5s ease, transform .6s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .6s;
+}
+
+.rail.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(-50%);
+  transition: opacity .5s ease, transform .6s cubic-bezier(.2, .8, .2, 1), visibility 0s;
+}
+
+/* Thin progress track behind the dots */
+.rail::before {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: 28px;
+  bottom: 28px;
+  width: 1px;
+  background: rgba(255, 255, 255, .14);
+}
+
+.rail a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+  padding: 0 14px 0 10px;
+  border-radius: 12px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--fg-2);                  /* ≈ 10:1 on the plate */
+  transition: color .2s ease, background-color .2s ease, transform .15s ease;
+}
+
+.rail a::before {
+  content: "";
+  flex: 0 0 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .45);
+  background: var(--bg);
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.rail a:hover { color: #fff; background: rgba(255, 255, 255, .07); }
+.rail a:active { transform: scale(.97); }
+.rail a:focus-visible { outline: 2px solid var(--orange); outline-offset: 0; }
+
+/* Chapters already passed */
+.rail a.is-past::before { border-color: var(--orange-2); background: rgba(242, 137, 58, .35); }
+
+/* Current chapter */
+.rail a[aria-current="true"] {
+  color: #fff;
+  background: linear-gradient(100deg, rgba(225, 86, 155, .26), rgba(242, 137, 58, .2));
+}
+
+.rail a[aria-current="true"]::before {
+  border-color: var(--orange);
+  background: var(--orange);
+  box-shadow: 0 0 0 4px rgba(242, 137, 58, .25);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+/* XXL: rail on, and the container leaves a lane for it on both sides */
+@media (min-width: 1800px) {
+  .rail { display: flex; }
+
+  /* The rail is the chapter menu here, so the hamburger isn't needed */
+  .menu-toggle,
+  .site-menu,
+  .site-menu-backdrop { display: none !important; }
+}
+
+/* M: chapter readout would crowd the bar */
+@media (max-width: 1199px) {
+  .site-menu__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .site-header__chapter { display: none; }
+
+  .site-menu__inner { grid-template-columns: 1fr; }
+}
+
+/* Mobile: icon-only hamburger, CTA moves into the menu, menu becomes a sheet */
+@media (max-width: 767px) {
+  .site-header__bar { gap: 12px; }
+
+  .logo { --logo-scale: .54; }
+
+  .site-header__cta { display: none; }
+
+  .site-menu {
+    background: var(--bg);
+    height: calc(100vh - var(--header-h));
+    height: calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .site-menu__inner {
+    min-height: 100%;
+    align-content: space-between;
+    padding-block: 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .site-menu__list { grid-template-columns: 1fr; }
+
+  .site-menu__list a {
+    min-height: 46px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    font-size: 19px;
+  }
+
+  .site-menu__list a[aria-current="true"] { border-radius: 12px; border-bottom-color: transparent; }
+
+  .site-menu-backdrop { display: none; }
+}

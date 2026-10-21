@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Concept · Your week (calendar)</title>
+  <meta name="theme-color" content="#111320">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+  <!-- Shared tokens and buttons from the main site, then this concept's own styles -->
+  <link rel="stylesheet" href="../../css/base.css?v=1">
+  <link rel="stylesheet" href="week.css?v=3">
+  <script src="week.js?v=1" defer></script>
+</head>
+<body>
+
+<!-- ==========================================================================
+     CONCEPT · "YOUR WEEK" AS A CALENDAR
+     The hero hint says "Your week changes", so this version shows exactly
+     that: the founder's working week, hour by hour. Each scroll step changes
+     what the hours are spent on.
+       0  Most hours go to answering questions; a few go to the business
+       1  Questions fill every hour and spill into evenings; business on hold
+       2  A team of three takes some questions, fills up; overflow comes back
+       3  SAS takes the questions; you get short "decision" slots only
+       4  The week is yours: product, operations, finance, people
+     ========================================================================== -->
+
+<p class="concept-tag">Concept for review · not linked from the site · <a href="../../index.html">back to the current version</a></p>
+
+<main class="wk-story wrap" id="story">
+
+  <div class="wk-steps">
+    <section class="wk-step is-on" data-step="0">
+      <p class="label">For eCommerce founders running paid ads</p>
+      <h1>Your business grew.<br>Every decision still comes back to you.</h1>
+      <p class="wk-body">We take the daily work of acquisition and retention off your desk. You keep the decisions that are yours, and they reach you ready.</p>
+      <a class="btn" href="../../index.html#start">Request a growth audit</a>
+    </section>
+
+    <section class="wk-step" data-step="1">
+      <p class="label">The bottleneck</p>
+      <h2>Every question waits for you.</h2>
+      <p class="wk-body">Decisions slow down. Challenges get answered late. Nobody has time for a deep dive. Acquisition slows, and so does everything else you run.</p>
+    </section>
+
+    <section class="wk-step" data-step="2">
+      <p class="label">The ceiling</p>
+      <h2>Your team has a ceiling.</h2>
+      <p class="wk-body">One marketer can't be the expert in media, creative, tracking and retention. Growth flattens where their time and skills run out, and the overflow lands back on you.</p>
+    </section>
+
+    <section class="wk-step" data-step="3">
+      <p class="label">With SAS</p>
+      <h2>The work routes through us.</h2>
+      <p class="wk-body">Specialists in media, creative, tracking and retention take the questions. What reaches you is a short list of decisions, each with the numbers and our recommendation.</p>
+    </section>
+
+    <section class="wk-step" data-step="4">
+      <p class="label">Back to leading</p>
+      <h2>You run the business again.</h2>
+      <p class="wk-body">Product, operations, finance, people. Your time goes where only you can decide.</p>
+      <a class="btn" href="../../index.html#start">Request a growth audit</a>
+    </section>
+  </div>
+
+  <!-- Sticky calendar. Cells are built by week.js -->
+  <div class="wk-stage">
+    <figure class="wk-card" aria-labelledby="wk-title">
+      <figcaption class="wk-head">
+        <p class="wk-title" id="wk-title">Your week</p>
+        <dl class="wk-stats">
+          <div><dt>On questions</dt><dd data-stat="q">0h</dd></div>
+          <div><dt>Leading the business</dt><dd data-stat="b">0h</dd></div>
+          <div><dt>Waiting on you</dt><dd data-stat="w">0</dd></div>
+        </dl>
+      </figcaption>
+
+      <div class="wk-body-grid">
+        <div class="wk-cal" id="cal" role="img" aria-label="Your working week"></div>
+
+        <!-- Who takes the questions off you: nobody, your team, or SAS -->
+        <aside class="wk-lane" id="lane" data-who="none" aria-live="polite">
+          <div class="wk-lane__team">
+            <span class="wk-people" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p class="wk-lane__name">Your team</p>
+            <p class="wk-lane__note" data-team-note>Taking what they can</p>
+            <div class="wk-meter" aria-hidden="true"><span data-team-fill></span></div>
+          </div>
+          <div class="wk-lane__sas">
+            <span class="wk-badge" aria-hidden="true">SAS</span>
+            <p class="wk-lane__name">Handled by SAS</p>
+            <p class="wk-lane__count"><b data-sas-count>0</b> questions this week</p>
+          </div>
+        </aside>
+      </div>
+
+      <ul class="wk-legend" aria-hidden="true">
+        <li><i class="k-q"></i>Questions on your desk</li>
+        <li><i class="k-b"></i>Leading the business</li>
+        <li><i class="k-d"></i>Prepared decision</li>
+        <li><i class="k-h"></i>On hold</li>
+      </ul>
+    </figure>
+  </div>
+</main>
+
+</body>
+</html>
