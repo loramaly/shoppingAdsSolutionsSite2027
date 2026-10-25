@@ -13,14 +13,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap">
 
   <!-- Styles: load order matters (tokens → layout → components → sections) -->
-  <link rel="stylesheet" href="css/base.css?v=273">
-  <link rel="stylesheet" href="css/header.css?v=273">
-  <link rel="stylesheet" href="css/sections.css?v=273">
+  <link rel="stylesheet" href="css/base.css?v=358">
+  <link rel="stylesheet" href="css/header.css?v=358">
+  <link rel="stylesheet" href="css/sections.css?v=358">
 
   <!-- Scripts: deferred, run after the HTML is parsed -->
-  <script src="js/navigation.js?v=273" defer></script>
-  <script src="js/hero-network.js?v=273" defer></script>
-  <script src="js/sections.js?v=273" defer></script>
+  <script src="js/navigation.js?v=358" defer></script>
+  <script src="js/hero-network.js?v=358" defer></script>
+  <script src="js/sections.js?v=358" defer></script>
 </head>
 <body>
 
@@ -191,8 +191,8 @@
     <div class="nm-head">
       <div>
         <p class="label">Who we work with</p>
-        <h2 id="b-h" class="h2">8 Niches. 3 Markets.</h2>
-        <p class="sub">Established eCommerce brands. These are the categories and countries we've run campaigns in.</p>
+        <h2 id="b-h" class="h2">3 Markets. 8 Niches.</h2>
+        <p class="sub">Established eCommerce brands. These are the countries and categories we've run campaigns in.</p>
       </div>
       <div class="budget">
         <p class="bl">Client ad budgets, per year</p>
@@ -205,7 +205,7 @@
       </div>
     </div>
 
-    <div class="subhead"><p class="label">Markets</p><span></span></div>
+    <div class="subhead"><p class="label">3 Markets</p><span></span></div>
     <div class="mkt">
       <div class="wmap" id="wmap" data-m="">
         <svg viewBox="40 0 860 405" role="img" aria-label="World map with the United States, Canada and Israel highlighted, and routes from Israel to North America.">
@@ -225,7 +225,7 @@
       </div>
     </div>
 
-    <div class="subhead"><p class="label">Our Clients</p><span></span></div>
+    <div class="subhead"><p class="label">Brands We've Worked With</p><span></span></div>
     <div class="niches">
       <article class="nc big" data-n="home"><div class="nt"><b>9 brands</b></div><h3>Home &amp; Garden</h3><div class="lg">
           <img src="assets/logos/sealy.svg" alt="Sealy" loading="lazy" style="--h:25.2">
@@ -403,7 +403,7 @@
       <svg class="links" id="links" aria-hidden="true"></svg>
       <div class="col">
         <h3 class="visually-hidden">What you see</h3>
-        <p class="tap-tip" aria-hidden="true"><span class="tip-touch">Tap a symptom</span><span class="tip-mouse">Point at a symptom</span></p>
+        <p class="tap-tip" aria-hidden="true"><span class="tip-touch">Tap to see why</span><span class="tip-mouse">Point to trace the cause</span></p>
         <button class="sym" type="button" data-s="s1" aria-pressed="true">ROAS looks fine. Profit doesn't.</button>
         <button class="sym" type="button" data-s="s2" aria-pressed="false">Creatives burn out in weeks.</button>
         <button class="sym" type="button" data-s="s3" aria-pressed="false">Every budget increase breaks efficiency.</button>
@@ -463,7 +463,7 @@
           <line x1="42" y1="42" x2="68" y2="16" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
           <path d="M68 16 l1 -8 M68 16 l8 -1" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
         </g>
-      </svg><h3>One Number<br>to Trust</h3><p>Decisions made on store results.</p></div>
+      </svg><h3>One Number<br>to Trust</h3><p>Decisions made on<br>store results.</p></div>
     </div>
 
     <div class="redline">
@@ -486,9 +486,14 @@
         <line x1="40" x2="880" id="rl-red" stroke="#FF5C6A" stroke-width="1.5" stroke-dasharray="7 6"/>
         <line id="rl-v" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-dasharray="3 5"/>
         <!-- x axis as a thin arrow, like the hero's -->
-        <path class="rl-axis" d="M40 390 H 874 M867 385 L 874 390 L 867 395"/>
+        <path class="rl-axis" d="M40 390 H 874 M856 378 L 874 390 L 856 402"/>
         <line class="rl-axis-on" id="rl-axis-on" x1="40" x2="40" y1="390" y2="390"/>
         <text class="rl-axl" x="874" y="422" text-anchor="end">More spend</text>
+        <g class="rl-mlab" aria-hidden="true">
+          <circle class="rl-start" id="rl-start" cx="40" r="7"/>
+          <text class="rl-mlab-ret" id="rl-mlab-ret" x="62">Return per $1</text>
+          <text class="rl-mlab-red" id="rl-mlab-red" x="880" text-anchor="end">Red line</text>
+        </g>
         <g class="rl-knob" id="rl-knob" filter="url(#rlShadow)"><circle id="rl-dot" r="13" fill="url(#rlBead)" stroke="#fff" stroke-width="3"/></g>
       </svg>
       <!-- Callouts beside the chart: a frame that points at what it explains -->
@@ -554,11 +559,10 @@
     <p class="sub">We find why the right customer would choose your product, make ads that communicate that reason, and let tests and commercial evidence shape the next brief.</p>
 
     <div class="cr-panel" id="crp-growth">
-    <div class="subhead cr-title"><h3 class="label">The Growth</h3><span></span></div>
     <div class="gw" id="gw">
       <div class="gw-head">
-        <h3>Most Tests Lose.<br>The few that win pay for all of them.</h3>
-        <p class="sub">Losing tests are stopped early, while they're still cheap, and each one still teaches the next brief. Winners get the budget and keep earning. That imbalance is where the growth comes from.</p>
+        <h3><span class="cr-num">01</span><span class="mk draw-line">Most tests lose.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3.19 13.98 L6.75 13.34 L10.39 12.73 L14.12 12.16 L17.93 11.61 L21.82 11.10 L25.79 10.62 L29.84 10.17 L33.96 9.76 L38.16 9.37 L42.42 9.01 L46.77 8.68 L51.18 8.38 L55.65 8.12 L60.20 7.88 L64.81 7.67 L69.48 7.49 L74.22 7.34 L79.01 7.22 L83.87 7.13 L88.78 7.07 L93.75 7.03 L98.77 7.03 L103.85 7.05 L108.98 7.10 L114.16 7.18 L119.38 7.29 L124.65 7.42 L129.97 7.59 L135.33 7.78 L140.74 8.00 L146.19 8.24 L151.67 8.52 L157.19 8.82 L162.75 9.15 L168.35 9.51 L173.98 9.89 L179.63 10.30 L185.32 10.74 L191.04 11.20 L196.79 11.69 A2.70 2.70 0 0 1 197.21 6.31 L197.21 6.31 L191.43 5.93 L185.68 5.57 L179.96 5.24 L174.28 4.93 L168.62 4.65 L163.00 4.40 L157.41 4.18 L151.87 3.98 L146.36 3.81 L140.89 3.66 L135.46 3.54 L130.07 3.45 L124.73 3.38 L119.44 3.34 L114.19 3.33 L108.99 3.35 L103.84 3.39 L98.75 3.46 L93.71 3.56 L88.72 3.68 L83.79 3.84 L78.91 4.02 L74.10 4.23 L69.35 4.46 L64.66 4.72 L60.03 5.02 L55.47 5.33 L50.98 5.68 L46.56 6.06 L42.20 6.46 L37.92 6.89 L33.71 7.35 L29.57 7.84 L25.51 8.35 L21.52 8.89 L17.62 9.46 L13.79 10.06 L10.05 10.69 L6.39 11.34 L2.81 12.02 A1.00 1.00 0 0 1 3.19 13.98 Z"/></svg></span><br>The few that win pay for all of them.</h3>
+        <p class="sub">Losing tests stop early, while they're still cheap. Winners get the budget and keep earning.</p>
       </div>
       <div class="gw-board">
         <!-- What is happening right now: changes as the tests play -->
@@ -631,47 +635,48 @@
     </div>
     </div>
     <div class="cr-panel" id="crp-loop">
-    <div class="subhead cr-title"><h3 class="label">The Loop</h3><span></span></div>
+    <div class="gw-head cl-head"><h3><span class="cr-num">02</span>Every test feeds the <span class="mk draw-line">next brief.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3.19 13.98 L6.75 13.34 L10.39 12.73 L14.12 12.16 L17.93 11.61 L21.82 11.10 L25.79 10.62 L29.84 10.17 L33.96 9.76 L38.16 9.37 L42.42 9.01 L46.77 8.68 L51.18 8.38 L55.65 8.12 L60.20 7.88 L64.81 7.67 L69.48 7.49 L74.22 7.34 L79.01 7.22 L83.87 7.13 L88.78 7.07 L93.75 7.03 L98.77 7.03 L103.85 7.05 L108.98 7.10 L114.16 7.18 L119.38 7.29 L124.65 7.42 L129.97 7.59 L135.33 7.78 L140.74 8.00 L146.19 8.24 L151.67 8.52 L157.19 8.82 L162.75 9.15 L168.35 9.51 L173.98 9.89 L179.63 10.30 L185.32 10.74 L191.04 11.20 L196.79 11.69 A2.70 2.70 0 0 1 197.21 6.31 L197.21 6.31 L191.43 5.93 L185.68 5.57 L179.96 5.24 L174.28 4.93 L168.62 4.65 L163.00 4.40 L157.41 4.18 L151.87 3.98 L146.36 3.81 L140.89 3.66 L135.46 3.54 L130.07 3.45 L124.73 3.38 L119.44 3.34 L114.19 3.33 L108.99 3.35 L103.84 3.39 L98.75 3.46 L93.71 3.56 L88.72 3.68 L83.79 3.84 L78.91 4.02 L74.10 4.23 L69.35 4.46 L64.66 4.72 L60.03 5.02 L55.47 5.33 L50.98 5.68 L46.56 6.06 L42.20 6.46 L37.92 6.89 L33.71 7.35 L29.57 7.84 L25.51 8.35 L21.52 8.89 L17.62 9.46 L13.79 10.06 L10.05 10.69 L6.39 11.34 L2.81 12.02 A1.00 1.00 0 0 1 3.19 13.98 Z"/></svg></span></h3></div>
     <div class="cl" id="cl">
       <div class="cl-ring">
-        <svg viewBox="0 0 640 580" role="img" aria-label="The creative loop. Understand and Hypothesis lead into a loop of Create, Test, Measure, Learn and Next brief, which returns to Create. When an assumption breaks, Next brief returns to Hypothesis.">
-          <defs><marker id="clArr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" fill="#B8A6F5"/></marker></defs>
+        <svg viewBox="0 0 750 580" role="img" aria-label="The creative loop. Understand and Hypothesis lead into a loop of Create, Test, Measure, Learn and Next brief, which returns to Create. When an assumption breaks, Next brief returns to Hypothesis.">
+          <defs><marker id="clArr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" fill="#F2893A"/></marker></defs>
           <g class="cl-paths">
             <path class="cl-seg" id="cls-0-1" d="M92 132 L92 300"/>
-            <path class="cl-seg" id="cls-1-2" d="M92 300 L235.0 300.0"/>
-            <path class="cl-seg" id="cls-2-3" d="M235.0 300.0 A165 165 0 0 1 349.0 143.1"/>
-            <path class="cl-seg" id="cls-3-4" d="M349.0 143.1 A165 165 0 0 1 533.5 203.0"/>
-            <path class="cl-seg" id="cls-4-5" d="M533.5 203.0 A165 165 0 0 1 533.5 397.0"/>
-            <path class="cl-seg" id="cls-5-6" d="M533.5 397.0 A165 165 0 0 1 349.0 456.9"/>
-            <path class="cl-seg" id="cls-6-2" d="M349.0 456.9 A165 165 0 0 1 235.0 300.0"/>
-            <path class="cl-seg" id="cls-6-1" d="M349.0 456.9 C229.0 514.9 114 470 92 300"/></g>
-          <circle class="cl-track" cx="400" cy="300" r="165"/>
-          <circle class="cl-track2 flow" cx="400" cy="300" r="165"/>
-          <path class="cl-lead" d="M92 132 L92 300 L235.0 300.0" style="stroke-linejoin:round"/>
-          <path class="cl-lead2 flow" d="M92 132 L92 300 L235.0 300.0"/>
-          <path class="cl-back" d="M335.0 476.9 C219.0 526.9 114 470 92 334" marker-end="url(#clArr)"/>
-          <text class="cl-backlab" x="150" y="532" text-anchor="middle">WHEN AN</text><text class="cl-backlab" x="150" y="550" text-anchor="middle">ASSUMPTION BREAKS</text>
+            <path class="cl-seg" id="cls-1-2" d="M92 300 L298.5 300.0"/>
+            <path class="cl-seg" id="cls-2-3" d="M298.5 300.0 A181.5 181.5 0 0 1 423.9 127.4"/>
+            <path class="cl-seg" id="cls-3-4" d="M423.9 127.4 A181.5 181.5 0 0 1 626.9 193.3"/>
+            <path class="cl-seg" id="cls-4-5" d="M626.9 193.3 A181.5 181.5 0 0 1 626.9 406.7"/>
+            <path class="cl-seg" id="cls-5-6" d="M626.9 406.7 A181.5 181.5 0 0 1 423.9 472.6"/>
+            <path class="cl-seg" id="cls-6-2" d="M423.9 472.6 A181.5 181.5 0 0 1 298.5 300.0"/>
+            <path class="cl-seg" id="cls-6-1" d="M399 473 H 240 A 148 148 0 0 1 92.4 336"/></g>
+          <circle class="cl-track" cx="480" cy="300" r="181.5"/>
+          <circle class="cl-track2 flow" cx="480" cy="300" r="181.5"/>
+          <path class="cl-lead" d="M92 132 L92 300 L298.5 300.0" style="stroke-linejoin:round"/>
+          <path class="cl-lead2 flow" d="M92 132 L92 300 L298.5 300.0"/>
+          <path class="cl-back" d="M399 473 H 240 A 148 148 0 0 1 92.4 336" marker-end="url(#clArr)"/>
+          <text class="cl-backlab" x="160" y="426" text-anchor="middle">ASSUMPTION BROKEN?</text><text class="cl-backlab" x="160" y="444" text-anchor="middle">BACK TO HYPOTHESIS</text>
           <text class="cl-start" x="92" y="92" text-anchor="middle">START HERE</text>
           <circle class="cl-comet" id="cl-comet" r="7" cx="92" cy="132"/>
           <text class="cl-lab" data-i="0" x="128.0" y="137.0" text-anchor="start">Understand</text>
-          <text class="cl-lab" data-i="1" x="92.0" y="352.0" text-anchor="middle">Hypothesis</text>
-          <text class="cl-lab" data-i="2" x="212.0" y="274.0" text-anchor="end">Create</text>
-          <text class="cl-lab" data-i="3" x="349.0" y="103.1" text-anchor="middle">Test</text>
-          <text class="cl-lab" data-i="4" x="563.5" y="208.0" text-anchor="start">Measure</text>
-          <text class="cl-lab" data-i="5" x="563.5" y="402.0" text-anchor="start">Learn</text>
-          <text class="cl-lab" data-i="6" x="349.0" y="504.9" text-anchor="middle">Next brief</text>
+          <text class="cl-lab" data-i="1" x="124.0" y="344.0" text-anchor="start">Hypothesis</text>
+          <text class="cl-lab" data-i="2" x="289.5" y="266.0" text-anchor="end">Create</text>
+          <text class="cl-lab" data-i="3" x="423.9" y="80.3" text-anchor="middle">Test</text>
+          <text class="cl-lab" data-i="4" x="667.4" y="198.3" text-anchor="start">Measure</text>
+          <text class="cl-lab" data-i="5" x="667.4" y="411.7" text-anchor="start">Learn</text>
+          <text class="cl-lab" data-i="6" x="414.9" y="529.7" text-anchor="start">Next brief</text>
           <g class="cl-node" data-i="0" transform="translate(92.0 132.0)" tabindex="0" role="button" aria-label="Step 1: Understand"><circle r="25"/><text y="5" text-anchor="middle">01</text></g>
           <g class="cl-node" data-i="1" transform="translate(92.0 300.0)" tabindex="0" role="button" aria-label="Step 2: Hypothesis"><circle r="25"/><text y="5" text-anchor="middle">02</text></g>
-          <g class="cl-node" data-i="2" transform="translate(235.0 300.0)" tabindex="0" role="button" aria-label="Step 3: Create"><circle r="25"/><text y="5" text-anchor="middle">03</text></g>
-          <g class="cl-node" data-i="3" transform="translate(349.0 143.1)" tabindex="0" role="button" aria-label="Step 4: Test"><circle r="25"/><text y="5" text-anchor="middle">04</text></g>
-          <g class="cl-node" data-i="4" transform="translate(533.5 203.0)" tabindex="0" role="button" aria-label="Step 5: Measure"><circle r="25"/><text y="5" text-anchor="middle">05</text></g>
-          <g class="cl-node" data-i="5" transform="translate(533.5 397.0)" tabindex="0" role="button" aria-label="Step 6: Learn"><circle r="25"/><text y="5" text-anchor="middle">06</text></g>
-          <g class="cl-node" data-i="6" transform="translate(349.0 456.9)" tabindex="0" role="button" aria-label="Step 7: Next brief"><circle r="25"/><text y="5" text-anchor="middle">07</text></g>
-          <text class="cl-cn" id="cl-cn" x="400" y="282" text-anchor="middle">01 / 07</text>
-          <text class="cl-ct" id="cl-ct" x="400" y="322" text-anchor="middle">Understand</text>
-          <text class="cl-cs" x="400" y="352" text-anchor="middle">LOOP: 03 TO 07</text>
+          <g class="cl-node" data-i="2" transform="translate(298.5 300.0)" tabindex="0" role="button" aria-label="Step 3: Create"><circle r="25"/><text y="5" text-anchor="middle">03</text></g>
+          <g class="cl-node" data-i="3" transform="translate(423.9 127.4)" tabindex="0" role="button" aria-label="Step 4: Test"><circle r="25"/><text y="5" text-anchor="middle">04</text></g>
+          <g class="cl-node" data-i="4" transform="translate(626.9 193.3)" tabindex="0" role="button" aria-label="Step 5: Measure"><circle r="25"/><text y="5" text-anchor="middle">05</text></g>
+          <g class="cl-node" data-i="5" transform="translate(626.9 406.7)" tabindex="0" role="button" aria-label="Step 6: Learn"><circle r="25"/><text y="5" text-anchor="middle">06</text></g>
+          <g class="cl-node" data-i="6" transform="translate(423.9 472.6)" tabindex="0" role="button" aria-label="Step 7: Next brief"><circle r="25"/><text y="5" text-anchor="middle">07</text></g>
+          <text class="cl-cn" id="cl-cn" x="480" y="282" text-anchor="middle">01 / 07</text>
+          <text class="cl-ct" id="cl-ct" x="480" y="322" text-anchor="middle">Understand</text>
+          <text class="cl-cs" x="480" y="352" text-anchor="middle">LOOP: 03 TO 07</text>
         </svg>
       </div>
+      <div class="cl-side">
       <div class="cl-panel">
         <article class="cl-step on" data-i="0"><p class="cl-k"><b>01</b> / 07 · Understand</p><h3>Understand the buying decision</h3><p class="cl-d">We start from your data and the story behind each number. Then the buyer of this exact product: what they want, what they compare it with, what makes them hesitate, how aware they already are, and what your competitors already tell them. We come back here when the product, market or season changes.</p><div class="cl-ex"><span>Example · commuter bag</span><p>Commuter bag. Buyers carry a laptop to work every day and are comparing bags. Their doubt: will my laptop actually fit?</p></div></article>
         <article class="cl-step" data-i="1"><p class="cl-k"><b>02</b> / 07 · Hypothesis</p><h3>Write one testable reason</h3><p class="cl-d">One reason the right customer would choose this product, written down before anything is made. Big levers come first for quick wins: product focus, audiences and unit economics. Then the message, piece by piece. It gets rewritten when a test breaks it.</p><div class="cl-ex"><span>Example · commuter bag</span><p>“For commuters considering this bag, showing laptop fit and everyday organization may sell it better than a general lifestyle image.”</p></div></article>
@@ -680,7 +685,9 @@
         <article class="cl-step" data-i="4"><p class="cl-k"><b>05</b> / 07 · Measure</p><h3>Judge it by the business</h3><p class="cl-d">Attention shows how people reacted. New customers, what they cost and the contribution they leave decide whether it is worth scaling. Results are read in context: timing, spend, placement, audience and the page after the click.</p><div class="cl-ex"><span>Example · commuter bag</span><p>A high click rate alone doesn't win. We check whether the clicks became new customers at a cost the margin can carry.</p></div></article>
         <article class="cl-step" data-i="5"><p class="cl-k"><b>06</b> / 07 · Learn</p><h3>Separate a lead from proof</h3><p class="cl-d">We compare what we planned, what actually appeared in the ad and what happened. A pattern is a lead, not proof. Missing data, thin evidence and a true zero are 3 different things.</p><div class="cl-ex"><span>Example · commuter bag</span><p>If the laptop was hard to see in the ad, the hypothesis was never really tested.</p></div></article>
         <article class="cl-step" data-i="6"><p class="cl-k"><b>07</b> / 07 · Next brief</p><h3>Feed the next brief</h3><p class="cl-d">Refine what's promising and build useful variations, then go straight back to Create. If a test broke the hypothesis, we return to step 02 and write a new one.</p><div class="cl-ex"><span>Example · commuter bag</span><p>Next: the same idea with the laptop clearly in frame, plus a new hook on organization.</p></div></article>
-        <div class="cl-nav"><button type="button" id="cl-prev" aria-label="Previous step">←</button><button type="button" id="cl-next" aria-label="Next step">→</button><span class="cl-tag">Illustrative example</span></div>
+        <div class="cl-nav"><button type="button" id="cl-prev" aria-label="Previous step">←</button><button type="button" id="cl-next" aria-label="Next step">→</button></div>
+      </div>
+      <p class="cl-tag">Illustrative example</p>
       </div>
     </div>
     </div>
@@ -691,7 +698,7 @@
       <div><p class="cl-fk">Scoped separately</p><p>On-location shoots, creator sourcing and large productions get their own agreed scope.</p></div>
       <div><p class="cl-fk">Upfront about limits</p><p>What we do well and what we don't, said before we start.</p></div>
     </div>
-    <p class="mpunch cr-punch">No guesswork. Experience, skill and intuition, checked against <span class="mk">real numbers.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 13 C 50 4, 120 3, 197 9" fill="none" stroke="#F2893A" stroke-width="5" stroke-linecap="round"/></svg></span></p>
+    <p class="mpunch cr-punch">No guesswork. Experience, skill and intuition,<br>checked against <span class="mk draw-line">real numbers.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3.19 13.98 L6.75 13.34 L10.39 12.73 L14.12 12.16 L17.93 11.61 L21.82 11.10 L25.79 10.62 L29.84 10.17 L33.96 9.76 L38.16 9.37 L42.42 9.01 L46.77 8.68 L51.18 8.38 L55.65 8.12 L60.20 7.88 L64.81 7.67 L69.48 7.49 L74.22 7.34 L79.01 7.22 L83.87 7.13 L88.78 7.07 L93.75 7.03 L98.77 7.03 L103.85 7.05 L108.98 7.10 L114.16 7.18 L119.38 7.29 L124.65 7.42 L129.97 7.59 L135.33 7.78 L140.74 8.00 L146.19 8.24 L151.67 8.52 L157.19 8.82 L162.75 9.15 L168.35 9.51 L173.98 9.89 L179.63 10.30 L185.32 10.74 L191.04 11.20 L196.79 11.69 A2.70 2.70 0 0 1 197.21 6.31 L197.21 6.31 L191.43 5.93 L185.68 5.57 L179.96 5.24 L174.28 4.93 L168.62 4.65 L163.00 4.40 L157.41 4.18 L151.87 3.98 L146.36 3.81 L140.89 3.66 L135.46 3.54 L130.07 3.45 L124.73 3.38 L119.44 3.34 L114.19 3.33 L108.99 3.35 L103.84 3.39 L98.75 3.46 L93.71 3.56 L88.72 3.68 L83.79 3.84 L78.91 4.02 L74.10 4.23 L69.35 4.46 L64.66 4.72 L60.03 5.02 L55.47 5.33 L50.98 5.68 L46.56 6.06 L42.20 6.46 L37.92 6.89 L33.71 7.35 L29.57 7.84 L25.51 8.35 L21.52 8.89 L17.62 9.46 L13.79 10.06 L10.05 10.69 L6.39 11.34 L2.81 12.02 A1.00 1.00 0 0 1 3.19 13.98 Z"/></svg></span></p>
   </div>
 </section>
 
@@ -702,9 +709,10 @@
     <h2 id="lb-h" class="h2">Every Creative Keeps its Reasons.</h2>
     <p class="sub">SAS Labs is our in-house back office. It ties each ad to the brief behind it, what actually ended up in it, and what happened when it ran. Learning survives a new season or a new strategist, and you don't have to be the memory.</p>
 
-    <div class="lb" id="lb" data-l="int">
-      <div class="lb-ad">
-        <div class="lb-mock"><svg viewBox="0 0 300 375" role="img" aria-label="Illustrative ad: a commuter bag with the headline Fits your laptop. And your day.">
+    <!-- One record, all visible at once (same content as the former
+         Intended / Observed / Measured tabs). Rows appear in turn (sections.js). -->
+    <div class="lab" id="lab">
+      <figure class="lab-ad"><svg class="lab-mock" viewBox="0 0 300 375" role="img" aria-label="Illustrative ad: a commuter bag with the headline Fits your laptop. And your day.">
             <defs><linearGradient id="lbbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1EBE2"/><stop offset="1" stop-color="#E2D8CB"/></linearGradient></defs>
             <rect width="300" height="375" rx="18" fill="url(#lbbg)"/>
             <text x="24" y="46" fill="#1B1D2A" style="font:800 24px var(--display)">Fits your laptop.</text>
@@ -719,54 +727,32 @@
             <rect x="238" y="240" width="30" height="9" rx="3" fill="#7A5A44"/>
             <rect x="24" y="320" width="118" height="34" rx="17" fill="#1B1D2A"/>
             <text x="83" y="342" text-anchor="middle" fill="#fff" style="font:700 13px var(--display)">Shop the bag</text>
-          </svg>
-          <span class="lb-pin p-int" style="left:22%;top:62%">1</span>
-          <span class="lb-pin p-int" style="left:64%;top:40%">2</span>
-          <span class="lb-pin p-int" style="left:80%;top:9%">3</span>
-          <span class="lb-pin p-int" style="left:52%;top:91%">4</span>
-          <span class="lb-pin p-obs" style="left:22%;top:62%">1</span>
-          <span class="lb-pin p-obs warn" style="left:64%;top:40%">2</span>
-          <span class="lb-pin p-obs" style="left:80%;top:9%">3</span>
-          <span class="lb-pin p-obs new" style="left:92%;top:60%">5</span><div class="lb-ran"><b>Ran</b><span>Placement, dates and spend logged</span></div></div>
-        <p class="lb-cap">Illustrative example. Automated tagging starts with static images.</p>
-      </div>
-      <div class="lb-side">
-        <div class="bigtoggle lb-tog" role="group" aria-label="Show layer">
-          <button type="button" data-l="int" aria-pressed="true">Intended</button><button type="button" data-l="obs" aria-pressed="false">Observed</button><button type="button" data-l="mea" aria-pressed="false">Measured</button>
-        </div>
-        <div class="lb-layer" data-l="int">
-          <p class="lb-lk">In the brief</p>
-          <ol class="lb-list">
-            <li><i>1</i><span><b>Product</b> Commuter bag</span></li>
-            <li><i>2</i><span><b>Proof</b> Show the laptop fitting inside</span></li>
-            <li><i>3</i><span><b>Hook</b> Fits your laptop. And your day.</span></li>
-            <li><i>4</i><span><b>Call to action</b> Shop the bag</span></li>
-          </ol>
-          <p class="lb-more"><b>Customer</b> daily laptop commuters · <b>Awareness</b> comparing bags · <b>Hypothesis</b> laptop fit beats a lifestyle shot</p>
-        </div>
-        <div class="lb-layer" data-l="obs">
-          <p class="lb-lk">In the finished ad</p>
-          <ol class="lb-list">
-            <li class="ok"><i>1</i><span><b>Matches</b> Bag shown, three-quarter view</span></li>
-            <li class="warn"><i>2</i><span><b>Unclear</b> Laptop barely visible. The requested proof didn't land.</span></li>
-            <li class="ok"><i>3</i><span><b>Matches</b> Headline is the planned hook</span></li>
-            <li class="new"><i>5</i><span><b>Not planned</b> Coffee cup in frame. Worth a look.</span></li>
-          </ol>
-        </div>
-        <div class="lb-layer" data-l="mea">
-          <p class="lb-lk">When it ran</p>
-          <ul class="lb-list lb-m">
-            <li><span><b>Attention</b> How people reacted. Diagnostic only.</span></li>
-            <li><span><b>New customers</b> And what each one cost</span></li>
-            <li><span><b>Contribution</b> After product, discount, returns and ad cost</span></li>
-            <li><span><b>Evidence</b> Enough to decide, too thin, or missing</span></li>
-          </ul>
-          <div class="lb-verdict"><b>Verdict</b> The laptop proof never showed clearly, so the hypothesis is still open. <b>Next brief:</b> retest it with the laptop in frame.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="lb-goals">
+          </svg><figcaption class="lb-cap">Illustrative example. Automated tagging starts with static images.</figcaption></figure>
+      <div class="lab-rows">
+        <div class="lab-row"><p class="lab-k">In the brief</p><div>
+          <p><b>Product</b> Commuter bag</p>
+          <p><b>Proof</b> Show the laptop fitting inside</p>
+          <p><b>Hook</b> Fits your laptop. And your day.</p>
+          <p><b>Call to action</b> Shop the bag</p>
+          <p class="lab-gap"><b>Customer</b> daily laptop commuters</p>
+          <p><b>Awareness</b> comparing bags</p>
+          <p><b>Hypothesis</b> laptop fit beats a lifestyle shot</p>
+        </div></div>
+        <div class="lab-row"><p class="lab-k">In the finished ad</p><div>
+          <p class="ok"><b>Matches</b> Bag shown, three-quarter view</p>
+          <p class="no"><b>Unclear</b> Laptop barely visible. The requested proof didn't land.</p>
+          <p class="ok"><b>Matches</b> Headline is the planned hook</p>
+          <p class="nw"><b>Not planned</b> Coffee cup in frame. Worth a look.</p>
+        </div></div>
+        <div class="lab-row"><p class="lab-k">When it ran</p><div>
+          <p><b>Attention</b> How people reacted. Diagnostic only.</p>
+          <p><b>New customers</b> And what each one cost</p>
+          <p><b>Contribution</b> After product, discount, returns and ad cost</p>
+          <p><b>Evidence</b> Enough to decide, too thin, or missing</p>
+          <p class="lab-log"><b>Ran</b> Placement, dates and spend logged</p>
+        </div></div>
+        <div class="lab-row is-verdict"><p class="lab-k">Verdict</p><div><p>The laptop proof never showed clearly, so the hypothesis is still open.</p><svg class="lab-arrow" viewBox="0 0 24 28" width="20" height="23" aria-hidden="true"><path d="M12 3v21.6M19 17.6l-7 7-7-7"/></svg><p class="lab-next"><b>Next brief:</b> retest it with the laptop in frame.</p></div></div>
+        <div class="lb-goals">
       <p class="lb-gk">What it all answers to</p>
       <div class="lb-grid">
         <div><b>New-customer cost</b><span>Cost per real new customer, with the cost basis defined</span></div>
@@ -775,7 +761,9 @@
         <div><b>Customer value</b><span>Repeat buying, where order data allows</span></div>
         <div><b>Payback</b><span>How fast a customer earns back what they cost</span></div>
       </div>
-      <p class="lb-note">The goals the method works toward, not promised results. What we can track depends on each client's data.</p>
+      <p class="lb-note">The goals the method works toward, not promised results.<br>What we can track depends on each client's data.</p>
+    </div>
+      </div>
     </div>
   </div>
 </section>
@@ -788,51 +776,69 @@
     <p class="sub">3 published cases, anonymized with client approval. Each one says what the data did not prove.</p>
     <div class="specs">
       <article class="board pv spec">
-        <p class="label label--violet">Meta · platform alert</p>
-        <h3>A rep said ROAS was falling.</h3>
-        <svg viewBox="0 0 520 240" role="img" aria-label="Account-wide purchase ROAS rose from 2.28 to 3.64 between August 15 and 21">
-            <g stroke="rgba(255,255,255,.07)"><line x1="40" x2="500" y1="200" y2="200"/><line x1="40" x2="500" y1="155" y2="155"/><line x1="40" x2="500" y1="110" y2="110"/><line x1="40" x2="500" y1="65" y2="65"/><line x1="40" x2="500" y1="20" y2="20"/></g>
-            <text x="32" y="204" text-anchor="end">0</text><text x="32" y="159" text-anchor="end">1</text><text x="32" y="114" text-anchor="end">2</text><text x="32" y="69" text-anchor="end">3</text><text x="32" y="24" text-anchor="end">4</text>
-            <line class="draw" x1="120" y1="97.4" x2="420" y2="36.2" stroke="url(#g1)" stroke-width="4.5" stroke-linecap="round"/>
-            <circle cx="120" cy="97.4" r="7" fill="#E1569B"/><circle cx="420" cy="36.2" r="8" fill="#F2893A"/>
-            <text x="120" y="124" text-anchor="middle" style="fill:#fff;font-size:20px;font-weight:700">2.28</text>
-            <text x="420" y="64" text-anchor="middle" style="fill:#fff;font-size:21px;font-weight:700">3.64</text>
-            <text x="120" y="226" text-anchor="middle">AUG 15</text><text x="420" y="226" text-anchor="middle">AUG 21</text>
+        <p class="spec-cat"><img class="spec-ic" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/meta.svg" alt="" width="18" height="18"><span>Meta · platform alert</span></p>
+        <h3>A rep said ROAS<br>was falling.</h3>
+        <svg viewBox="0 0 520 324" role="img" aria-label="Account-wide purchase ROAS rose from 2.28 to 3.64 between August 15 and 21">
+            <g stroke="rgba(255,255,255,.07)"><line x1="52" x2="500" y1="270" y2="270"/><line x1="52" x2="500" y1="209.2" y2="209.2"/><line x1="52" x2="500" y1="148.5" y2="148.5"/><line x1="52" x2="500" y1="87.8" y2="87.8"/><line x1="52" x2="500" y1="27" y2="27"/></g>
+            <text x="40" y="276" text-anchor="end">0</text><text x="40" y="215" text-anchor="end">1</text><text x="40" y="154" text-anchor="end">2</text><text x="40" y="93" text-anchor="end">3</text><text x="40" y="33" text-anchor="end">4</text>
+            <line class="draw" x1="110" y1="131.5" x2="380" y2="48.9" stroke="#4ADE9B" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="110" cy="131.5" r="7" fill="#4ADE9B"/><circle cx="380" cy="48.9" r="7" fill="#4ADE9B"/>
+            <!-- same layout as the next case: start value at its point, end value + name to the right.
+                 Green = growth (orange is kept for problems in the other cases; was the pink → orange brand gradient) -->
+            <text x="110" y="166" text-anchor="middle" style="fill:#BDF5D8;font-size:24px;font-weight:700">2.28</text>
+            <text x="398" y="56" style="fill:#BDF5D8;font-size:24px;font-weight:700">3.64</text>
+            <text x="398" y="80" style="fill:#BDF5D8;font-size:20px">ROAS</text>
+            <text x="110" y="305" text-anchor="middle">AUG 15</text><text x="380" y="305" text-anchor="middle">AUG 21</text>
           </svg>
         <dl class="what"><dt>Found</dt><dd>Account spend up about 10%, purchase ROAS up from 2.28 to 3.64. Store sales up 38% year over year.</dd><dt>Not proved</dt><dd>That the alert was wrong, or that Meta caused the growth.</dd></dl>
-        <a href="https://shoppingadssolutions.com/meta-roas-alert-later-account-point/">Read the case</a>
+        <a class="btn btn--glass spec-go" href="https://shoppingadssolutions.com/meta-roas-alert-later-account-point/">Read the Case <span aria-hidden="true">→</span></a>
       </article>
       <article class="board pv spec">
-        <p class="label label--violet">Google Ads · solar lighting</p>
-        <h3>More spend, less revenue.</h3>
-        <svg viewBox="0 0 580 240" role="img" aria-label="Branded clicks fell from about 982 to 190 while generic clicks rose from about 650 to 1,185">
-            <g stroke="rgba(255,255,255,.07)"><line x1="40" x2="500" y1="200" y2="200"/><line x1="40" x2="500" y1="140" y2="140"/><line x1="40" x2="500" y1="80" y2="80"/><line x1="40" x2="500" y1="20" y2="20"/></g>
-            <text x="32" y="204" text-anchor="end">0</text><text x="32" y="144" text-anchor="end">400</text><text x="32" y="84" text-anchor="end">800</text><text x="32" y="24" text-anchor="end">1.2K</text>
-            <line class="draw" x1="120" y1="102.5" x2="420" y2="22.3" stroke="#8B5CF6" stroke-width="3.5" stroke-linecap="round"/>
-            <line class="draw" x1="120" y1="52.7" x2="420" y2="171.5" stroke="#F2893A" stroke-width="4.5" stroke-linecap="round"/>
-            <circle cx="120" cy="102.5" r="6" fill="#8B5CF6"/><circle cx="420" cy="22.3" r="6" fill="#8B5CF6"/><circle cx="120" cy="52.7" r="7" fill="#F2893A"/><circle cx="420" cy="171.5" r="7" fill="#F2893A"/>
-            <text x="106" y="57" text-anchor="end" style="fill:#F7A06A;font-size:18px;font-weight:700">982</text><text x="106" y="107" text-anchor="end" style="fill:#B8A6F5;font-size:18px;font-weight:700">650</text>
-            <text x="432" y="176" style="fill:#F7A06A;font-size:18px;font-weight:700">190 branded</text><text x="432" y="27" style="fill:#B8A6F5;font-size:18px;font-weight:700">1,185 generic</text>
-            <text x="120" y="226" text-anchor="middle">2025</text><text x="420" y="226" text-anchor="middle">2026</text>
+        <p class="spec-cat"><img class="spec-ic" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/googleads.svg" alt="" width="18" height="18"><span>Google Ads · solar lighting</span></p>
+        <h3>More spend,<br>less revenue.</h3>
+        <svg viewBox="0 0 520 324" role="img" aria-label="Branded clicks fell from about 982 to 190 while generic clicks rose from about 650 to 1,185">
+            <g stroke="rgba(255,255,255,.07)"><line x1="52" x2="500" y1="270" y2="270"/><line x1="52" x2="500" y1="189" y2="189"/><line x1="52" x2="500" y1="108" y2="108"/><line x1="52" x2="500" y1="27" y2="27"/></g>
+            <text x="40" y="276" text-anchor="end">0</text><text x="40" y="195" text-anchor="end">400</text><text x="40" y="114" text-anchor="end">800</text><text x="40" y="33" text-anchor="end">1.2K</text>
+            <line class="draw" x1="110" y1="138.4" x2="380" y2="30.1" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round"/>
+            <line class="draw" x1="110" y1="71.1" x2="380" y2="231.5" stroke="#F2893A" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="110" cy="138.4" r="6" fill="#8B5CF6"/><circle cx="380" cy="30.1" r="6" fill="#8B5CF6"/><circle cx="110" cy="71.1" r="7" fill="#F2893A"/><circle cx="380" cy="231.5" r="7" fill="#F2893A"/>
+            <!-- values large and bold (like 2.28 / 3.64 in the first case), series names under the end values -->
+            <text x="110" y="52" text-anchor="middle" style="fill:#FFCBA6;font-size:24px;font-weight:700">982</text>
+            <text x="110" y="170" text-anchor="middle" style="fill:#CDBEFF;font-size:24px;font-weight:700">650</text>
+            <text x="398" y="38" style="fill:#CDBEFF;font-size:24px;font-weight:700">1,185</text>
+            <text x="398" y="62" style="fill:#CDBEFF;font-size:20px">generic</text>
+            <text x="398" y="238" style="fill:#FFCBA6;font-size:24px;font-weight:700">190</text>
+            <text x="398" y="262" style="fill:#FFCBA6;font-size:20px">branded</text>
+            <text x="110" y="305" text-anchor="middle">2025</text><text x="380" y="305" text-anchor="middle">2026</text>
           </svg>
         <dl class="what"><dt>Found</dt><dd>Spend nearly doubled, store net sales fell about 10%. Orders above $1,000 fell from 8 to 3.</dd><dt>Not proved</dt><dd>A single cause. It changed what we tested first.</dd></dl>
-        <a href="https://shoppingadssolutions.com/more-google-ads-spend-less-revenue/">Read the case</a>
+        <a class="btn btn--glass spec-go" href="https://shoppingadssolutions.com/more-google-ads-spend-less-revenue/">Read the Case <span aria-hidden="true">→</span></a>
       </article>
       <article class="board pv spec">
-        <p class="label label--violet">Google Shopping · swimwear</p>
-        <h3>Best sizes sold out. Ads kept running.</h3>
-        <svg viewBox="0 0 520 240" role="img" aria-label="Illustrative: if sizes M and L carried 70 percent of demand and sold out, 30 percent stays covered">
-            <text x="20" y="40" style="fill:#fff;font-size:19px;font-weight:700">Share of historical demand</text>
-            <rect x="20" y="64" width="480" height="70" rx="14" fill="rgba(255,255,255,.05)"/>
-            <rect x="20" y="64" width="332" height="70" rx="14" fill="#F2893A" fill-opacity=".15" stroke="#F2893A" stroke-width="2" stroke-dasharray="7 6"/>
-            <rect x="358" y="64" width="142" height="70" rx="14" fill="#8B5CF6"/>
-            <text x="186" y="105" text-anchor="middle" style="fill:#F7A06A;font-size:17px;font-weight:700">M + L · 70% · sold out</text>
-            <text x="429" y="105" text-anchor="middle" style="fill:#fff;font-size:17px;font-weight:700">30%</text>
-            <text x="20" y="172">FEED STILL SAYS "IN STOCK": XS · S · XL</text>
-            <text class="ill-note" x="20" y="226">Illustrative model from the case.</text>
+        <p class="spec-cat"><img class="spec-ic" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/google.svg" alt="" width="18" height="18"><span>Google Shopping · swimwear</span></p>
+        <h3>Best sizes sold out.<br>Ads kept running.</h3>
+        <svg viewBox="0 0 520 324" role="img" aria-label="Illustrative: if sizes M and L carried 70 percent of demand and sold out, 30 percent stays covered">
+            <defs>
+              <clipPath id="dmBar"><rect x="20" y="62" width="480" height="84" rx="18"/></clipPath>
+              <pattern id="dmGone" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="#F2893A" fill-opacity=".14"/><rect width="5" height="12" fill="#F2893A" fill-opacity=".32"/></pattern>
+              <linearGradient id="dmLeft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#A47BF8"/></linearGradient>
+            </defs>
+            <text x="20" y="36" style="fill:#fff;font-size:27px;font-weight:400;font-family:var(--display);letter-spacing:0">Share of historical demand</text>
+            <!-- one bar = 100% of demand, split 70 / 30 -->
+            <g clip-path="url(#dmBar)">
+              <rect x="20" y="62" width="336" height="84" fill="url(#dmGone)"/>
+              <rect x="359" y="62" width="141" height="84" fill="url(#dmLeft)"/>
+            </g>
+            <rect x="20" y="62" width="480" height="84" rx="18" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="2.5"/>
+            <text x="188" y="114" text-anchor="middle" style="fill:#FFD2B0;font-size:30px;font-weight:700;font-family:var(--display);letter-spacing:0">70%</text>
+            <text x="429.5" y="114" text-anchor="middle" style="fill:#fff;font-size:30px;font-weight:700;font-family:var(--display);letter-spacing:0">30%</text>
+            <text x="20" y="188" style="fill:#F7A06A;font-size:25px;font-weight:600;font-family:var(--display);letter-spacing:0">M + L · sold out</text>
+            <text x="500" y="188" text-anchor="end" style="fill:#CDBEFF;font-size:25px;font-weight:600;font-family:var(--display);letter-spacing:0">In stock</text>
+            <text x="20" y="248">FEED STILL SAYS "IN STOCK": XS · S · XL</text>
+            <text class="ill-note" x="20" y="298">Illustrative model from the case.</text>
           </svg>
         <dl class="what"><dt>We run</dt><dd>A rule that pulls a design from ads once its important sizes are gone.</dd><dt>Not proved</dt><dd>A measured lift. The account view is context only.</dd></dl>
-        <a href="https://shoppingadssolutions.com/google-ads-out-of-stock-sizes-fashion/">Read the case</a>
+        <a class="btn btn--glass spec-go" href="https://shoppingadssolutions.com/google-ads-out-of-stock-sizes-fashion/">Read the Case <span aria-hidden="true">→</span></a>
       </article>
     </div>
   </div>
@@ -842,7 +848,7 @@
 <section id="ch-fit" aria-labelledby="f-h">
   <div class="wrap">
     <p class="label">The partnership</p>
-    <h2 id="f-h" class="h2">Is This a Fit? Be Honest. We Will Be.</h2>
+    <h2 id="f-h" class="h2">Is This a Fit?<br>Be Honest. We Will Be.</h2>
     <p class="sub">We work with a small number of brands, and we're paid partly on results. That only works with owners who see it the same way.</p>
     <div class="fit">
       <div class="checks" id="checks">
@@ -956,6 +962,11 @@
     <span><a href="mailto:michael@shoppingadssolutions.com">michael@shoppingadssolutions.com</a> · <a href="https://shoppingadssolutions.com/he/" lang="he" hreflang="he">עברית</a></span>
   </div>
 </footer>
+
+<!-- Phones: the call to action stays pinned to the bottom of the screen
+     (only once the hero's own button has scrolled away; hidden again while
+     the audit form itself is on screen) -->
+<div class="sticky-cta is-hidden" id="sticky-cta"><a class="btn" href="#start">Request a Growth Audit</a></div>
 
 </body>
 </html>

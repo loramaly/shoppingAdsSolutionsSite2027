@@ -7,7 +7,7 @@
     5. What you want      red line slider
     6. The doubt          quote cards play in on scroll
     7. The method         tabs, growth chart, creative loop
-    8. SAS Labs           Intended / Observed / Measured layers
+    8. SAS Labs           one ad's record, rows appear in turn
    10. The fit            checklist meter
    11. First step         timeline reveal
    13. Close              audit form
@@ -248,13 +248,57 @@
       });
     }
 
+    // Phones and small screens: there is no room for the causes beside the
+    // symptoms, so each symptom opens like an accordion with its own
+    // causes inside, right under it. Tap again to close.
+    var openId = null;
+    symptoms.forEach(function (sym) {
+      var id = sym.getAttribute('data-s');
+      var ans = document.createElement('div');
+      ans.className = 'sym-ans';
+      ans.id = 'sym-ans-' + id;
+      var inner = document.createElement('div');
+      inner.className = 'sym-ans__in';
+      var k = document.createElement('p');
+      k.className = 'sym-ans__k';
+      k.textContent = "What's usually underneath";
+      inner.appendChild(k);
+      CAUSES_OF[id].forEach(function (cid) {
+        var c = $('[data-c="' + cid + '"]', tree).cloneNode(true);
+        c.removeAttribute('data-c');           // the links look causes up by data-c
+        c.className = 'cause on';
+        inner.appendChild(c);
+      });
+      ans.appendChild(inner);
+      sym.parentNode.insertBefore(ans, sym.nextSibling);
+      sym.setAttribute('aria-controls', ans.id);
+    });
+
+    function paintPhone() {
+      symptoms.forEach(function (sym) {
+        var id = sym.getAttribute('data-s'), open = id === openId;
+        sym.classList.toggle('is-open', open);
+        if (!wide()) sym.setAttribute('aria-expanded', String(open));
+        else sym.removeAttribute('aria-expanded');
+        document.getElementById('sym-ans-' + id).classList.toggle('open', open);
+      });
+    }
+
     function select(sym) {
       auto = false;
       var id = sym.getAttribute('data-s');
+      if (!wide()) {
+        openId = openId === id ? null : id;
+        paintPhone();
+        return;
+      }
       if (id === active) return;
       active = id;
       paint(true);
     }
+
+    paintPhone();
+    window.addEventListener('resize', paintPhone);
 
     symptoms.forEach(function (sym) {
       sym.addEventListener('click', function () { select(sym); });
@@ -269,7 +313,7 @@
     // Cycle through the symptoms until the visitor takes over
     var order = ['s1', 's2', 's3', 's4', 's5'], i = 0;
     setInterval(function () {
-      if (!auto) return;
+      if (!auto || !wide()) return;  // phones: nothing plays on its own
       i = (i + 1) % order.length;
       active = order[i];
       paint(true);
@@ -320,6 +364,15 @@
     var noteCurve = document.getElementById('rl-note-curve');
     if (noteRed) noteRed.style.setProperty('--y', (redY / VH * 100) + '%');
     if (noteCurve) noteCurve.style.setProperty('--y', (toY(efficiency(0)) / VH * 100) + '%');   // left: at the curve's start
+    // Small screens: the same two labels written on the chart (no frames),
+    // a dot where the curve starts, "Red line" just above its right end
+    var y0 = toY(efficiency(0));
+    var startDot = document.getElementById('rl-start');
+    if (startDot) startDot.setAttribute('cy', y0);
+    var labRet = document.getElementById('rl-mlab-ret');
+    if (labRet) labRet.setAttribute('y', y0 - 16);   // just above the curve's start, clear of the line
+    var labRed = document.getElementById('rl-mlab-red');
+    if (labRed) labRed.setAttribute('y', redY - 16);
 
     function update() {
       var t = +slider.value, x = toX(t), y = toY(efficiency(t));
@@ -523,6 +576,22 @@
      ========================================================================== */
 
   /* ---- 7a. "The growth" and "The loop" are both shown, each under its own title (no tabs) ---- */
+
+  /* ---- Key words ("Most tests lose.", "next brief.", "real numbers.") get
+     their white marker line when they scroll into view ---- */
+  (function markerLines() {
+    var marks = $$('.mk.draw-line');
+    if (!marks.length) return;
+    if (reduceMotion || !hasIO) { marks.forEach(function (m) { m.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        e.target.classList.add('in');
+      });
+    }, { rootMargin: '0px 0px -20% 0px' });
+    marks.forEach(function (m) { io.observe(m); });
+  })();
 
   /* ---- 7b. Growth chart: 30 tests, the running total ---- */
   (function growthChart() {
@@ -772,34 +841,16 @@
   /* ==========================================================================
      8. SAS LABS · Intended / Observed / Measured
      ========================================================================== */
-  (function labsLayers() {
-    var lb = document.getElementById('lb');
-    if (!lb) return;
-    var buttons = $$('.lb-tog button', lb);
-    var ORDER = ['int', 'obs', 'mea'];
-    var auto = !reduceMotion, inView = false;
-
-    function set(layer) {
-      lb.setAttribute('data-l', layer);
-      buttons.forEach(function (b) {
-        b.setAttribute('aria-pressed', String(b.getAttribute('data-l') === layer));
-      });
-    }
-
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () {
-        auto = false;
-        set(b.getAttribute('data-l'));
-      });
-    });
-    stopOnInteraction(lb, function () { auto = false; });
-
-    watchVisibility(lb, .4, function (visible) { inView = visible; });
-    setInterval(function () {
-      if (!auto || !inView) return;
-      var i = ORDER.indexOf(lb.getAttribute('data-l'));
-      set(ORDER[(i + 1) % ORDER.length]);
-    }, 5200);
+  (function labsRecord() {
+    var lab = document.getElementById('lab');
+    if (!lab || reduceMotion || !hasIO) return;   // without motion: the rows just show
+    lab.classList.add('js');
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      lab.classList.add('in');
+    }, { threshold: .3 });
+    io.observe(lab);
   })();
 
 

@@ -394,3 +394,38 @@
 
   .site-header .logo { z-index: 1; }
 }
+
+/* ---------- Sticky call to action (phones) ----------
+   Appears once the hero's button has scrolled off screen, then stays
+   pinned to the bottom; it steps aside while the audit form is on screen
+   and while the menu is open. */
+.sticky-cta { display: none; }
+
+@media (max-width: 767px) {
+  .sticky-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: block;
+    /* a tall fade from the bottom up: text scrolling under the button
+       melts away well before it reaches it (was 18px, .92 from 40%) */
+    padding: 64px var(--gutter) calc(14px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg,
+      rgba(17, 19, 32, 0) 0%,
+      rgba(17, 19, 32, .55) 30%,
+      rgba(17, 19, 32, .9) 55%,
+      var(--bg) 75%);
+    pointer-events: none;              /* the fade doesn't block taps; the button does */
+    transition: transform .3s cubic-bezier(.23, 1, .32, 1), opacity .3s ease;
+  }
+  .sticky-cta { display: flex; justify-content: center; }
+  .sticky-cta .btn { pointer-events: auto; }   /* its normal size, centred; the fade is full width
+                                                  (was a full-width button) */
+  .sticky-cta.is-hidden,
+  body.menu-open .sticky-cta { transform: translateY(110%); opacity: 0; pointer-events: none; }
+
+  /* room at the end of the page so the pinned button never covers the footer */
+  body { padding-bottom: 136px; }
+}

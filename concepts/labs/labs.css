@@ -1,0 +1,173 @@
+/* Concept page: SAS Labs, current section + options A, B, C side by side.
+   Uses the site's base.css + sections.css; this file only adds the page
+   frame and the three new options. */
+
+.lx-page { padding-block: 56px 160px; }
+.lx-page > h1 { font-size: clamp(26px, 2.6vw, 36px); font-weight: 700; }
+.lx-intro { max-width: 70ch; margin-top: 10px; font-size: 17px; color: #fff; opacity: .85; }
+.lx-intro a { color: #fff; }
+
+.lx-opt { margin-top: 96px; padding-top: 40px; border-top: 1px solid var(--line); }
+.lx-opt > .lx-k { font-family: var(--mono); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: #CDBEFF; }
+.lx-opt > .lx-t { margin-top: 6px; font-size: 26px; font-weight: 600; }
+.lx-why { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 32px; max-width: 900px; margin-top: 12px; font-size: 16px; line-height: 1.5; }
+.lx-why p b { font-weight: 600; }
+.lx-why .pro b { color: var(--green); }
+.lx-why .con b { color: #FF8C96; }
+
+/* the old section keeps its own spacing; give it a frame so it reads as "the current one" */
+.lx-old { margin-top: 32px; padding: 0 24px 24px; border: 1px dashed rgba(255, 255, 255, .25); border-radius: 24px; }
+.lx-old section { padding-block: 32px 8px; border: 0; }
+
+/* shared: the section's head as it would read with each option */
+.lx-head { margin-top: 32px; }
+.lx-head .h2 { margin-top: 14px; }
+.lx-head .sub { max-width: 640px; }
+
+/* the example ad */
+.lx-ad { display: block; width: 100%; height: auto; border-radius: 18px; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); }
+
+/* ---------- A · one record, no clicks ---------- */
+.lx-rec {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+  max-width: 1040px;
+  margin-top: 40px;
+}
+
+.lx-rows { display: grid; gap: 14px; }
+
+.lx-row {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .015));
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .5s cubic-bezier(.23, 1, .32, 1), transform .5s cubic-bezier(.23, 1, .32, 1);
+}
+
+.lx-rec.in .lx-row { opacity: 1; transform: none; }
+.lx-rec.in .lx-row:nth-child(2) { transition-delay: .5s; }
+.lx-rec.in .lx-row:nth-child(3) { transition-delay: 1s; }
+.lx-rec.in .lx-row:nth-child(4) { transition-delay: 1.5s; }
+
+.lx-row .k { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #fff; opacity: .8; padding-top: 3px; }
+.lx-row p { font-size: 17px; line-height: 1.5; color: #fff; }
+.lx-row p + p { margin-top: 4px; }
+.lx-row .ok::before,
+.lx-row .no::before { display: inline-block; width: 1.2em; font-weight: 700; }
+.lx-row .ok::before { content: "✓"; color: var(--green); }
+.lx-row .no::before { content: "✕"; color: #FF8C96; }
+
+.lx-row.next { border-color: rgba(155, 123, 242, .6); background: rgba(155, 123, 242, .12); }
+.lx-row.next .k { color: #CDBEFF; opacity: 1; }
+
+/* ---------- B · auto-playing steps (like stories) ---------- */
+.lx-story {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  max-width: 1040px;
+  margin-top: 40px;
+}
+
+.lx-bars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+
+.lx-bar {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity .25s ease;
+}
+
+.lx-bar.on { opacity: 1; }
+.lx-bar i { display: block; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .18); overflow: hidden; }
+.lx-bar i b { display: block; height: 100%; width: 0; background: #B8A6F5; }
+.lx-bar.done i b { width: 100%; }
+
+.lx-steps { position: relative; min-height: 210px; margin-top: 28px; }
+.lx-step { position: absolute; inset: 0; opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; pointer-events: none; }
+.lx-step.on { opacity: 1; transform: none; pointer-events: auto; }
+.lx-step h3 { font-size: var(--subtitle-size); font-weight: 600; line-height: 1.25; }
+.lx-step p { margin-top: 10px; font-size: 17px; line-height: 1.55; color: #fff; }
+.lx-step .verdict { margin-top: 14px; padding: 12px 14px; border-left: 3px solid #9B7BF2; border-radius: 0 12px 12px 0; background: rgba(155, 123, 242, .12); }
+
+/* the ad reacts to the step: the missing proof is ringed on step 2 */
+.lx-adwrap { position: relative; }
+.lx-ring {
+  position: absolute;
+  left: 77.3%;
+  top: 69.9%;
+  width: 18%;
+  aspect-ratio: 1;
+  border: 2px dashed #FF8C96;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(.6);
+  opacity: 0;
+  transition: opacity .35s ease, transform .45s cubic-bezier(.23, 1, .32, 1);
+}
+.lx-story[data-s="1"] .lx-ring { opacity: 1; transform: translate(-50%, -50%); }
+
+/* ---------- C · one line in the loop ---------- */
+.lx-c { max-width: 560px; margin-top: 40px; }
+.lx-c .cl-step { display: block; animation: none; }
+.lx-labs {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(184, 166, 245, .5);
+  border-radius: 14px;
+  background: rgba(155, 123, 242, .08);
+  font-size: 16px;
+  line-height: 1.5;
+  color: #fff;
+}
+.lx-labs b { flex: 0 0 auto; font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #CDBEFF; padding-top: 2px; }
+
+@media (max-width: 767px) {
+  .lx-why { grid-template-columns: 1fr; }
+  .lx-rec, .lx-story { grid-template-columns: 1fr; }
+  .lx-rec .lx-ad, .lx-story .lx-adwrap { max-width: 260px; }
+  .lx-row { grid-template-columns: 1fr; gap: 6px; }
+  .lx-steps { min-height: 260px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lx-row { opacity: 1; transform: none; transition: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lx-steps { min-height: 0; }
+  .lx-step { position: static; opacity: 1; transform: none; margin-bottom: 18px; }
+}
+
+/* ---------- with the real Calypsa story (9:16) ---------- */
+.lx-fig { margin: 0; }
+.lx-fig figcaption { margin-top: 10px; font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: #fff; opacity: .7; }
+.lx-row .k span { display: block; margin-top: 4px; font-size: 11px; letter-spacing: .06em; text-transform: none; opacity: .8; }
+.lx-row p b { font-weight: 600; margin-right: 6px; }
+.lx-row .nw::before { content: "+"; display: inline-block; width: 1.2em; font-weight: 700; color: #F7C35B; }
+.lx-meas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.lx-meas span { padding: 3px 9px; border: 1px solid rgba(255, 255, 255, .3); border-radius: 999px; font-family: var(--mono); font-size: 12px; letter-spacing: .04em; }
+.lx-row p.lx-log { margin-top: 8px; font-family: var(--mono); font-size: 13px; opacity: .75; }
+.lx-cap { margin-top: 18px; }
+/* the hidden product in step 2: ring the shorts under the "35%" */
+.lx-ring { left: 49%; top: 60%; width: 30%; }

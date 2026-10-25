@@ -1,0 +1,424 @@
+/* ==========================================================================
+   BASE · design tokens, reset, typography, shared components
+   --------------------------------------------------------------------------
+   Layout concept: a founder's journey drawn as live diagrams. One dark board
+   per question the founder brings: trigger, symptom, goal, doubt, fit, first
+   step. Lines carry the logic; words stay short.
+
+   Breakpoints (desktop-first, used in every file):
+     XL      ≥ 1440px   wide desktop      (container grows to 1440px)
+     L    1200–1439px   desktop
+     M    1024–1199px   laptop / small desktop
+     Tablet 768–1023px  everything stacks into one column
+     Mobile   ≤ 767px   phones            (+ refinements at ≤ 479px)
+     Side rail only appears at ≥ 1800px, where it has room.
+   ========================================================================== */
+
+/* ---------- Tokens ---------- */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg: #111320;
+  --panel: #181A2B;
+  --panel-2: #1F2135;
+  --line: rgba(255, 255, 255, .11);
+  --line-2: rgba(255, 255, 255, .2);
+
+  /* Text: all pure white for readability (was #F3F2F8 / #C5C8D6 / #9A9EB4).
+     Colours (orange, red, green…) are separate tokens below. */
+  --fg: #FFFFFF;
+  --fg-2: #FFFFFF;
+  --fg-3: #FFFFFF;
+
+  /* Accents */
+  --violet: #8B5CF6;
+  --violet-2: #B8A6F5;
+  --magenta: #E1569B;
+  --orange: #F2893A;
+  --orange-2: #F7A06A;
+  --red: #FF5C6A;
+  --red-2: #FF8C96;
+  --green: #4ADE9B;
+  --gold: #F7B84B;
+  --grad: linear-gradient(100deg, #E1569B 0%, #F2893A 100%);
+  /* Button paint: orange on the left, through pink and magenta, ending in
+     lilac-violet on the right (diagonal); a soft magenta glow underneath.
+     Previous paint (Figma plate), to go back:
+       radial-gradient(ellipse 37% 330% at 57% 31%, rgba(255,255,255,.3), rgba(255,255,255,0)),
+       radial-gradient(ellipse 60% 140% at 40% 14%, #FF33BA 19.7%, rgba(237,66,179,0) 100%),
+       radial-gradient(ellipse 45% 95% at 68% 96%, #FF00E1 0%, #FF9100 81%),
+       #55128A; */
+  --btn-paint:
+    radial-gradient(ellipse 55% 120% at 50% 115%, rgba(255, 0, 225, .3), rgba(255, 0, 225, 0) 70%),
+    linear-gradient(115deg, #FF9100 0%, #FF5C8A 40%, #D93CC8 70%, #8E4BEA 100%);
+  --grad-btn: var(--btn-paint);
+
+  /* Type */
+  --display: 'Maven Pro', 'Trebuchet MS', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* Layout */
+  --container: 1320px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --header-h: 72px;
+  --section-y: clamp(72px, 8vw, 120px);
+}
+
+@media (min-width: 1440px) {
+  :root { --container: 1440px; }
+}
+
+/* With the side rail (≥1800px) keep a ~240px lane free on each side */
+@media (min-width: 1800px) {
+  :root { --container: min(1440px, calc(100vw - 480px)); }
+}
+
+@media (max-width: 767px) {
+  :root { --header-h: 60px; }
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  /* Anchor jumps land below the sticky header */
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  /* Nothing may push the page sideways (the closed menu drawer, glows,
+     cards flying in). Set on html so it applies to the window itself;
+     the sticky header keeps working. */
+  overflow-x: hidden;
+}
+
+@supports (overflow-x: clip) {
+  html { overflow-x: clip; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image: radial-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px);
+  background-size: 26px 26px;
+  font-family: var(--display);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--fg-2);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* While the menu is open the page behind it does not scroll. Locked on
+   <html> (the viewport scroller): with html overflow-x: clip, hiding
+   overflow on <body> made body its own scroller and the sticky header
+   (with the menu inside it) jumped to the top of the page.
+   (Was: body.menu-open { overflow: hidden; }) */
+html:has(body.menu-open) { overflow: hidden; }
+
+img { display: block; max-width: 100%; height: auto; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { color: var(--fg); text-wrap: balance; }
+a { color: inherit; }
+button, input, select { font: inherit; }
+[hidden] { display: none !important; }
+
+main:focus { outline: none; }
+
+:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ---------- Accessibility helpers ---------- */
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 100;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--bg);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform .2s ease;
+}
+
+.skip-link:focus { transform: none; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.svg-defs { position: absolute; }
+
+/* ---------- Layout ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+section {
+  position: relative;
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Typography ---------- */
+.label {
+  font-family: var(--mono);
+  font-size: 14px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.label--muted    { color: var(--fg-3); }
+.label--bad      { color: var(--red-2); }
+.label--good     { color: var(--green); }
+.label--violet   { color: var(--violet-2); }
+.label--on-brand { color: #fff; }
+.label--ink      { color: #6A2FB8; }
+
+/* Type levels: big titles (h1 / .h2) are the heaviest; subtitles (card
+   titles, niche names, key figures) are mid size and mid weight, so they
+   read easily and don't compete with the titles */
+:root {
+  --subtitle-size: clamp(19px, .5vw + 16px, 24px);   /* 24px on a 16" laptop */
+  --subtitle-weight: 500;   /* was 600: lighter, less heavy text on the page */
+}
+
+.h2 {
+  margin-top: 14px;
+  max-width: 20ch;
+  font-size: clamp(30px, 2.6vw + 8px, 46px);   /* all big titles: 46px on a 16" laptop (was up to 56px) */
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -.025em;
+}
+
+.sub {
+  margin-top: 16px;
+  max-width: 56ch;
+  font-size: clamp(17px, 1.2vw + 2px, 20px);
+  color: var(--fg-2);
+}
+
+.gtext {
+  background: linear-gradient(90deg, #F7A06A, #EC6FA8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Buttons & chips ----------
+   Pill buttons (fully rounded ends) filled with the exact paint of the
+   designer's plate in Figma (node 1766:1601): base #55128A + three radial
+   gradients, same colours and stops, centres converted to % of the button. */
+/* Button: the logo-plate shape. Top-left / bottom-right corners are round,
+   top-right / bottom-left are cut at an angle (rounded joints), and the
+   plate leans like the logo; the label stays upright. The shape is a
+   clip-path polygon on ::before (any width works); the shadow is a
+   drop-shadow filter so it follows the shape.
+   Generated polygon: round corners 9px (was 12.8), cut 18px, cut joints 10.8px.
+   (Was: a pill, border-radius 999px + box-shadow.) */
+.btn {
+  --btn-shape: polygon(0.0px 9.0px, 0.23px 7.0px, 0.89px 5.1px, 1.96px 3.39px, 3.39px 1.96px, 5.1px 0.89px, 7.0px 0.23px, 9.0px 0.0px, calc(100% - 22.47px) -0.0px, calc(100% - 21.26px) 0.07px, calc(100% - 20.07px) 0.27px, calc(100% - 18.91px) 0.61px, calc(100% - 17.79px) 1.07px, calc(100% - 16.73px) 1.66px, calc(100% - 15.74px) 2.36px, calc(100% - 14.84px) 3.16px, calc(100% - 3.16px) 14.84px, calc(100% - 2.36px) 15.74px, calc(100% - 1.66px) 16.73px, calc(100% - 1.07px) 17.79px, calc(100% - 0.61px) 18.91px, calc(100% - 0.27px) 20.07px, calc(100% - 0.07px) 21.26px, calc(100% - -0.0px) 22.47px, calc(100% - -0.0px) calc(100% - 9.0px), calc(100% - 0.23px) calc(100% - 7.0px), calc(100% - 0.89px) calc(100% - 5.1px), calc(100% - 1.96px) calc(100% - 3.39px), calc(100% - 3.39px) calc(100% - 1.96px), calc(100% - 5.1px) calc(100% - 0.89px), calc(100% - 7.0px) calc(100% - 0.23px), calc(100% - 9.0px) calc(100% - -0.0px), 22.47px calc(100% - -0.0px), 21.26px calc(100% - 0.07px), 20.07px calc(100% - 0.27px), 18.91px calc(100% - 0.61px), 17.79px calc(100% - 1.07px), 16.73px calc(100% - 1.66px), 15.74px calc(100% - 2.36px), 14.84px calc(100% - 3.16px), 3.16px calc(100% - 14.84px), 2.36px calc(100% - 15.74px), 1.66px calc(100% - 16.73px), 1.07px calc(100% - 17.79px), 0.61px calc(100% - 18.91px), 0.27px calc(100% - 20.07px), 0.07px calc(100% - 21.26px), -0.0px calc(100% - 22.47px));
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 30px;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  /* Soft purple shadow helps the white label on the bright orange areas */
+  text-shadow: 0 1px 2px rgba(85, 18, 138, .55);
+  cursor: pointer;
+  filter:
+    drop-shadow(0 10px 18px rgba(125, 20, 208, .45))
+    drop-shadow(0 3px 6px rgba(218, 37, 156, .25));
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-paint);
+  clip-path: var(--btn-shape);
+  transform: skewX(-8deg);          /* leans like the logo plate */
+}
+
+/* Convex look (hover / focus): light from above on the top half, a little
+   shade along the bottom edge, same shape and lean as the plate */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: var(--btn-shape);
+  transform: skewX(-8deg);
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, .42) 0%,
+      rgba(255, 255, 255, .14) 38%,
+      rgba(255, 255, 255, 0) 55%,
+      rgba(60, 0, 90, 0) 70%,
+      rgba(60, 0, 90, .32) 100%);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-2px);
+}
+
+.btn:hover::after,
+.btn:focus-visible::after { opacity: 1; }
+
+.btn:hover {
+  filter:
+    drop-shadow(0 16px 24px rgba(125, 20, 208, .6))
+    drop-shadow(0 4px 8px rgba(218, 37, 156, .35));
+}
+
+/* Keyboard focus: a white ring that follows the plate shape, with a dark
+   gap so it reads on dark and on orange sections alike */
+.btn:focus-visible {
+  outline: none;
+  filter:
+    drop-shadow(2px 0 0 var(--bg)) drop-shadow(-2px 0 0 var(--bg))
+    drop-shadow(0 2px 0 var(--bg)) drop-shadow(0 -2px 0 var(--bg))
+    drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
+    drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+    drop-shadow(0 12px 20px rgba(125, 20, 208, .55));
+}
+
+.btn:active { transform: scale(.97); }
+
+.btn--small {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 16px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  color: var(--fg);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+/* Two- or three-way segmented switch ("Now / With SAS", tabs, layers) */
+.bigtoggle {
+  display: inline-flex;
+  padding: 5px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .4);
+}
+
+.bigtoggle button {
+  min-height: 46px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-3);
+  font-family: var(--mono);
+  font-size: 14px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .25s ease, color .25s ease;
+}
+
+.bigtoggle button:hover { color: var(--fg); }
+
+.bigtoggle button[aria-pressed="true"],
+.bigtoggle button[aria-selected="true"] {
+  background: #fff;
+  color: var(--bg);
+  font-weight: 700;
+}
+
+/* Dark card used by most diagrams */
+.board {
+  padding: clamp(16px, 2.2vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .02));
+  box-shadow: 0 40px 120px rgba(0, 0, 0, .35);
+}
+
+/* ---------- Shared motion ---------- */
+.flow {
+  stroke-dasharray: 5 9;
+  animation: flow 1.4s linear infinite;
+}
+
+.draw {
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  animation: draw 1.4s ease forwards;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@keyframes flow  { to { stroke-dashoffset: -28; } }
+@keyframes draw  { to { stroke-dashoffset: 0; } }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Respect "reduce motion": no loops, no transitions, final state shown */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .draw { stroke-dashoffset: 0; }
+}

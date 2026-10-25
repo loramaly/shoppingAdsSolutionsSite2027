@@ -143,4 +143,28 @@
 
   window.addEventListener('resize', update);
   update();
+
+  /* ---------- Sticky call to action (phones) ----------
+     Shown only once the hero's own button has scrolled off screen, and
+     hidden again while the audit form is on screen (its button is there) */
+  var stickyCta = document.getElementById('sticky-cta');
+  var heroCta = document.querySelector('.s0 .row .btn');
+  var formSection = document.getElementById('start');
+  if (stickyCta && 'IntersectionObserver' in window) {
+    var heroSeen = true, formSeen = false;
+    var paintCta = function () { stickyCta.classList.toggle('is-hidden', heroSeen || formSeen); };
+    if (heroCta) {
+      new IntersectionObserver(function (entries) {
+        heroSeen = entries[0].isIntersecting;
+        paintCta();
+      }).observe(heroCta);
+    } else heroSeen = false;
+    if (formSection) {
+      new IntersectionObserver(function (entries) {
+        formSeen = entries[0].isIntersecting;
+        paintCta();
+      }, { threshold: 0.15 }).observe(formSection);
+    }
+    paintCta();
+  } else if (stickyCta) stickyCta.classList.remove('is-hidden');
 })();

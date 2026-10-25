@@ -204,7 +204,7 @@ section {
    titles, niche names, key figures) are mid size and mid weight, so they
    read easily and don't compete with the titles */
 :root {
-  --subtitle-size: clamp(19px, .5vw + 16px, 24px);   /* 24px on a 16" laptop */
+  --subtitle-size: clamp(21px, .5vw + 18px, 26px);   /* 26px on a 16" laptop (+2, was 24px) */
   --subtitle-weight: 500;   /* was 600: lighter, less heavy text on the page */
 }
 
@@ -243,7 +243,13 @@ section {
    Generated polygon: round corners 9px (was 12.8), cut 18px, cut joints 10.8px.
    (Was: a pill, border-radius 999px + box-shadow.) */
 .btn {
-  --btn-shape: polygon(0.0px 9.0px, 0.23px 7.0px, 0.89px 5.1px, 1.96px 3.39px, 3.39px 1.96px, 5.1px 0.89px, 7.0px 0.23px, 9.0px 0.0px, calc(100% - 22.47px) -0.0px, calc(100% - 21.26px) 0.07px, calc(100% - 20.07px) 0.27px, calc(100% - 18.91px) 0.61px, calc(100% - 17.79px) 1.07px, calc(100% - 16.73px) 1.66px, calc(100% - 15.74px) 2.36px, calc(100% - 14.84px) 3.16px, calc(100% - 3.16px) 14.84px, calc(100% - 2.36px) 15.74px, calc(100% - 1.66px) 16.73px, calc(100% - 1.07px) 17.79px, calc(100% - 0.61px) 18.91px, calc(100% - 0.27px) 20.07px, calc(100% - 0.07px) 21.26px, calc(100% - -0.0px) 22.47px, calc(100% - -0.0px) calc(100% - 9.0px), calc(100% - 0.23px) calc(100% - 7.0px), calc(100% - 0.89px) calc(100% - 5.1px), calc(100% - 1.96px) calc(100% - 3.39px), calc(100% - 3.39px) calc(100% - 1.96px), calc(100% - 5.1px) calc(100% - 0.89px), calc(100% - 7.0px) calc(100% - 0.23px), calc(100% - 9.0px) calc(100% - -0.0px), 22.47px calc(100% - -0.0px), 21.26px calc(100% - 0.07px), 20.07px calc(100% - 0.27px), 18.91px calc(100% - 0.61px), 17.79px calc(100% - 1.07px), 16.73px calc(100% - 1.66px), 15.74px calc(100% - 2.36px), 14.84px calc(100% - 3.16px), 3.16px calc(100% - 14.84px), 2.36px calc(100% - 15.74px), 1.66px calc(100% - 16.73px), 1.07px calc(100% - 17.79px), 0.61px calc(100% - 18.91px), 0.27px calc(100% - 20.07px), 0.07px calc(100% - 21.26px), -0.0px calc(100% - 22.47px));
+  /* Round corners 5px (were 9px: as soft as the cut's joints); cuts 25px
+     across × 18px down, joints 10.8px. The two round corners are pulled
+     in 7px (top one towards the middle, bottom one too), so the short
+     sides lean like the logo. The plate is drawn mirrored (see ::before),
+     so on screen these are the top-right and bottom-left corners.
+     (Was: round corners flush with the sides.) */
+  --btn-shape: polygon(6.25px 4.09px, 6.48px 3.26px, 6.85px 2.48px, 7.35px 1.77px, 7.96px 1.16px, 8.68px 0.66px, 9.46px 0.3px, 10.3px 0.08px, 11.16px 0.0px, calc(100% - 28.48px) 0.0px, calc(100% - 27.64px) 0.03px, calc(100% - 26.81px) 0.13px, calc(100% - 25.98px) 0.29px, calc(100% - 25.17px) 0.52px, calc(100% - 24.38px) 0.81px, calc(100% - 23.61px) 1.16px, calc(100% - 22.88px) 1.57px, calc(100% - 22.17px) 2.04px, calc(100% - 5.55px) 14.0px, calc(100% - 4.38px) 14.98px, calc(100% - 3.36px) 16.11px, calc(100% - 2.51px) 17.37px, calc(100% - 1.84px) 18.74px, calc(100% - 1.37px) 20.19px, calc(100% - 1.11px) 21.69px, calc(100% - 1.07px) 23.21px, calc(100% - 1.24px) 24.73px, calc(100% - 6.25px) calc(100% - 4.09px), calc(100% - 6.48px) calc(100% - 3.26px), calc(100% - 6.85px) calc(100% - 2.48px), calc(100% - 7.35px) calc(100% - 1.77px), calc(100% - 7.96px) calc(100% - 1.16px), calc(100% - 8.68px) calc(100% - 0.66px), calc(100% - 9.46px) calc(100% - 0.3px), calc(100% - 10.3px) calc(100% - 0.08px), calc(100% - 11.16px) calc(100% - 0.0px), 28.48px calc(100% - 0.0px), 27.64px calc(100% - 0.03px), 26.81px calc(100% - 0.13px), 25.98px calc(100% - 0.29px), 25.17px calc(100% - 0.52px), 24.38px calc(100% - 0.81px), 23.61px calc(100% - 1.16px), 22.88px calc(100% - 1.57px), 22.17px calc(100% - 2.04px), 5.55px calc(100% - 14.0px), 4.38px calc(100% - 14.98px), 3.36px calc(100% - 16.11px), 2.51px calc(100% - 17.37px), 1.84px calc(100% - 18.74px), 1.37px calc(100% - 20.19px), 1.11px calc(100% - 21.69px), 1.07px calc(100% - 23.21px), 1.24px calc(100% - 24.73px));
   position: relative;
   isolation: isolate;
   display: inline-flex;
@@ -275,7 +281,11 @@ section {
   z-index: -1;
   background: var(--btn-paint);
   clip-path: var(--btn-shape);
-  transform: skewX(-8deg);          /* leans like the logo plate */
+  /* mirrored: round corners top-right / bottom-left, cuts on the other
+     two, the lean and the paint flipped too (violet left, orange right);
+     the label is on the button itself, so it still reads normally.
+     (Was: skewX(-8deg) alone.) */
+  transform: scaleX(-1) skewX(-8deg);
 }
 
 /* Convex look (hover / focus): light from above on the top half, a little
@@ -286,7 +296,7 @@ section {
   inset: 0;
   z-index: -1;
   clip-path: var(--btn-shape);
-  transform: skewX(-8deg);
+  transform: scaleX(-1) skewX(-8deg);   /* mirrored, like the plate */
   background:
     linear-gradient(180deg,
       rgba(255, 255, 255, .42) 0%,
