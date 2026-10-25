@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><title>debug scroll</title>
+<style>body{margin:0;background:#333;padding:8px}iframe{border:0;width:375px;height:667px;background:#111}</style>
+<iframe id="f" src="../index.html?r=1"></iframe>
+<script>
+window.probe = async function () {
+  var w = document.getElementById('f').contentWindow, d = w.document, out = [];
+  for (var y = 0; y < 3000; y += 100) {
+    w.scrollTo(0, y);
+    await new Promise(function (r) { setTimeout(r, 150); });
+    var on = d.querySelector('.step.on');
+    out.push(y + ':' + (on ? on.getAttribute('data-i') : '-'));
+  }
+  return out.join(' ');
+};
+</script>

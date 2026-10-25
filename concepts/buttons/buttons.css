@@ -1,0 +1,76 @@
+/* ==========================================================================
+   CONCEPT · Button shapes
+   Top-left and bottom-right stay round; top-right and bottom-left are cut
+   at an angle, like the corners of the logo plate. The shapes are
+   clip-path polygons (generated, rounded joints) on a ::before layer, so
+   the button keeps any width and its shadow still shows (filter).
+   ========================================================================== */
+:root {
+  --cut-a: polygon(0.0px 22.0px, 0.55px 17.1px, 2.18px 12.45px, 4.8px 8.28px, 8.28px 4.8px, 12.45px 2.18px, 17.1px 0.55px, 22.0px 0.0px, calc(100% - 16.07px) -0.0px, calc(100% - 15.51px) 0.03px, calc(100% - 14.96px) 0.13px, calc(100% - 14.42px) 0.28px, calc(100% - 13.9px) 0.5px, calc(100% - 13.41px) 0.77px, calc(100% - 12.95px) 1.09px, calc(100% - 12.54px) 1.46px, calc(100% - 1.46px) 12.54px, calc(100% - 1.09px) 12.95px, calc(100% - 0.77px) 13.41px, calc(100% - 0.5px) 13.9px, calc(100% - 0.28px) 14.42px, calc(100% - 0.13px) 14.96px, calc(100% - 0.03px) 15.51px, calc(100% - -0.0px) 16.07px, calc(100% - -0.0px) calc(100% - 22.0px), calc(100% - 0.55px) calc(100% - 17.1px), calc(100% - 2.18px) calc(100% - 12.45px), calc(100% - 4.8px) calc(100% - 8.28px), calc(100% - 8.28px) calc(100% - 4.8px), calc(100% - 12.45px) calc(100% - 2.18px), calc(100% - 17.1px) calc(100% - 0.55px), calc(100% - 22.0px) calc(100% - -0.0px), 16.07px calc(100% - -0.0px), 15.51px calc(100% - 0.03px), 14.96px calc(100% - 0.13px), 14.42px calc(100% - 0.28px), 13.9px calc(100% - 0.5px), 13.41px calc(100% - 0.77px), 12.95px calc(100% - 1.09px), 12.54px calc(100% - 1.46px), 1.46px calc(100% - 12.54px), 1.09px calc(100% - 12.95px), 0.77px calc(100% - 13.41px), 0.5px calc(100% - 13.9px), 0.28px calc(100% - 14.42px), 0.13px calc(100% - 14.96px), 0.03px calc(100% - 15.51px), -0.0px calc(100% - 16.07px));
+  --cut-b: polygon(0.0px 12.8px, 0.32px 9.95px, 1.27px 7.25px, 2.79px 4.82px, 4.82px 2.79px, 7.25px 1.27px, 9.95px 0.32px, 12.8px 0.0px, calc(100% - 22.47px) -0.0px, calc(100% - 21.26px) 0.07px, calc(100% - 20.07px) 0.27px, calc(100% - 18.91px) 0.61px, calc(100% - 17.79px) 1.07px, calc(100% - 16.73px) 1.66px, calc(100% - 15.74px) 2.36px, calc(100% - 14.84px) 3.16px, calc(100% - 3.16px) 14.84px, calc(100% - 2.36px) 15.74px, calc(100% - 1.66px) 16.73px, calc(100% - 1.07px) 17.79px, calc(100% - 0.61px) 18.91px, calc(100% - 0.27px) 20.07px, calc(100% - 0.07px) 21.26px, calc(100% - -0.0px) 22.47px, calc(100% - -0.0px) calc(100% - 12.8px), calc(100% - 0.32px) calc(100% - 9.95px), calc(100% - 1.27px) calc(100% - 7.25px), calc(100% - 2.79px) calc(100% - 4.82px), calc(100% - 4.82px) calc(100% - 2.79px), calc(100% - 7.25px) calc(100% - 1.27px), calc(100% - 9.95px) calc(100% - 0.32px), calc(100% - 12.8px) calc(100% - -0.0px), 22.47px calc(100% - -0.0px), 21.26px calc(100% - 0.07px), 20.07px calc(100% - 0.27px), 18.91px calc(100% - 0.61px), 17.79px calc(100% - 1.07px), 16.73px calc(100% - 1.66px), 15.74px calc(100% - 2.36px), 14.84px calc(100% - 3.16px), 3.16px calc(100% - 14.84px), 2.36px calc(100% - 15.74px), 1.66px calc(100% - 16.73px), 1.07px calc(100% - 17.79px), 0.61px calc(100% - 18.91px), 0.27px calc(100% - 20.07px), 0.07px calc(100% - 21.26px), -0.0px calc(100% - 22.47px));
+  --cut-c: polygon(0.0px 9.0px, 0.23px 7.0px, 0.89px 5.1px, 1.96px 3.39px, 3.39px 1.96px, 5.1px 0.89px, 7.0px 0.23px, 9.0px 0.0px, calc(100% - 12.62px) -0.0px, calc(100% - 12.45px) 0.01px, calc(100% - 12.29px) 0.04px, calc(100% - 12.13px) 0.08px, calc(100% - 11.97px) 0.15px, calc(100% - 11.82px) 0.23px, calc(100% - 11.69px) 0.33px, calc(100% - 11.56px) 0.44px, calc(100% - 0.44px) 11.56px, calc(100% - 0.33px) 11.69px, calc(100% - 0.23px) 11.82px, calc(100% - 0.15px) 11.97px, calc(100% - 0.08px) 12.13px, calc(100% - 0.04px) 12.29px, calc(100% - 0.01px) 12.45px, calc(100% - -0.0px) 12.62px, calc(100% - -0.0px) calc(100% - 9.0px), calc(100% - 0.23px) calc(100% - 7.0px), calc(100% - 0.89px) calc(100% - 5.1px), calc(100% - 1.96px) calc(100% - 3.39px), calc(100% - 3.39px) calc(100% - 1.96px), calc(100% - 5.1px) calc(100% - 0.89px), calc(100% - 7.0px) calc(100% - 0.23px), calc(100% - 9.0px) calc(100% - -0.0px), 12.62px calc(100% - -0.0px), 12.45px calc(100% - 0.01px), 12.29px calc(100% - 0.04px), 12.13px calc(100% - 0.08px), 11.97px calc(100% - 0.15px), 11.82px calc(100% - 0.23px), 11.69px calc(100% - 0.33px), 11.56px calc(100% - 0.44px), 0.44px calc(100% - 11.56px), 0.33px calc(100% - 11.69px), 0.23px calc(100% - 11.82px), 0.15px calc(100% - 11.97px), 0.08px calc(100% - 12.13px), 0.04px calc(100% - 12.29px), 0.01px calc(100% - 12.45px), -0.0px calc(100% - 12.62px));
+}
+
+.btn.cut-a,
+.btn.cut-b,
+.btn.cut-c {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  filter: drop-shadow(0 10px 18px rgba(125, 20, 208, .45)) drop-shadow(0 3px 6px rgba(218, 37, 156, .25));
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.btn.cut-a::before,
+.btn.cut-b::before,
+.btn.cut-c::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-paint);
+}
+
+.btn.cut-a::before { clip-path: var(--cut-a); transform: none; }
+.btn.cut-b::before { clip-path: var(--cut-b); transform: skewX(-8deg); }   /* leans like the logo */
+.btn.cut-c::before { clip-path: var(--cut-c); transform: none; }
+
+.btn.cut-a:hover,
+.btn.cut-b:hover,
+.btn.cut-c:hover {
+  box-shadow: none;
+  filter: drop-shadow(0 14px 22px rgba(125, 20, 208, .6)) drop-shadow(0 3px 6px rgba(218, 37, 156, .3));
+}
+
+/* ---------- Review page ---------- */
+body { background: var(--bg); color: var(--fg); }
+
+.bt-page { padding-block: 48px 96px; }
+.bt-page h1 { font-size: clamp(28px, 3vw, 40px); font-weight: 600; margin-bottom: 8px; }
+.bt-page > p { color: var(--fg-2); max-width: 60ch; margin-bottom: 40px; }
+
+.bt-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 32px 0;
+  border-top: 1px solid var(--line);
+}
+
+.bt-row h2 { font-size: 22px; font-weight: 700; }
+.bt-row h2 span { display: block; margin-top: 6px; font-family: var(--mono); font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-3); }
+
+.bt-demo { display: flex; flex-wrap: wrap; align-items: center; gap: 28px 32px; }
+
+.bt-light {
+  padding: 22px 26px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #FF9A3C, #F2893A 40%, #E1569B);
+}
+
+@media (max-width: 767px) {
+  .bt-row { grid-template-columns: 1fr; }
+}

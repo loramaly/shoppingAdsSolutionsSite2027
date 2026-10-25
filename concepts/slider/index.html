@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Concept · Budget slider</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="../../css/base.css?v=211">
+  <style>
+    /* Dark, tactile handles on the site's dark background. Each one has a
+       visible rim (a lit edge), reads as raised, and visibly presses in
+       while you hold it. The groove is sunk into the page. */
+    body { background: var(--bg); color: #fff; }
+    .page { padding-block: 48px 140px; }
+    h1 { font-size: clamp(26px, 2.6vw, 36px); font-weight: 700; }
+    .intro { max-width: 64ch; margin-top: 10px; color: var(--fg-2); }
+    .intro a { color: #fff; }
+    .opt { margin-top: 72px; }
+    .opt-k { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+    .opt h2 { margin-top: 8px; font-size: 24px; font-weight: 500; }
+    .opt p.d { margin-top: 6px; max-width: 64ch; color: var(--fg-2); font-size: 16px; }
+    .demo { max-width: 720px; margin-top: 44px; }
+    .row { display: flex; justify-content: space-between; margin-top: 12px; font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,.5); }
+
+    input[type=range] { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 56px; background: transparent; cursor: grab; margin: 0; --v: 38%; }
+    input[type=range]:active { cursor: grabbing; }
+    input[type=range]:focus { outline: none; }
+
+    /* Shared: a groove sunk into the page, lilac light filling it */
+    input[type=range]::-webkit-slider-runnable-track {
+      height: 8px; border-radius: 99px;
+      background:
+        linear-gradient(90deg, #8E6CF0, #B8A6F5) 0 / var(--v) 100% no-repeat,
+        #0B0C16;
+      box-shadow: inset 0 2px 3px rgba(0,0,0,.8), inset 0 -1px 0 rgba(255,255,255,.06), 0 0 0 1px rgba(255,255,255,.04);
+    }
+    input[type=range]::-moz-range-track { height: 8px; border-radius: 99px; background: #0B0C16; box-shadow: inset 0 2px 3px rgba(0,0,0,.8); }
+    input[type=range]::-moz-range-progress { height: 8px; border-radius: 99px; background: linear-gradient(90deg, #8E6CF0, #B8A6F5); }
+    input[type=range]:active::-webkit-slider-runnable-track { background: linear-gradient(90deg, #8E6CF0, #CDBEFF) 0 / var(--v) 100% no-repeat, #0B0C16; box-shadow: inset 0 2px 3px rgba(0,0,0,.8), 0 0 18px rgba(142,108,240,.35); }
+
+    /* ===== A · Obsidian dome =====
+       A dark glassy dome: light rim on top, shadowed underside, a soft
+       highlight. Pressed: it sinks (inner shadow), the rim lights lilac. */
+    .a::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 34px; height: 34px; margin-top: -13px; border-radius: 50%;
+      border: 1px solid transparent;
+      background:
+        radial-gradient(circle at 38% 30%, rgba(255,255,255,.28), rgba(255,255,255,0) 42%) padding-box,
+        radial-gradient(circle at 50% 40%, #34364E, #14152A 75%) padding-box,
+        linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.05) 55%, rgba(0,0,0,.6)) border-box;
+      box-shadow: 0 10px 18px rgba(0,0,0,.6), 0 2px 4px rgba(0,0,0,.5);
+      transition: transform .18s cubic-bezier(.23,1,.32,1), box-shadow .18s ease;
+    }
+    .a::-moz-range-thumb { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35); background: radial-gradient(circle at 38% 30%, #4A4C66, #14152A 75%); box-shadow: 0 10px 18px rgba(0,0,0,.6); }
+    .a:hover::-webkit-slider-thumb { transform: scale(1.06); box-shadow: 0 12px 22px rgba(0,0,0,.65), 0 0 0 6px rgba(184,166,245,.10); }
+    .a:active::-webkit-slider-thumb {
+      transform: scale(.94);
+      background:
+        radial-gradient(circle at 50% 60%, rgba(255,255,255,.08), rgba(255,255,255,0) 50%) padding-box,
+        radial-gradient(circle at 50% 55%, #1D1E33, #0E0F1E 80%) padding-box,
+        linear-gradient(180deg, #CDBEFF, #8E6CF0) border-box;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,.7), 0 0 0 8px rgba(184,166,245,.14), 0 4px 10px rgba(0,0,0,.5);
+    }
+    .a:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px #fff, 0 10px 18px rgba(0,0,0,.6); }
+
+    /* ===== B · Ringed knob =====
+       A dark disc with a bevelled metal ring and a small lilac light in the
+       centre. Pressed: the light grows into a glow, the disc presses in. */
+    .b::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 36px; height: 36px; margin-top: -14px; border-radius: 50%; border: 3px solid transparent;
+      background:
+        radial-gradient(circle, #D9CCFF 0 3.5px, rgba(184,166,245,.45) 5px, transparent 8px) padding-box,
+        radial-gradient(circle at 50% 35%, #2E2152, #130C26 72%) padding-box,
+        conic-gradient(from 200deg, #4B1FA0, #C9B2FF 25%, #3A1580 50%, #A684FF 75%, #4B1FA0) border-box;
+      box-shadow: 0 8px 18px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,255,255,.2);
+      transition: transform .18s cubic-bezier(.23,1,.32,1), box-shadow .2s ease;
+    }
+    .b::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; border: 3px solid #8B5CF6; background: radial-gradient(circle, #B8A6F5 0 3px, #121325 7px); box-shadow: 0 8px 18px rgba(0,0,0,.6); }
+    .b:hover::-webkit-slider-thumb { transform: rotate(25deg) scale(1.05); }
+    .b:active::-webkit-slider-thumb {
+      transform: rotate(45deg) scale(.95);
+      background:
+        radial-gradient(circle, #fff 0 3px, #CDBEFF 5px, rgba(184,166,245,.45) 8px, transparent 13px) padding-box,
+        radial-gradient(circle at 50% 60%, #1E1538, #0E0820 72%) padding-box,
+        conic-gradient(from 200deg, #4B1FA0, #C9B2FF 25%, #3A1580 50%, #A684FF 75%, #4B1FA0) border-box;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,.75), 0 0 22px rgba(184,166,245,.55);
+    }
+    .b:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px #fff; }
+
+    /* ===== C · Grip pill =====
+       A dark pill with a lit top edge and three grooves to hold. Pressed:
+       the grooves light up lilac and the pill sinks a little. */
+    .c::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 50px; height: 30px; margin-top: -11px; border-radius: 99px; border: 1px solid transparent;
+      background:
+        linear-gradient(90deg, transparent 17px, rgba(0,0,0,.65) 17px 18.5px, rgba(255,255,255,.18) 18.5px 19.5px, transparent 19.5px 23px, rgba(0,0,0,.65) 23px 24.5px, rgba(255,255,255,.18) 24.5px 25.5px, transparent 25.5px 29px, rgba(0,0,0,.65) 29px 30.5px, rgba(255,255,255,.18) 30.5px 31.5px, transparent 31.5px) center / 100% 12px no-repeat padding-box,
+        linear-gradient(180deg, #34364E, #16172B) padding-box,
+        linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.04) 60%, rgba(0,0,0,.6)) border-box;
+      box-shadow: 0 10px 18px rgba(0,0,0,.6), 0 2px 4px rgba(0,0,0,.5);
+      transition: transform .18s cubic-bezier(.23,1,.32,1), box-shadow .18s ease;
+    }
+    .c::-moz-range-thumb { width: 48px; height: 28px; border-radius: 99px; border: 1px solid rgba(255,255,255,.35); background: linear-gradient(180deg, #34364E, #16172B); box-shadow: 0 10px 18px rgba(0,0,0,.6); }
+    .c:hover::-webkit-slider-thumb { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(0,0,0,.65), 0 0 0 6px rgba(184,166,245,.10); }
+    .c:active::-webkit-slider-thumb {
+      transform: translateY(1px) scaleX(1.06);
+      background:
+        linear-gradient(90deg, transparent 17px, #CDBEFF 17px 19.5px, transparent 19.5px 23px, #CDBEFF 23px 25.5px, transparent 25.5px 29px, #CDBEFF 29px 31.5px, transparent 31.5px) center / 100% 12px no-repeat padding-box,
+        linear-gradient(180deg, #1F2036, #111225) padding-box,
+        linear-gradient(180deg, #CDBEFF, #8E6CF0) border-box;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,.7), 0 0 18px rgba(184,166,245,.45);
+    }
+    .c:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px #fff, 0 10px 18px rgba(0,0,0,.6); }
+  </style>
+</head>
+<body>
+<main class="wrap page">
+  <h1>Budget slider · three dark handles</h1>
+  <p class="intro">All on the dark page, no frames around them. Each handle is dark, has a lit edge, looks raised, and visibly presses in while you hold it; the groove lights lilac up to the handle. Drag them here. The dot on the chart would get the same look. <a href="../../index.html#ch-want">Back to the site</a></p>
+
+  <section class="opt">
+    <p class="opt-k">Option A</p>
+    <h2>Obsidian dome</h2>
+    <p class="d">A dark glassy dome with a light rim on top and a soft highlight. Hold it: it sinks in and its rim lights lilac.</p>
+    <div class="demo"><input class="a" type="range" min="0" max="100" value="38" aria-label="Monthly budget, option A"><div class="row"><span>LESS</span><span>MORE SPEND</span></div></div>
+  </section>
+
+  <section class="opt">
+    <p class="opt-k">Option B</p>
+    <h2>Ringed knob · in our violet</h2>
+    <p class="d">A dark violet disc in a bevelled violet ring (no grey metal) with a lilac light in the middle. It turns a little under the cursor; hold it and the light swells into a glow.</p>
+    <div class="demo"><input class="b" type="range" min="0" max="100" value="38" aria-label="Monthly budget, option B"><div class="row"><span>LESS</span><span>MORE SPEND</span></div></div>
+  </section>
+
+  <section class="opt">
+    <p class="opt-k">Option C</p>
+    <h2>Grip pill</h2>
+    <p class="d">A dark pill with a lit top edge and three grooves to hold, like a hardware fader. Hold it: the grooves light lilac and it sinks a little.</p>
+    <div class="demo"><input class="c" type="range" min="0" max="100" value="38" aria-label="Monthly budget, option C"><div class="row"><span>LESS</span><span>MORE SPEND</span></div></div>
+  </section>
+</main>
+<script>
+  // the lilac fill follows each handle
+  document.querySelectorAll('input[type=range]').forEach(function (el) {
+    function paint() { el.style.setProperty('--v', el.value + '%'); }
+    el.addEventListener('input', paint);
+    paint();
+  });
+</script>
+</body>
+</html>

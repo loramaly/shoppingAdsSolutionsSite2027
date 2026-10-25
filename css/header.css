@@ -39,7 +39,7 @@
    the rest is room for its purple glow. The link is sized to the wordmark only
    (--logo-scale), and the image hangs outside it so the glow can spill freely. */
 .logo {
-  --logo-scale: .7;
+  --logo-scale: .58;
   position: relative;
   flex: 0 0 auto;
   display: block;
@@ -67,7 +67,7 @@
   padding-left: 20px;
   border-left: 1px solid var(--line-2);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--fg-2);
@@ -78,7 +78,23 @@
 
 .site-header.is-scrolled .site-header__chapter { opacity: 1; }
 
-.site-header__num { color: var(--orange-2); }
+.site-header__num { color: #fff; }
+
+/* Header CTA appears only once the header is sticky (after the first
+   scroll); before that the hero's own button does the job */
+.site-header__cta {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .3s ease, transform .3s ease, visibility 0s linear .3s;
+}
+
+.site-header.is-scrolled .site-header__cta {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition: opacity .3s ease, transform .3s ease, visibility 0s;
+}
 
 .site-header__actions {
   display: flex;
@@ -102,7 +118,7 @@
   background: none;
   color: var(--fg);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: .12em;
   text-transform: uppercase;
   cursor: pointer;
@@ -123,66 +139,67 @@
 .menu-toggle__icon {
   position: relative;
   display: block;
-  width: 18px;
-  height: 12px;
+  width: 20px;
+  height: 14px;
 }
 
 .menu-toggle__icon i {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 1.5px;
   border-radius: 2px;
   background: currentColor;
   transition: transform .3s ease, opacity .2s ease, top .3s ease;
 }
 
 .menu-toggle__icon i:nth-child(1) { top: 0; }
-.menu-toggle__icon i:nth-child(2) { top: 5px; }
-.menu-toggle__icon i:nth-child(3) { top: 10px; }
+.menu-toggle__icon i:nth-child(2) { top: 6.25px; }
+.menu-toggle__icon i:nth-child(3) { top: 12.5px; }
 
 /* Hamburger morphs into a close "×" */
-.menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(1) { top: 5px; transform: rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(1) { top: 6.25px; transform: rotate(45deg); }
 .menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(2) { opacity: 0; }
-.menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(3) { top: 5px; transform: rotate(-45deg); }
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon i:nth-child(3) { top: 6.25px; transform: rotate(-45deg); }
 
-/* ---------- Menu panel ---------- */
+/* ---------- Menu panel ----------
+   A side drawer from the right, about half the screen wide, with a soft
+   shadow; the page stays visible (dimmed) underneath. */
 .site-menu {
   position: absolute;
-  left: 0;
   right: 0;
   top: 100%;
-  border-bottom: 1px solid var(--line);
-  background: rgba(17, 19, 32, .97);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 40px 80px rgba(0, 0, 0, .45);
+  width: clamp(280px, 50vw, 440px);
+  height: calc(100vh - var(--header-h));
+  height: calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-left: 1px solid var(--line);
+  background: var(--bg);              /* solid: nothing shows through */
+  box-shadow: -24px 0 60px rgba(0, 0, 0, .5);
   /* closed: invisible, out of the tab order, out of the a11y tree */
   visibility: hidden;
-  opacity: 0;
-  transform: translateY(-8px);
-  transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+  transform: translateX(100%);
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .35s;
 }
 
 .site-header.is-open .site-menu {
   visibility: visible;
-  opacity: 1;
   transform: none;
-  transition: opacity .25s ease, transform .25s ease, visibility 0s;
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), visibility 0s;
 }
 
 .site-menu__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
-  gap: clamp(24px, 4vw, 64px);
-  align-items: start;
-  padding-block: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;        /* CTA right under the list */
+  gap: 28px;
+  min-height: 100%;
+  max-width: none;
+  padding: 16px 24px calc(24px + env(safe-area-inset-bottom, 0px));
 }
 
 .site-menu__list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px 24px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -192,49 +209,47 @@
   display: flex;
   align-items: baseline;
   gap: 12px;
-  min-height: 48px;
-  padding: 12px 14px;
-  border-radius: 14px;
+  min-height: 46px;
+  padding: 11px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, .07);   /* light separators */
   color: var(--fg);
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 400;
   text-decoration: none;
   transition: background .2s ease, color .2s ease;
 }
 
-.site-menu__list a:hover { background: rgba(255, 255, 255, .06); }
+.site-menu__list a:hover { background: rgba(255, 255, 255, .05); }
 
 .site-menu__list a[aria-current="true"] {
+  border-radius: 12px;
+  border-bottom-color: transparent;
   background: linear-gradient(100deg, rgba(225, 86, 155, .16), rgba(242, 137, 58, .12));
   color: #fff;
 }
 
 .site-menu__num {
   font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   letter-spacing: .1em;
   color: var(--fg-3);
 }
 
-.site-menu__list a[aria-current="true"] .site-menu__num { color: var(--orange-2); }
+.site-menu__list a[aria-current="true"] .site-menu__num { color: #fff; }
 
 .site-menu__foot {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 12px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--panel);
 }
 
-.site-menu__foot .btn { width: 100%; }
+.site-menu__foot .btn { padding-inline: 26px; }   /* as long as its label */
 
 .site-menu__note {
-  font-size: 14px;
-  color: var(--fg-3);
-  text-align: center;
+  font-size: 16px;
+  color: var(--fg-2);
 }
 
 /* Dimmed page behind the menu (click to close) */
@@ -242,7 +257,7 @@
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgba(8, 9, 16, .55);
+  background: rgba(8, 9, 16, .35);
 }
 
 /* ---------- Side rail (very wide screens only) ----------
@@ -322,7 +337,7 @@
 .rail a:focus-visible { outline: 2px solid var(--orange); outline-offset: 0; }
 
 /* Chapters already passed */
-.rail a.is-past::before { border-color: var(--orange-2); background: rgba(242, 137, 58, .35); }
+.rail a.is-past::before { border-color: #fff; background: rgba(242, 137, 58, .35); }
 
 /* Current chapter */
 .rail a[aria-current="true"] {
@@ -350,51 +365,32 @@
   .site-menu-backdrop { display: none !important; }
 }
 
-/* M: chapter readout would crowd the bar */
-@media (max-width: 1199px) {
-  .site-menu__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
 /* Tablet */
 @media (max-width: 1023px) {
   .site-header__chapter { display: none; }
-
-  .site-menu__inner { grid-template-columns: 1fr; }
 }
 
 /* Mobile: icon-only hamburger, CTA moves into the menu, menu becomes a sheet */
 @media (max-width: 767px) {
   .site-header__bar { gap: 12px; }
 
-  .logo { --logo-scale: .54; }
+  .logo { --logo-scale: .46; }
 
   .site-header__cta { display: none; }
 
-  .site-menu {
-    background: var(--bg);
-    height: calc(100vh - var(--header-h));
-    height: calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px));
-    overflow-y: auto;
-    overscroll-behavior: contain;
+  .site-menu { width: min(72vw, 340px); }
+  .site-menu__inner { padding-inline: 16px; }
+  .site-menu__foot .btn { padding-inline: 14px; font-size: 16px; }
+
+  /* Phones: transparent over the hero; once scrolled, solid (nothing shows
+     through) with a thin line underneath */
+  .site-header.is-scrolled,
+  .site-header.is-open {
+    background-color: var(--bg);
+    border-bottom-color: var(--line);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
-  .site-menu__inner {
-    min-height: 100%;
-    align-content: space-between;
-    padding-block: 16px calc(24px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .site-menu__list { grid-template-columns: 1fr; }
-
-  .site-menu__list a {
-    min-height: 46px;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--line);
-    border-radius: 0;
-    font-size: 19px;
-  }
-
-  .site-menu__list a[aria-current="true"] { border-radius: 12px; border-bottom-color: transparent; }
-
-  .site-menu-backdrop { display: none; }
+  .site-header .logo { z-index: 1; }
 }

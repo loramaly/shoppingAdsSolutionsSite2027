@@ -25,10 +25,11 @@
   --line: rgba(255, 255, 255, .11);
   --line-2: rgba(255, 255, 255, .2);
 
-  /* Text — fg-3 is a touch lighter than the original for small-text contrast */
-  --fg: #F3F2F8;
-  --fg-2: #C5C8D6;
-  --fg-3: #9A9EB4;
+  /* Text: all pure white for readability (was #F3F2F8 / #C5C8D6 / #9A9EB4).
+     Colours (orange, red, green…) are separate tokens below. */
+  --fg: #FFFFFF;
+  --fg-2: #FFFFFF;
+  --fg-3: #FFFFFF;
 
   /* Accents */
   --violet: #8B5CF6;
@@ -41,13 +42,16 @@
   --green: #4ADE9B;
   --gold: #F7B84B;
   --grad: linear-gradient(100deg, #E1569B 0%, #F2893A 100%);
-  /* Button paint = Figma "plate" fills (top layer first):
-     white glow 30% · pink #FF33BA → transparent · magenta #FF00E1 → orange #FF9100 · base #55128A */
+  /* Button paint: orange on the left, through pink and magenta, ending in
+     lilac-violet on the right (diagonal); a soft magenta glow underneath.
+     Previous paint (Figma plate), to go back:
+       radial-gradient(ellipse 37% 330% at 57% 31%, rgba(255,255,255,.3), rgba(255,255,255,0)),
+       radial-gradient(ellipse 60% 140% at 40% 14%, #FF33BA 19.7%, rgba(237,66,179,0) 100%),
+       radial-gradient(ellipse 45% 95% at 68% 96%, #FF00E1 0%, #FF9100 81%),
+       #55128A; */
   --btn-paint:
-    radial-gradient(ellipse 37% 330% at 57% 31%, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0)),
-    radial-gradient(ellipse 60% 140% at 40% 14%, #FF33BA 19.7%, rgba(237, 66, 179, 0) 100%),
-    radial-gradient(ellipse 45% 95% at 68% 96%, #FF00E1 0%, #FF9100 81%),
-    #55128A;
+    radial-gradient(ellipse 55% 120% at 50% 115%, rgba(255, 0, 225, .3), rgba(255, 0, 225, 0) 70%),
+    linear-gradient(115deg, #FF9100 0%, #FF5C8A 40%, #D93CC8 70%, #8E4BEA 100%);
   --grad-btn: var(--btn-paint);
 
   /* Type */
@@ -84,6 +88,14 @@ html {
   -webkit-text-size-adjust: 100%;
   /* Anchor jumps land below the sticky header */
   scroll-padding-top: calc(var(--header-h) + 16px);
+  /* Nothing may push the page sideways (the closed menu drawer, glows,
+     cards flying in). Set on html so it applies to the window itself;
+     the sticky header keeps working. */
+  overflow-x: hidden;
+}
+
+@supports (overflow-x: clip) {
+  html { overflow-x: clip; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -104,8 +116,12 @@ body {
   overflow-x: clip;
 }
 
-/* While the mobile menu is open the page behind it does not scroll */
-body.menu-open { overflow: hidden; }
+/* While the menu is open the page behind it does not scroll. Locked on
+   <html> (the viewport scroller): with html overflow-x: clip, hiding
+   overflow on <body> made body its own scroller and the sticky header
+   (with the menu inside it) jumped to the top of the page.
+   (Was: body.menu-open { overflow: hidden; }) */
+html:has(body.menu-open) { overflow: hidden; }
 
 img { display: block; max-width: 100%; height: auto; }
 h1, h2, h3, p { margin: 0; }
@@ -171,10 +187,10 @@ section {
 /* ---------- Typography ---------- */
 .label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--orange-2);
+  color: #fff;
 }
 
 .label--muted    { color: var(--fg-3); }
@@ -184,10 +200,18 @@ section {
 .label--on-brand { color: #fff; }
 .label--ink      { color: #6A2FB8; }
 
+/* Type levels: big titles (h1 / .h2) are the heaviest; subtitles (card
+   titles, niche names, key figures) are mid size and mid weight, so they
+   read easily and don't compete with the titles */
+:root {
+  --subtitle-size: clamp(19px, .5vw + 16px, 24px);   /* 24px on a 16" laptop */
+  --subtitle-weight: 500;   /* was 600: lighter, less heavy text on the page */
+}
+
 .h2 {
   margin-top: 14px;
   max-width: 20ch;
-  font-size: clamp(32px, 3.6vw + 4px, 56px);
+  font-size: clamp(30px, 2.6vw + 8px, 46px);   /* all big titles: 46px on a 16" laptop (was up to 56px) */
   line-height: 1.04;
   font-weight: 800;
   letter-spacing: -.025em;
@@ -211,34 +235,93 @@ section {
    Pill buttons (fully rounded ends) filled with the exact paint of the
    designer's plate in Figma (node 1766:1601): base #55128A + three radial
    gradients, same colours and stops, centres converted to % of the button. */
+/* Button: the logo-plate shape. Top-left / bottom-right corners are round,
+   top-right / bottom-left are cut at an angle (rounded joints), and the
+   plate leans like the logo; the label stays upright. The shape is a
+   clip-path polygon on ::before (any width works); the shadow is a
+   drop-shadow filter so it follows the shape.
+   Generated polygon: round corners 9px (was 12.8), cut 18px, cut joints 10.8px.
+   (Was: a pill, border-radius 999px + box-shadow.) */
 .btn {
+  --btn-shape: polygon(0.0px 9.0px, 0.23px 7.0px, 0.89px 5.1px, 1.96px 3.39px, 3.39px 1.96px, 5.1px 0.89px, 7.0px 0.23px, 9.0px 0.0px, calc(100% - 22.47px) -0.0px, calc(100% - 21.26px) 0.07px, calc(100% - 20.07px) 0.27px, calc(100% - 18.91px) 0.61px, calc(100% - 17.79px) 1.07px, calc(100% - 16.73px) 1.66px, calc(100% - 15.74px) 2.36px, calc(100% - 14.84px) 3.16px, calc(100% - 3.16px) 14.84px, calc(100% - 2.36px) 15.74px, calc(100% - 1.66px) 16.73px, calc(100% - 1.07px) 17.79px, calc(100% - 0.61px) 18.91px, calc(100% - 0.27px) 20.07px, calc(100% - 0.07px) 21.26px, calc(100% - -0.0px) 22.47px, calc(100% - -0.0px) calc(100% - 9.0px), calc(100% - 0.23px) calc(100% - 7.0px), calc(100% - 0.89px) calc(100% - 5.1px), calc(100% - 1.96px) calc(100% - 3.39px), calc(100% - 3.39px) calc(100% - 1.96px), calc(100% - 5.1px) calc(100% - 0.89px), calc(100% - 7.0px) calc(100% - 0.23px), calc(100% - 9.0px) calc(100% - -0.0px), 22.47px calc(100% - -0.0px), 21.26px calc(100% - 0.07px), 20.07px calc(100% - 0.27px), 18.91px calc(100% - 0.61px), 17.79px calc(100% - 1.07px), 16.73px calc(100% - 1.66px), 15.74px calc(100% - 2.36px), 14.84px calc(100% - 3.16px), 3.16px calc(100% - 14.84px), 2.36px calc(100% - 15.74px), 1.66px calc(100% - 16.73px), 1.07px calc(100% - 17.79px), 0.61px calc(100% - 18.91px), 0.27px calc(100% - 20.07px), 0.07px calc(100% - 21.26px), -0.0px calc(100% - 22.47px));
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 56px;
   padding: 0 30px;
   border: 0;
-  border-radius: 999px;
-  background: var(--btn-paint);
+  background: none;
   color: #fff;
   font-family: var(--display);
-  font-size: 19px;               /* 19px bold = "large text" for WCAG */
-  font-weight: 700;
+  font-size: 19px;
+  font-weight: 600;
+  white-space: nowrap;
   text-decoration: none;
   /* Soft purple shadow helps the white label on the bright orange areas */
   text-shadow: 0 1px 2px rgba(85, 18, 138, .55);
   cursor: pointer;
-  box-shadow:
-    0 10px 24px rgba(125, 20, 208, .45),
-    0 4px 10px rgba(218, 37, 156, .25);
-  transition: transform .2s ease, box-shadow .2s ease;
+  filter:
+    drop-shadow(0 10px 18px rgba(125, 20, 208, .45))
+    drop-shadow(0 3px 6px rgba(218, 37, 156, .25));
+  transition: transform .2s ease, filter .2s ease;
 }
 
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-paint);
+  clip-path: var(--btn-shape);
+  transform: skewX(-8deg);          /* leans like the logo plate */
+}
+
+/* Convex look (hover / focus): light from above on the top half, a little
+   shade along the bottom edge, same shape and lean as the plate */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: var(--btn-shape);
+  transform: skewX(-8deg);
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, .42) 0%,
+      rgba(255, 255, 255, .14) 38%,
+      rgba(255, 255, 255, 0) 55%,
+      rgba(60, 0, 90, 0) 70%,
+      rgba(60, 0, 90, .32) 100%);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-2px);
+}
+
+.btn:hover::after,
+.btn:focus-visible::after { opacity: 1; }
+
 .btn:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 14px 30px rgba(125, 20, 208, .6),
-    0 4px 10px rgba(218, 37, 156, .3);
+  filter:
+    drop-shadow(0 16px 24px rgba(125, 20, 208, .6))
+    drop-shadow(0 4px 8px rgba(218, 37, 156, .35));
+}
+
+/* Keyboard focus: a white ring that follows the plate shape, with a dark
+   gap so it reads on dark and on orange sections alike */
+.btn:focus-visible {
+  outline: none;
+  filter:
+    drop-shadow(2px 0 0 var(--bg)) drop-shadow(-2px 0 0 var(--bg))
+    drop-shadow(0 2px 0 var(--bg)) drop-shadow(0 -2px 0 var(--bg))
+    drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
+    drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+    drop-shadow(0 12px 20px rgba(125, 20, 208, .55));
 }
 
 .btn:active { transform: scale(.97); }
@@ -246,7 +329,7 @@ section {
 .btn--small {
   min-height: 44px;
   padding: 0 20px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .chip {
@@ -278,7 +361,7 @@ section {
   background: transparent;
   color: var(--fg-3);
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: .12em;
   text-transform: uppercase;
   cursor: pointer;

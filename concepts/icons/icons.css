@@ -1,0 +1,248 @@
+/* ==========================================================================
+   CONCEPT · Red line icons (3 options per card)
+   Uses tokens and .wrap from ../../css/base.css; the cards copy the site's
+   .job look. Every animation loops; reduced motion shows the final frame.
+   ========================================================================== */
+body { background: var(--bg); color: var(--fg); }
+
+.ic-page { padding-block: 48px 96px; }
+.ic-page h1 { max-width: 30ch; font-size: clamp(26px, 2.6vw, 36px); font-weight: 700; }
+.ic-intro { max-width: 62ch; margin-top: 10px; color: var(--fg-2); }
+.ic-intro a { color: #fff; }
+
+.ic-row-title {
+  margin-top: 48px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--orange-2);
+}
+
+.ic-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+/* Same card as on the site (.job) */
+.job {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--panel);
+}
+
+.job h3 { font-size: 20px; font-weight: 700; }
+.job p { margin-top: 6px; font-size: 15px; color: var(--fg-3); }
+
+.ic-tag {
+  margin: 0 0 16px !important;
+  font-family: var(--mono);
+  font-size: 11px !important;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* 2× the current 42px icon */
+.ic { display: block; width: 84px; height: 84px; margin-bottom: 16px; overflow: visible; }
+.ic * { transform-box: view-box; }
+
+/* ---------- 1A · Clock rewinds ---------- */
+.ic-rewind .ring {
+  stroke-dasharray: 201;
+  transform: rotate(-90deg);
+  transform-origin: 42px 42px;
+  animation: ringFill 3.2s cubic-bezier(.6, 0, .3, 1) infinite;
+}
+@keyframes ringFill { 0% { stroke-dashoffset: 201; } 70%, 100% { stroke-dashoffset: 0; } }
+
+.ic-rewind .hand-m { transform-origin: 42px 42px; animation: spinBack 3.2s cubic-bezier(.6, 0, .3, 1) infinite; }
+.ic-rewind .hand-h { transform-origin: 42px 42px; animation: spinBackSlow 3.2s cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes spinBack { 0% { transform: rotate(0); } 70%, 100% { transform: rotate(-720deg); } }
+@keyframes spinBackSlow { 0% { transform: rotate(0); } 70%, 100% { transform: rotate(-60deg); } }
+
+.ic-rewind .back { transform-origin: 14px 26px; animation: nudge 3.2s ease-in-out infinite; }
+@keyframes nudge { 0%, 60%, 100% { transform: translate(0, 0); } 30% { transform: translate(-2px, -2px); } }
+
+/* ---------- 1B · Hourglass flips ---------- */
+.ic-hourglass .glass { transform-origin: 42px 42px; animation: flip 4s cubic-bezier(.7, 0, .3, 1) infinite; }
+@keyframes flip { 0%, 82% { transform: rotate(0); } 100% { transform: rotate(180deg); } }
+
+.ic-hourglass .sand-top { transform-origin: 42px 40px; animation: drain 4s linear infinite; }
+.ic-hourglass .sand-bot { transform-origin: 42px 66px; animation: fill 4s linear infinite; }
+@keyframes drain { 0% { transform: scaleY(1); } 78%, 100% { transform: scaleY(0); } }
+@keyframes fill  { 0% { transform: scaleY(0); } 78%, 100% { transform: scaleY(1); } }
+
+.ic-hourglass .stream { animation: stream .5s linear infinite, streamOff 4s linear infinite; }
+@keyframes stream { to { stroke-dashoffset: -6; } }
+@keyframes streamOff { 0%, 76% { opacity: 1; } 80%, 100% { opacity: 0; } }
+
+/* ---------- 1C · Busy week clears ---------- */
+.ic-week .s { fill: #FF9100; transform-origin: center; transform-box: fill-box; animation: slotOut 5s ease-in-out infinite; }
+.ic-week .s2, .ic-week .s4 { fill: #FF4FA0; }
+.ic-week .s1 { animation-delay: 0s; }
+.ic-week .s2 { animation-delay: .25s; }
+.ic-week .s3 { animation-delay: .5s; }
+.ic-week .s4 { animation-delay: .75s; }
+.ic-week .s5 { animation-delay: 1s; }
+.ic-week .s6 { animation-delay: 1.25s; }
+@keyframes slotOut {
+  0%, 15%  { opacity: 1; transform: scale(1); }
+  25%, 85% { opacity: 0; transform: scale(.4); }
+  100%     { opacity: 1; transform: scale(1); }
+}
+
+.ic-week .free { transform-origin: 42px 50px; animation: freePop 5s cubic-bezier(.3, 1.6, .5, 1) infinite; }
+@keyframes freePop {
+  0%, 40%  { opacity: 0; transform: scale(.3); }
+  50%, 82% { opacity: 1; transform: scale(1); }
+  92%, 100% { opacity: 0; transform: scale(.3); }
+}
+
+/* ---------- 2A · Line climbs ---------- */
+.ic-climb .line { stroke-dasharray: 90; animation: draw 3.4s cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes draw { 0% { stroke-dashoffset: 90; } 55%, 100% { stroke-dashoffset: 0; } }
+
+.ic-climb .area { animation: areaIn 3.4s ease infinite; }
+@keyframes areaIn { 0%, 30% { opacity: 0; } 60%, 90% { opacity: 1; } 100% { opacity: 0; } }
+
+.ic-climb .arrow { transform-origin: 70px 20px; animation: arrowPop 3.4s cubic-bezier(.3, 1.6, .5, 1) infinite; }
+@keyframes arrowPop { 0%, 60% { opacity: 0; transform: scale(.4); } 70%, 92% { opacity: 1; transform: scale(1); } 100% { opacity: 0; } }   /* after the dot arrives */
+
+.ic-climb .rider {
+  fill: #8E4BEA;                       /* violet dot first, then the arrow */
+  stroke: #fff;
+  stroke-width: 2;
+  offset-path: path("M10 64 L28 48 L42 56 L70 20");
+  offset-rotate: 0deg;
+  animation: ride 3.4s cubic-bezier(.6, 0, .3, 1) infinite;
+}
+@keyframes ride { 0% { offset-distance: 0%; opacity: 1; } 55% { offset-distance: 100%; opacity: 1; } 68%, 100% { offset-distance: 100%; opacity: 0; } }
+
+/* ---------- 2B · Bars under your line ---------- */
+.ic-bars .b { transform-origin: 0 72px; animation: grow 3.6s cubic-bezier(.3, 1.3, .5, 1) infinite; }
+.ic-bars .b2 { animation-delay: .15s; }
+.ic-bars .b3 { animation-delay: .3s; }
+.ic-bars .b4 { animation-delay: .45s; }
+@keyframes grow { 0% { transform: scaleY(0); } 25%, 85% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+
+.ic-bars .spark { animation: spark 3.6s ease infinite; }
+@keyframes spark {
+  0%, 30% { opacity: 0; transform: translate(66.5px, 14px) scale(0) rotate(0); }
+  40% { opacity: 1; transform: translate(66.5px, 14px) scale(1.3) rotate(45deg); }
+  55%, 80% { opacity: 1; transform: translate(66.5px, 14px) scale(1) rotate(90deg); }
+  100% { opacity: 0; transform: translate(66.5px, 14px) scale(0) rotate(90deg); }
+}
+
+/* ---------- 2C · Coins stack up ---------- */
+.ic-coins .coin { animation: drop 4s cubic-bezier(.4, 0, .6, 1.4) infinite; }
+.ic-coins .c2 { animation-delay: .3s; }
+.ic-coins .c3 { animation-delay: .6s; }
+.ic-coins .c4 { animation-delay: .9s; }
+@keyframes drop {
+  0% { opacity: 0; transform: translateY(-34px); }
+  15%, 85% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+.ic-coins .badge { animation: badge 4s cubic-bezier(.3, 1.6, .5, 1) infinite; }
+@keyframes badge {
+  0%, 35% { opacity: 0; transform: translate(62px, 26px) scale(.3); }
+  48%, 85% { opacity: 1; transform: translate(62px, 26px) scale(1); }
+  100% { opacity: 0; transform: translate(62px, 26px) scale(.3); }
+}
+
+/* ---------- 3A · Checked on our plate ---------- */
+.ic-plate .plate { transform-origin: 29.5px 29px; animation: breathe 3s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+
+.ic-plate .check { stroke-dasharray: 40; animation: tick 3s cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes tick { 0%, 15% { stroke-dashoffset: 40; } 45%, 100% { stroke-dashoffset: 0; } }
+
+.ic-plate .pulse { transform-origin: 29.5px 29px; animation: pulseOut 3s ease-out infinite; }
+@keyframes pulseOut { 0%, 40% { opacity: 0; transform: scale(1); } 45% { opacity: .9; } 100% { opacity: 0; transform: scale(1.4); } }
+
+/* ---------- 3B · Two numbers become one ---------- */
+.ic-merge .n1 { transform-origin: 10px 31px; animation: n1 4s cubic-bezier(.6, 0, .3, 1) infinite; }
+.ic-merge .n2 { transform-origin: 10px 53px; animation: n2 4s cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes n1 {
+  0%, 15% { opacity: 1; transform: translateY(0) scaleX(1); }
+  45% { opacity: 1; transform: translateY(11px) scaleX(.786); }
+  55%, 90% { opacity: 0; transform: translateY(11px) scaleX(.786); }
+  100% { opacity: 1; transform: translateY(0) scaleX(1); }
+}
+@keyframes n2 {
+  0%, 15% { opacity: 1; transform: translateY(0) scaleX(1); }
+  45% { opacity: 1; transform: translateY(-11px) scaleX(1.467); }
+  55%, 90% { opacity: 0; transform: translateY(-11px) scaleX(1.467); }
+  100% { opacity: 1; transform: translateY(0) scaleX(1); }
+}
+
+.ic-merge .one { transform-origin: 10px 42px; animation: one 4s cubic-bezier(.3, 1.4, .5, 1) infinite; }
+@keyframes one { 0%, 45% { opacity: 0; transform: scaleX(.6); } 55%, 90% { opacity: 1; transform: scaleX(1); } 100% { opacity: 0; } }
+
+.ic-merge .ok { animation: ok 4s cubic-bezier(.3, 1.6, .5, 1) infinite; }
+@keyframes ok {
+  0%, 55% { opacity: 0; transform: translate(66px, 42px) scale(.2); }
+  65%, 90% { opacity: 1; transform: translate(66px, 42px) scale(1); }
+  100% { opacity: 0; transform: translate(66px, 42px) scale(.2); }
+}
+
+/* ---------- 3C · Bullseye ---------- */
+.ic-target .r { transform-origin: 40px 44px; animation: ripple 3.2s ease-in-out infinite; }
+.ic-target .r2 { animation-delay: .12s; }
+.ic-target .r3 { animation-delay: .24s; }
+@keyframes ripple { 0%, 40%, 100% { transform: scale(1); } 48% { transform: scale(1.08); } 58% { transform: scale(.98); } }
+
+.ic-target .dart { animation: dart 3.2s cubic-bezier(.5, 0, .9, .5) infinite; }
+@keyframes dart {
+  0% { opacity: 0; transform: translate(26px, -26px); }
+  20% { opacity: 1; transform: translate(26px, -26px); }
+  40% { transform: translate(0, 0); }
+  85% { opacity: 1; transform: translate(0, 0); }
+  100% { opacity: 0; transform: translate(0, 0); }
+}
+
+.ic-target .hit { transform-origin: 40px 44px; animation: hit 3.2s ease-out infinite; }
+@keyframes hit { 0%, 40% { opacity: 0; transform: scale(1); } 42% { opacity: 1; } 75%, 100% { opacity: 0; transform: scale(2.6); } }
+
+/* ---------- Chosen set: bullseye in the clock's style ----------
+   Grey track + gradient ring that sweeps round when the dart lands */
+.ic-target2 .ring {
+  stroke-dasharray: 201;
+  transform: rotate(-90deg);
+  transform-origin: 42px 42px;
+  animation: ringHit 3.2s cubic-bezier(.6, 0, .3, 1) infinite;
+}
+@keyframes ringHit { 0%, 40% { stroke-dashoffset: 201; } 85%, 100% { stroke-dashoffset: 0; } }
+
+.ic-target2 .mid,
+.ic-target2 .core { transform-origin: 42px 42px; animation: ripple 3.2s ease-in-out infinite; }
+.ic-target2 .core { animation-delay: .1s; }
+
+.ic-target2 .dart { animation: dart 3.2s cubic-bezier(.5, 0, .9, .5) infinite; }
+.ic-target2 .hit { transform-origin: 42px 42px; animation: hit 3.2s ease-out infinite; }
+
+.ic-note { max-width: 62ch; margin-top: 6px; color: var(--fg-2); font-size: 15px; }
+.ic-all { margin-top: 72px; }
+
+/* Reduced motion: no loops, every icon shows its finished state */
+@media (prefers-reduced-motion: reduce) {
+  .ic * { animation: none !important; }
+  .ic-week .s { opacity: 0; }
+  .ic-hourglass .sand-top { transform: scaleY(.4); }
+  .ic-hourglass .sand-bot { transform: scaleY(.6); }
+  .ic-coins .badge { transform: translate(62px, 26px); }
+  .ic-bars .spark { transform: translate(66.5px, 14px); }
+  .ic-merge .n1, .ic-merge .n2 { opacity: 0; }
+  .ic-merge .ok { transform: translate(66px, 42px); }
+  .ic-target .hit,
+  .ic-target2 .hit { opacity: 0; }
+  .ic-climb .rider {
+  fill: #8E4BEA;                       /* violet dot first, then the arrow */
+  stroke: #fff;
+  stroke-width: 2; offset-distance: 100%; }
+}

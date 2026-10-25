@@ -2,10 +2,10 @@
    SECTIONS · interactive pieces, in page order
    --------------------------------------------------------------------------
     2. Niches + markets   world map dots, hover a market, live clocks
-    3. Other weeks        "Now / With SAS" switch
+    3. What changes       (static: before / with SAS side by side)
     4. The pain           symptom → cause links
     5. What you want      red line slider
-    6. The doubt          strike-through on scroll
+    6. The doubt          quote cards play in on scroll
     7. The method         tabs, growth chart, creative loop
     8. SAS Labs           Intended / Observed / Measured layers
    10. The fit            checklist meter
@@ -100,42 +100,7 @@
   })();
 
 
-  /* ==========================================================================
-     3. OTHER WEEKS · one switch flips all four boards
-     ========================================================================== */
-  (function weekSwitch() {
-    var week = document.getElementById('week');
-    var btnNow = document.getElementById('w-now');
-    var btnSas = document.getElementById('w-sas');
-    if (!week) return;
-    var touched = false;
-
-    function set(view) {
-      week.setAttribute('data-v', view);
-      btnNow.setAttribute('aria-pressed', String(view === 'now'));
-      btnSas.setAttribute('aria-pressed', String(view === 'sas'));
-      // Restart the line-drawing animation of the visible state
-      $$('.v-' + view + ' .draw', week).forEach(function (path) {
-        path.style.animation = 'none';
-        path.getBoundingClientRect();
-        path.style.animation = '';
-      });
-    }
-
-    btnNow.addEventListener('click', function () { touched = true; set('now'); });
-    btnSas.addEventListener('click', function () { touched = true; set('sas'); });
-
-    // First time in view: show "Now", then flip to "With SAS" once
-    if (!reduceMotion && hasIO) {
-      var io = new IntersectionObserver(function (entries) {
-        if (!entries[0].isIntersecting) return;
-        io.disconnect();
-        set('now');
-        setTimeout(function () { if (!touched) set('sas'); }, 1800);
-      }, { threshold: .3 });
-      io.observe(week);
-    }
-  })();
+  /* 3. WHAT CHANGES WITH SAS · both states always visible, no script needed */
 
 
   /* ==========================================================================
@@ -161,47 +126,134 @@
 
     function wide() { return window.innerWidth >= 768; }
 
-    // Curved connector lines (only when symptoms and causes sit side by side)
+    // Curved connector lines (only when symptoms and causes sit side by side).
+    // Each link is a thin dashed line that is always there, plus a bright
+    // line on top that runs from the symptom to its cause when chosen.
+    var links = [];                    // { id, cause, flow, rect, span }
+    var timers = [];
+    var GRAD = 'treeFlow';
+
     function drawLinks() {
       while (svg.firstChild) svg.removeChild(svg.firstChild);
-      if (!wide()) { paint(); return; }
+      links = [];
+      if (!wide()) { paint(false); return; }
 
       var box = tree.getBoundingClientRect();
       svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
 
+      var defs = document.createElementNS(NS, 'defs');
+      svg.appendChild(defs);
+
       symptoms.forEach(function (sym) {
         var s = sym.getBoundingClientRect();
         var id = sym.getAttribute('data-s');
-        CAUSES_OF[id].forEach(function (causeId) {
+        CAUSES_OF[id].forEach(function (causeId, k) {
           var c = $('[data-c="' + causeId + '"]', tree).getBoundingClientRect();
           var x1 = s.right - box.left, y1 = s.top + s.height / 2 - box.top;
           var x2 = c.left - box.left, y2 = c.top + c.height / 2 - box.top;
           var mx = (x1 + x2) / 2;
-          var path = document.createElementNS(NS, 'path');
-          path.setAttribute('d', 'M' + x1 + ' ' + y1 + ' C ' + mx + ' ' + y1 + ' ' + mx + ' ' + y2 + ' ' + x2 + ' ' + y2);
-          path.setAttribute('data-s', id);
-          svg.appendChild(path);
+          var d = 'M' + x1 + ' ' + y1 + ' C ' + mx + ' ' + y1 + ' ' + mx + ' ' + y2 + ' ' + x2 + ' ' + y2;
+
+          var base = document.createElementNS(NS, 'path');
+          base.setAttribute('d', d);
+          base.setAttribute('class', 'base');
+          svg.appendChild(base);
+
+          // white at the symptom, lilac at the cause
+          var gid = GRAD + id + k;
+          var g = document.createElementNS(NS, 'linearGradient');
+          g.setAttribute('id', gid);
+          g.setAttribute('gradientUnits', 'userSpaceOnUse');
+          g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+          g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+          g.innerHTML = '<stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#CDBEFF"/><stop offset="1" stop-color="#9B7BF2"/>';
+          defs.appendChild(g);
+
+          // The bright line is always a plain solid stroke. It is revealed
+          // left → right by a clip rectangle that grows (the curves only
+          // ever move rightwards), so no dash pattern is ever drawn.
+          // (Was: a long dash + dash offset; some browsers redrew its start
+          // unevenly and the line jittered against the symptom's frame.)
+          var clip = document.createElementNS(NS, 'clipPath');
+          clip.setAttribute('id', gid + 'c');
+          var rect = document.createElementNS(NS, 'rect');
+          rect.setAttribute('x', x1 - 4);
+          rect.setAttribute('y', -20);
+          rect.setAttribute('height', box.height + 40);
+          rect.setAttribute('width', 0);
+          clip.appendChild(rect);
+          defs.appendChild(clip);
+
+          var flow = document.createElementNS(NS, 'path');
+          flow.setAttribute('d', d);
+          flow.setAttribute('class', 'lit');      // not "flow": base.css animates .flow as marching dashes
+          flow.setAttribute('stroke', 'url(#' + gid + ')');
+          flow.setAttribute('clip-path', 'url(#' + gid + 'c)');
+          svg.appendChild(flow);
+
+          links.push({ id: id, cause: causeId, flow: flow, rect: rect, span: x2 - x1 + 8 });
         });
       });
-      paint();
+      paint(false);
     }
 
-    function paint() {
+    function reveal(link, k) { link.rect.setAttribute('width', link.span * k); }
+
+    var RUN = 520;                     // ms for the light to reach a cause
+    function ease(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function run(link, delay) {
+      var start = null;
+      reveal(link, 0);
+      function step(now) {
+        if (start === null) start = now + delay;
+        var t = Math.max(0, Math.min(1, (now - start) / RUN));
+        reveal(link, ease(t));
+        if (t < 1) link.raf = requestAnimationFrame(step);
+      }
+      link.raf = requestAnimationFrame(step);
+    }
+
+    function paint(animate) {
+      timers.forEach(clearTimeout);
+      timers = [];
+      var on = CAUSES_OF[active];
+      var still = animate === false || reduceMotion || !links.length;
+
       symptoms.forEach(function (s) {
         s.setAttribute('aria-pressed', String(s.getAttribute('data-s') === active));
       });
-      causes.forEach(function (c) {
-        c.classList.toggle('on', CAUSES_OF[active].indexOf(c.getAttribute('data-c')) > -1);
+
+      links.forEach(function (l) {
+        cancelAnimationFrame(l.raf);
+        var mine = l.id === active;
+        l.flow.classList.toggle('on', mine);
+        if (!mine) { reveal(l, 0); return; }
+        if (still) reveal(l, 1);
+        else run(l, 0);
       });
-      $$('path', svg).forEach(function (p) {
-        p.classList.toggle('on', p.getAttribute('data-s') === active);
+
+      // A cause lights up when the line reaches it
+      causes.forEach(function (c) {
+        var lit = on.indexOf(c.getAttribute('data-c')) > -1;
+        c.classList.remove('hit');
+        if (!lit) { c.classList.remove('on'); return; }
+        if (still) { c.classList.add('on'); return; }
+        c.classList.remove('on');
+        timers.push(setTimeout(function () {
+          c.classList.add('on');
+          void c.offsetWidth;          // restart the flash
+          c.classList.add('hit');
+        }, RUN * .8));
       });
     }
 
     function select(sym) {
       auto = false;
-      active = sym.getAttribute('data-s');
-      paint();
+      var id = sym.getAttribute('data-s');
+      if (id === active) return;
+      active = id;
+      paint(true);
     }
 
     symptoms.forEach(function (sym) {
@@ -220,7 +272,7 @@
       if (!auto) return;
       i = (i + 1) % order.length;
       active = order[i];
-      paint();
+      paint(true);
     }, 3200);
   })();
 
@@ -236,8 +288,13 @@
     var dot = document.getElementById('rl-dot');
     var guide = document.getElementById('rl-v');
     var clip = document.getElementById('rl-clip');
+    var tip = document.getElementById('rl-tip');
+    var dragTag = document.getElementById('rl-drag');
+    var axisOn = document.getElementById('rl-axis-on');
+    var redline = slider.closest('.redline');
 
-    var X0 = 40, X1 = 880, Y0 = 290, Y1 = 40, RED = 2.5;
+    var X0 = 40, X1 = 880, Y0 = 390, Y1 = 40, RED = 2.5;   // taller plot: more air (was Y0 290, svg 340 tall)
+    var VH = 440;                                            // svg height in units
 
     function efficiency(t) { return 1.6 + 4.2 * Math.exp(-t / 40); }
     function toY(v) { return Y0 - (v - 1) / (6 - 1) * (Y0 - Y1); }
@@ -258,49 +315,206 @@
     var red = document.getElementById('rl-red');
     red.setAttribute('y1', redY);
     red.setAttribute('y2', redY);
-    document.getElementById('rl-redlabel').setAttribute('y', redY - 12);
+    // Pin the two notes to the heights they explain (svg is VH units tall)
+    var noteRed = document.getElementById('rl-note-red');
+    var noteCurve = document.getElementById('rl-note-curve');
+    if (noteRed) noteRed.style.setProperty('--y', (redY / VH * 100) + '%');
+    if (noteCurve) noteCurve.style.setProperty('--y', (toY(efficiency(0)) / VH * 100) + '%');   // left: at the curve's start
 
     function update() {
       var t = +slider.value, x = toX(t), y = toY(efficiency(t));
       dot.setAttribute('cx', x);
       dot.setAttribute('cy', y);
+      // keep the chart dot the same on-screen size as the slider handle (22px)
+      var unit = 900 / (dot.ownerSVGElement.getBoundingClientRect().width || 900);
+      dot.setAttribute('r', 10 * unit);            // 20px + 2px ring = 22px, like the slider handle
+      dot.setAttribute('stroke-width', 2 * unit);
       guide.setAttribute('x1', x);
       guide.setAttribute('x2', x);
       guide.setAttribute('y1', y);
       guide.setAttribute('y2', Y0);
       clip.setAttribute('width', Math.max(0, x - X0));
+      axisOn.setAttribute('x2', x);       // spend so far, lit on the x axis
 
       var over = efficiency(t) < RED;
-      dot.setAttribute('fill', over ? '#FF5C6A' : '#F2893A');
+      // Lilac while within the red line, red once past it (dot and slider)
+      slider.classList.toggle('is-over', over);
+      redline.classList.toggle('is-over', over);
+      slider.style.setProperty('--fill', t + '%');
+      // "Drag the budget" floats above the dot (svg is 900 × VH units)
+      if (tip) {
+        // anchored at the dot, in px of the svg (the plot can be taller on phones)
+        var sr = dot.ownerSVGElement.getBoundingClientRect(), pr = tip.parentNode.getBoundingClientRect(), k = sr.width / 900;
+        tip.style.left = (sr.left - pr.left + x * k) + 'px';
+        tip.style.top = (sr.top - pr.top + y * k) + 'px';
+      }
+      // "Drag" rides above the slider's handle (26px wide)
+      if (dragTag) {
+        var trackBox = dragTag.parentNode.getBoundingClientRect(), sb = slider.getBoundingClientRect();
+        dragTag.style.left = (sb.left - trackBox.left + 13 + t / 100 * (sb.width - 26)) + 'px';
+      }
       msg.textContent = over
         ? 'Past your red line. Growth now costs margin.'
         : (efficiency(t) - RED < .35 ? 'Close to your red line. Scale carefully.' : 'Room to scale profitably.');
       msg.classList.toggle('bad', over);
+      // The floating tag: "Drag the budget" until the first move, then the
+      // same answer in short, coloured by the state
+      if (tip && touched) {
+        var close = !over && efficiency(t) - RED < .35;
+        tip.textContent = over ? 'Past your red line' : close ? 'Scale carefully' : 'Room to scale';
+        tip.classList.toggle('is-ok', !over && !close);
+        tip.classList.toggle('is-warn', close);
+        tip.classList.toggle('is-bad', over);
+        if (dragTag) {
+          dragTag.classList.toggle('is-ok', !over && !close);
+          dragTag.classList.toggle('is-warn', close);
+          dragTag.classList.toggle('is-bad', over);
+        }
+      }
       slider.setAttribute('aria-valuetext', msg.textContent);
     }
 
-    slider.addEventListener('input', update);
+    var touched = false;
+    slider.addEventListener('input', function () { touched = true; update(); });
+
+    // The chart itself is draggable too: press anywhere on it (or on the dot)
+    // and move left / right; the slider follows
+    var plot = dot.ownerSVGElement, dragging = false;
+    function fromPointer(e) {
+      var r = plot.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width * 900;
+      slider.value = Math.round(Math.max(0, Math.min(100, (x - X0) / (X1 - X0) * 100)));
+      touched = true;
+      update();
+    }
+    plot.addEventListener('pointerdown', function (e) {
+      dragging = true;
+      redline.classList.add('is-dragging');
+      plot.setPointerCapture(e.pointerId);
+      fromPointer(e);
+    });
+    plot.addEventListener('pointermove', function (e) { if (dragging) fromPointer(e); });
+    function release() { dragging = false; redline.classList.remove('is-dragging'); }
+    plot.addEventListener('pointerup', release);
+    plot.addEventListener('pointercancel', release);
+    window.addEventListener('resize', update);
     update();
   })();
 
 
+  /* ---- Red line icons: play once, one after another, each time the row
+          comes into view (CSS keys off .play) ---- */
+  (function jobIcons() {
+    var row = document.querySelector('.jobs');
+    if (!row || reduceMotion || !hasIO) return;
+    new IntersectionObserver(function (entries) {
+      row.classList.toggle('play', entries[0].isIntersecting);
+    }, { threshold: .35 }).observe(row);
+  })();
+
+
   /* ==========================================================================
-     6. THE DOUBT · strike through each objection as it scrolls into view
+     6. THE DOUBT · each card plays in as it scrolls into view:
+        the doubt, then "typing…", then our answer
      ========================================================================== */
-  (function objections() {
-    var rows = $$('.o');
-    if (reduceMotion || !hasIO) {
-      rows.forEach(function (r) { r.classList.add('seen'); });
-      return;
+  (function doubts() {
+    var box = document.getElementById('obj');
+    if (!box || reduceMotion || !hasIO || !box.animate) return;   // without motion: everything just shows
+    var cards = $$('.dbt-card', box);
+    box.classList.add('js');
+
+    // A soft spring (slight overshoot, no wobble) as a CSS linear() curve;
+    // older browsers get a strong ease-out instead
+    function springCurve() {
+      var z = .72, w = 11, pts = [];
+      for (var k = 0; k <= 40; k++) {
+        var t = k / 40, wd = w * Math.sqrt(1 - z * z);
+        var y = 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+        pts.push(+y.toFixed(4));
+      }
+      pts[pts.length - 1] = 1;
+      return 'linear(' + pts.join(', ') + ')';
     }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('seen');
-        io.unobserve(e.target);
+    var SPRING = CSS.supports('animation-timing-function', 'linear(0, 1)') ? springCurve() : 'cubic-bezier(.23, 1, .32, 1)';
+    var GAP = 220;                                     // ms between cards: one by one
+
+    // Our answer is typed out, letter by letter, after the "typing…" dots.
+    // Every letter is in place from the start (invisible), so nothing moves.
+    var TYPE_AT = 950, PER_CHAR = 18;  // ms
+    cards.forEach(function (card) {
+      var text = card.querySelector('.dbt-a > span:last-child');
+      if (!text) return;
+      var walker = document.createTreeWalker(text, NodeFilter.SHOW_TEXT), nodes = [], n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      text.setAttribute('aria-label', text.textContent);
+      nodes.forEach(function (node) {
+        var frag = document.createDocumentFragment();
+        node.textContent.split('').forEach(function (ch) {
+          var sp = document.createElement('span');
+          sp.className = 'ch';
+          sp.setAttribute('aria-hidden', 'true');
+          sp.textContent = ch;
+          frag.appendChild(sp);
+        });
+        node.parentNode.replaceChild(frag, node);
       });
-    }, { threshold: .6 });
-    rows.forEach(function (r) { io.observe(r); });
+    });
+
+    function typeOut(card) {
+      var chars = $$('.dbt-a .ch', card), k = 0;
+      setTimeout(function next() {
+        if (k >= chars.length) return;
+        chars[k++].classList.add('on');
+        setTimeout(next, PER_CHAR);
+      }, TYPE_AT);
+    }
+
+    function land(card) { card.classList.add('landed'); typeOut(card); }
+
+    // Large screens: dealt from a stack in the middle of the group to their
+    // places. Phones: each rises into place as it scrolls in.
+    function deal() {
+      var wide = window.innerWidth >= 1024;
+      var g = box.getBoundingClientRect();
+      var cx = g.left + g.width / 2, cy = g.top + g.height / 2;
+      cards.forEach(function (card, i) {
+        var r = card.getBoundingClientRect();
+        var from = wide
+          ? 'translate(' + (cx - (r.left + r.width / 2)) + 'px, ' + (cy - (r.top + r.height / 2)) + 'px) scale(.86)'
+          : 'translateY(40px) scale(.96)';
+        var a = card.animate([
+          { opacity: 0, transform: from },
+          { opacity: 1, offset: .25 },
+          { opacity: 1, transform: 'none' }
+        ], { duration: wide ? 1000 : 700, delay: wide ? i * GAP : 0, easing: SPRING, fill: 'backwards' });
+        a.onfinish = function () { land(card); };
+        // the card is visible from the moment it starts moving
+        setTimeout(function () { card.style.opacity = 1; }, wide ? i * GAP : 0);
+      });
+    }
+
+    if (window.innerWidth >= 1024) {
+      var io = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        deal();
+      }, { rootMargin: '0px 0px -25% 0px' });
+      io.observe(box);
+    } else {
+      var one = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          one.unobserve(e.target);
+          var a = e.target.animate([
+            { opacity: 0, transform: 'translateY(40px) scale(.96)' },
+            { opacity: 1, transform: 'none' }
+          ], { duration: 700, easing: SPRING, fill: 'backwards' });
+          e.target.style.opacity = 1;
+          a.onfinish = function () { land(e.target); };
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      cards.forEach(function (c) { one.observe(c); });
+    }
   })();
 
 
@@ -308,35 +522,7 @@
      7. THE METHOD
      ========================================================================== */
 
-  /* ---- 7a. Tabs: The growth / The loop (arrow keys move between tabs) ---- */
-  (function methodTabs() {
-    var tabs = $$('.cr-tabs [role="tab"]');
-    if (!tabs.length) return;
-
-    function select(tab) {
-      tabs.forEach(function (t) {
-        var on = t === tab;
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
-        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
-      });
-    }
-
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { select(tab); });
-      tab.addEventListener('keydown', function (e) {
-        var next = null;
-        if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
-        if (e.key === 'ArrowLeft') next = tabs[(i + tabs.length - 1) % tabs.length];
-        if (e.key === 'Home') next = tabs[0];
-        if (e.key === 'End') next = tabs[tabs.length - 1];
-        if (!next) return;
-        e.preventDefault();
-        select(next);
-        next.focus();
-      });
-    });
-  })();
+  /* ---- 7a. "The growth" and "The loop" are both shown, each under its own title (no tabs) ---- */
 
   /* ---- 7b. Growth chart: 30 tests, the running total ---- */
   (function growthChart() {
@@ -354,6 +540,7 @@
     var dot = document.getElementById('gw-dot');
     var tag = document.getElementById('gw-tag');
     var range = document.getElementById('gw-r');
+    var dragTag = document.getElementById('gw-drag');
     var out = {
       n: document.getElementById('gw-n'),
       lost: document.getElementById('gw-l'),
@@ -362,17 +549,48 @@
       msg: document.getElementById('gw-msg')
     };
 
-    function show(n) {
-      bars.forEach(function (b, i) { b.classList.toggle('off', i >= n); });
+    // The running total as one smooth curve through the points (Catmull-Rom
+    // turned into Béziers), drawn once; playing reveals it from the left
+    var smooth = 'M' + PTS[0][0] + ' ' + PTS[0][1];
+    for (var s = 0; s < PTS.length - 1; s++) {
+      var p0 = PTS[Math.max(0, s - 1)], p1 = PTS[s], p2 = PTS[s + 1], p3 = PTS[Math.min(PTS.length - 1, s + 2)];
+      var c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      var c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      smooth += ' C' + c1[0].toFixed(1) + ' ' + c1[1].toFixed(1) + ' ' + c2[0].toFixed(1) + ' ' + c2[1].toFixed(1) + ' ' + p2[0] + ' ' + p2[1];
+    }
+    line.setAttribute('d', smooth);
+    var LEN = line.getTotalLength();
+    line.style.strokeDasharray = LEN;
+    function lengthAtX(x) {                          // x grows along the curve: binary search
+      var lo = 0, hi = LEN;
+      for (var it = 0; it < 22; it++) {
+        var mid = (lo + hi) / 2;
+        if (line.getPointAtLength(mid).x < x) lo = mid; else hi = mid;
+      }
+      return (lo + hi) / 2;
+    }
 
-      var d = '';
-      for (var i = 0; i <= n; i++) d += (i ? ' L' : 'M') + PTS[i][0] + ' ' + PTS[i][1];
-      line.setAttribute('d', d);
+    // p can be fractional while it plays: bars appear as p passes them and
+    // the line / dot glide between the points
+    function show(p) {
+      var n = Math.max(1, Math.min(N, Math.floor(p))), f = Math.min(1, p - Math.floor(p));
+      bars.forEach(function (b, i) { b.classList.toggle('off', i >= Math.ceil(p - .001)); });
 
-      var p = PTS[n];
-      dot.setAttribute('cx', p[0]);
-      dot.setAttribute('cy', p[1]);
-      tag.setAttribute('transform', 'translate(' + Math.min(Math.max(p[0], 70), 830) + ' ' + p[1] + ')');
+      // reveal the smooth curve up to where we are (by x, which only grows)
+      var tx = PTS[n][0] + (n < N ? (PTS[n + 1][0] - PTS[n][0]) * f : 0);
+      var len = lengthAtX(tx), q = line.getPointAtLength(len);
+      line.style.strokeDashoffset = LEN - len;
+      q = [q.x, q.y];
+      dot.setAttribute('cx', q[0]);
+      dot.setAttribute('cy', q[1]);
+      // "Total so far" chip over the end of the curve (svg viewBox: 44 20 840 270)
+      var svgR = line.ownerSVGElement.getBoundingClientRect(), boxR = tag.parentNode.getBoundingClientRect();
+      var kx = svgR.width / 840, ky = svgR.height / 270;
+      var tx2 = svgR.left - boxR.left + (q[0] - 44) * kx, half2 = tag.offsetWidth / 2;
+      var tl = Math.max(half2, Math.min(boxR.width - half2, tx2));
+      tag.style.left = tl + 'px';
+      tag.style.top = (svgR.top - boxR.top + (q[1] - 20) * ky) + 'px';
+      tag.style.setProperty('--ax', (tx2 - tl) + 'px');
 
       var wins = 0;
       for (var k = 0; k < n; k++) if (VALS[k] > 0) wins++;
@@ -384,12 +602,31 @@
       out.total.textContent = total >= 0 ? 'above break-even' : 'below break-even';
 
       var text, tone;
-      if (wins === 0) { text = 'Judge it now and the loop looks like pure cost.'; tone = 'neg'; }
-      else if (total < 0) { text = 'A winner arrived. It keeps earning while the tests go on.'; tone = 'neg'; }
-      else if (n < N) { text = 'The winners are now paying for every loss.'; tone = 'pos'; }
-      else { text = wins + ' winners out of ' + N + ' paid for every loss. Now they drive the growth.'; tone = 'pos'; }
-      out.msg.textContent = text;
-      out.msg.className = 'gw-msg ' + tone;
+      if (wins === 0) { text = 'So far every test lost a little. Judged now, testing looks like pure cost.'; tone = 'neg'; }
+      else if (total < 0) { text = 'A winner arrived. It keeps earning while the next tests run.'; tone = 'neg'; }
+      else if (n < N) { text = 'The winners now pay for every losing test.'; tone = 'pos'; }
+      else { text = wins + ' winners out of ' + N + ' tests paid for every loss, and now drive the growth.'; tone = 'pos'; }
+      if (out.msg.textContent !== text) {
+        out.msg.textContent = text;
+        out.msg.className = 'gw-msg ' + tone;
+        void out.msg.offsetWidth;            // restart the flash-in
+        out.msg.classList.add('is-new');
+      }
+
+      // the slider follows: white up to here, light grey after; "Drag" rides its handle
+      range.value = n;
+      var pct = (p - 1) / (N - 1);
+      range.style.setProperty('--fill', (pct * 100) + '%');
+      if (dragTag) {
+        // the tag on the handle says where you are: "12 of 30 tests"
+        dragTag.textContent = n + ' of ' + N + ' tests';
+        var tb = dragTag.parentNode.getBoundingClientRect(), sb = range.getBoundingClientRect();
+        var cx = sb.left - tb.left + 11 + pct * (sb.width - 22), half = dragTag.offsetWidth / 2;
+        // keep the tag inside the box; its pointer still aims at the handle
+        var left = Math.max(half, Math.min(tb.width - half, cx));
+        dragTag.style.left = left + 'px';
+        dragTag.style.setProperty('--ax', (cx - left) + 'px');
+      }
     }
 
     // Phones: stretch the chart and move labels below it
@@ -402,29 +639,31 @@
     fit();
     window.addEventListener('resize', fit);
 
-    // Plays 1 → 30 the first time the chart is seen
-    var playing = false, timer = 0, touched = false, wasVisible = false;
+    // Plays 1 → 30 by itself the first time the chart is seen (so you can
+    // watch losses pile up and the winners pay them back); grab the slider
+    // or the "Drag" tag's handle any time to take over
+    var playing = false, raf = 0, touched = false, wasVisible = false;
     function play() {
-      clearInterval(timer);
+      cancelAnimationFrame(raf);
       playing = true;
-      var n = 1;
-      range.value = n;
-      show(n);
-      timer = setInterval(function () {
-        if (!playing) { clearInterval(timer); return; }
-        n++;
-        range.value = n;
-        show(n);
-        if (n >= N) { playing = false; clearInterval(timer); }
-      }, 170);
+      var start = null, DUR = 6500;
+      (function step(now) {
+        if (!playing) return;
+        if (start === null) start = now;
+        var t = Math.min(1, (now - start) / DUR);
+        var e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;   // ease-in-out
+        show(1 + e * (N - 1));
+        if (t < 1) raf = requestAnimationFrame(step); else { playing = false; show(N); }
+      })(performance.now());
     }
 
     range.addEventListener('input', function () {
       touched = true;
       playing = false;
-      clearInterval(timer);
+      cancelAnimationFrame(raf);
       show(+range.value);
     });
+    window.addEventListener('resize', function () { show(+range.value); });
 
     show(N);
 

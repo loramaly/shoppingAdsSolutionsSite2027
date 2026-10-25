@@ -11,14 +11,18 @@
        YOUR BUSINESS  Product · Operations · Finance · People
 
    Captions never change. The five text steps share three states (PHASE):
-     A  steps 0–1  You alone. Lots of questions land on you; the links to
-                   the business open one at a time for a moment (✓) and pause
-                   again (‖). Almost nothing gets through, decisions queue up.
-     B  step 2     A team of three in the middle. Questions ping-pong between
-                   you and the team; links open more often, still pause.
+     A  steps 0–1  You alone. Questions keep landing on you and pile up.
+                   The links to the business are almost always paused (‖,
+                   red, blinking); decisions stack up in a red queue at the
+                   end of each line. Now and then one link opens (✓) and
+                   lets one or two through.
+     B  step 2     A circular track: your three people close together at the
+                   top of it, you at the bottom. Questions run round and round
+                   the track — team → you → team — and rarely go down.
      C  steps 3–4  SAS in the middle. Everything flows one way and green:
-                   SAS → you → the business, ✓ on every part of it.
-   A counter under "YOUR BUSINESS" shows decisions through (✓) vs waiting (‖).
+                   SAS → you → the business, every link open (✓).
+   Big counts under the diagram (#stage-stats): stuck on you (left) · tasks
+   done (right). Done only grows when a dot really reaches the business.
    With prefers-reduced-motion the diagram is drawn once per step, no loop.
    Previous horizontal version: _backup/hero-horizontal/hero-network.js
    ========================================================================== */
@@ -48,10 +52,16 @@
     { team: 0, sas: 1, lit: 1, tall: 1 }
   ];
 
-  // Links to the business open in turns: every PERIOD seconds each link is
-  // open for OPEN_FOR seconds, staggered so they take turns
-  var PERIOD = [5.2, 4.4, 1];
-  var OPEN_FOR = [.9, 1.8, 1];
+  // Tasks waiting per business part grow this fast (per second) in each
+  // state, and clear this fast once SAS is in
+  var WAIT_GROWTH = [.3, .25, 0];
+
+  // Links to the business are paused most of the time: every PERIOD seconds
+  // each link opens for OPEN_FOR seconds (staggered, so they take turns)
+  var PERIOD = [6, 5.5];
+  var OPEN_FOR = [.6, .8];
+  var WAIT_CLEAR = 2.2;
+  var WAIT_WEIGHT = [1, .8, 1.2, .7];   // parts don't fill up at the same pace
 
   var STATES = [
     'Now · questions flow to you',
@@ -70,7 +80,7 @@
   ];
 
   var SPAWN_RATE = [7, 8, 8];   // questions per second, per state
-  var PILE_DECAY = [.3, .3, 6];  // how fast the pile on "You" clears, per state
+  var PILE_DECAY = [.12, .12, 6]; // how fast the pile on "You" clears, per state (barely, until SAS)
 
   var COLORS = {
     orange: '#F2893A',
@@ -94,18 +104,31 @@
   var spawnAcc = 0, deptAcc = 0, glow = 0, sasCount = 0, sasPulse = 0;
   var step = -1, time = 0, lastFrame = performance.now(), running = true;
   var phase = 0;
-  var tween = { team: 0, sas: 0, lit: 0, tall: 0, ring: 0 };
-  var queue = [0, 0, 0, 0];            // decisions waiting in front of each part of the business
+  var tween = { team: 0, sas: 0, lit: 0, tall: 0 };
+  var done = [0, 0, 0, 0];             // tasks done, per business part
+  var justDone = [0, 0, 0, 0];         // 1 → 0: ✓ shown just after a task arrives
+  var bump = [0, 0, 0, 0];             // badge bounce per part (1 → 0 after something arrives)
+  var queue = [0, 0, 0, 0];            // decisions stuck at the end of each line (red dots)
   var queueAcc = [0, 0, 0, 0];
-  var QUEUE_MAX = 7, GATE_T = .84;     // queue length; where on the wire the queue ends
-  var passed = 0;                      // decisions that got through (counter ✓)
+  var QUEUE_MAX = 9, GATE_T = .9;      // queue length; where on the line the pause sits
+  var waiting = [0, 0, 0, 0];          // tasks waiting for you, per part (red count); counters start at 0
+  var passed = 0;                      // decisions that got through (hidden counter ✓)
   var intro = reduceMotion ? 99 : 0;   // seconds since the diagram first came into view
   var LINE = 1.3;                      // one stroke width for every wire and outline
   var MIN_LINE = 1;                    // nothing is ever drawn thinner than 1px
-  var SHORT = .68;                     // compact diagram height, share of the canvas
+  var SHORT = .84;                     // compact diagram height, share of the canvas
+  var ITEM_TRACKING = '0.6px';         // letter spacing for Campaigns, Product…
+  var LABEL_TRACKING = '2px';          // letter spacing for ON YOUR DESK / YOUR BUSINESS
+  var RED_AT = 8;                      // pile size after which everything on you turns red
+  var SPREAD = 1.25;                   // >1 = outer items of a row spread wider
   var target = LOOK[0];
 
   /* ---------- Helpers ---------- */
+  // Canvas letter spacing (ignored by browsers that don't support it)
+  function track(value) {
+    if ('letterSpacing' in ctx) ctx.letterSpacing = value;
+  }
+
   function font(weight, size) {
     return weight + ' ' + size + 'px "Maven Pro", system-ui, sans-serif';
   }
@@ -147,6 +170,25 @@
     return bezier(ox, sy, ox, sy + reach * .9, x1, y1 - reach, x1, y1);
   }
 
+  // Cubic bezier along a circle arc from angle a0 to a1 (|a1 - a0| ≤ 90°)
+  function arcBezier(cx, cy, r, a0, a1) {
+    var k = 4 / 3 * Math.tan((a1 - a0) / 4) * r;
+    var x0 = cx + Math.cos(a0) * r, y0 = cy + Math.sin(a0) * r;
+    var x1 = cx + Math.cos(a1) * r, y1 = cy + Math.sin(a1) * r;
+    return bezier(x0, y0, x0 - Math.sin(a0) * k, y0 + Math.cos(a0) * k,
+      x1 + Math.sin(a1) * k, y1 - Math.cos(a1) * k, x1, y1);
+  }
+
+  // Path along a circle from angle a0 to a1, split into ≤ 90° pieces
+  function arcPath(cx, cy, r, a0, a1) {
+    var pieces = Math.max(1, Math.ceil(Math.abs(a1 - a0) / (Math.PI / 2)));
+    var out = [];
+    for (var i = 0; i < pieces; i++) {
+      out.push(arcBezier(cx, cy, r, a0 + (a1 - a0) * i / pieces, a0 + (a1 - a0) * (i + 1) / pieces));
+    }
+    return out;
+  }
+
   // Straight vertical link between two nodes
   function wireVertical(x, y0, y1) {
     var my = (y0 + y1) / 2;
@@ -157,6 +199,8 @@
   // `taper` thins the line towards the person: 'end' (wire arrives at "You")
   // or 'start' (wire leaves "You"). Drawn in short segments so the width can
   // change along the curve; dash patterns continue across segments.
+  var FADE_FROM = .8;   // last 20% of a wire at the person fades out
+
   function strokeWire(w, endColor, alpha, width, dash, taper) {
     if (alpha <= .004) return;
     ctx.save();
@@ -166,16 +210,20 @@
     g.addColorStop(.55, '#FFFFFF');
     g.addColorStop(1, endColor || '#FFFFFF');
     ctx.strokeStyle = g;
-    ctx.lineCap = dash ? 'butt' : 'round';
+    // Butt caps: tapered wires are drawn in short pieces, and round caps on
+    // semi-transparent pieces would overlap into visible dots at each joint
+    ctx.lineCap = (dash || taper) ? 'butt' : 'round';
     if (dash) ctx.setLineDash(dash);
 
-    var SEGMENTS = taper ? 24 : 1, travelled = 0, prev = pointOnWire(w, 0);
+    var SEGMENTS = taper ? 40 : 1, travelled = 0, prev = pointOnWire(w, 0);
     for (var k = 1; k <= SEGMENTS; k++) {
       var t = k / SEGMENTS;
       var pt = taper ? pointOnWire(w, t) : null;
       var thin = taper === 'end' ? t : taper === 'start' ? 1 - t : 0;
       // full width for most of the way, thinner at the person (never < 1px)
       ctx.lineWidth = Math.max(MIN_LINE, width * (1 - .65 * Math.pow(Math.max(0, (thin - .55) / .45), 1.4)));
+      // ...and it fades away before it reaches the person: we know where it goes
+      ctx.globalAlpha = alpha * (thin > FADE_FROM ? Math.pow(1 - (thin - FADE_FROM) / (1 - FADE_FROM), 1.6) : 1);
       ctx.lineDashOffset = travelled;
       ctx.beginPath();
       if (taper) {
@@ -192,7 +240,12 @@
     ctx.restore();
   }
 
+  // A route is one bezier, or an array of beziers travelled one after another
   function pointOnWire(w, t) {
+    if (Array.isArray(w[0])) {
+      var n = w.length, idx = Math.min(n - 1, Math.floor(t * n));
+      return pointOnWire(w[idx], t * n - idx);
+    }
     var u = 1 - t;
     var a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, d = t * t * t;
     return [
@@ -202,6 +255,7 @@
   }
 
   function wireLength(w) {
+    if (Array.isArray(w[0])) return w.reduce(function (a, seg) { return a + wireLength(seg); }, 0);
     var len = 0, prev = pointOnWire(w, 0);
     for (var i = 1; i <= 16; i++) {
       var pt = pointOnWire(w, i / 16);
@@ -214,7 +268,7 @@
   // Colour = pressure. Orange while the pile on "You" is manageable,
   // red once it overflows (same rule as the pile dots).
   function loadColor() {
-    return pile > 16 ? COLORS.red : COLORS.orange;
+    return pile > RED_AT ? COLORS.red : COLORS.orange;
   }
 
   // Mix two hex colours (t = 0 → a, t = 1 → b)
@@ -260,12 +314,14 @@
 
     // Where each waiting question settles: scattered around "You" with no
     // shield in between. Later questions land a little further out.
-    L.pileMax = compact ? 20 : 48;
+    L.pileMax = compact ? 34 : 80;
     pile = Math.min(pile, L.pileMax);
     L.slots = [];
     for (var k = 0; k < L.pileMax; k++) {
-      var reach = L.you.r * (1.05 + Math.random() * (.35 + .9 * k / L.pileMax));
-      var ang = Math.random() * Math.PI * 2;
+      // Under and beside you (an upturned umbrella), never above:
+      // angles from just above the left side, round the bottom, to the right
+      var reach = L.you.r * (1.15 + Math.random() * (.3 + .8 * k / L.pileMax));
+      var ang = (-.12 + Math.random() * 1.24) * Math.PI;
       L.slots.push([Math.cos(ang) * reach, Math.sin(ang) * reach]);
     }
     particles = [];
@@ -273,66 +329,62 @@
 
   // Positions of everything inside the canvas. Runs on resize and every
   // frame while the diagram grows / shrinks (tween.tall).
+  // With SAS the pair (SAS above, you below) sits lower, so it reads as
+  // centred between the desk row and the business row (share of the gap).
+  // Large screens only (≥ 1024px): on tablets and phones "You" would touch the business row
+  var SAS_DROP = .1;
+  var SIDE_TILT = .95;   // phones: team / SAS and you on a diagonal (radians from vertical)
+  var BIZ_RAISE = .08;   // with SAS, the business row moves up this share (was .15)
+
   function layoutContent() {
-    var Hc = H * (SHORT + (1 - SHORT) * tween.tall);   // height in use
+    var short = compact ? .97 : SHORT;                 // phones: no empty band above / below
+    var Hc = H * (short + (1 - short) * tween.tall);   // height in use
     var oy = (H - Hc) / 2;                             // centred vertically
-    var fs = compact ? 12 : 14;          // items and row captions share this size
+    var fs = compact ? 11 : 14;          // items and row captions share this size
     var pad = compact ? 14 : 24;
     L.fs = fs;
-    L.ch = compact ? 24 : 32;            // pill height
+    L.ch = compact ? 22 : 32;            // pill height
     ctx.font = font(600, fs);
+    track(ITEM_TRACKING);                // widths below include the spacing
 
-    // Captions sit at the start of each row ("ON YOUR DESK:  Campaigns …").
-    // On narrow canvases they move onto their own line.
-    var labelSize = fs;
-    ctx.font = monoFont(labelSize, 700);
-    var labelW = Math.max(ctx.measureText('ON YOUR DESK:').width, ctx.measureText('YOUR BUSINESS:').width) + 13;
-    ctx.font = font(600, fs);
-    L.labelSize = labelSize;
-    L.inline = !compact && W - labelW - 24 > 300;   // items zig-zag if they need to
-    var xStart = L.inline ? labelW + 18 : 0;
+    // Captions sit on their own line: ON YOUR DESK above the desk row,
+    // YOUR BUSINESS below the business row, both aligned to the row's start
+    L.labelSize = fs;
 
-    // A row of items after the caption. If they don't fit in one line they
-    // zig-zag over two lines, each in its own column, so every wire still
-    // drops straight down without crossing another item.
-    function placeRow(names, y, itemPad, maxGap, direction) {
+    // Items are always laid out as a "staircase": two levels, zig-zag, each
+    // item in its own column so every wire drops straight down between the
+    // others. The rows stay compact and centred instead of spanning the full
+    // width on large screens. direction: 1 = second level below, -1 = above.
+    function placeRow(names, y, itemPad, maxWidth, direction, pull) {
       var widths = names.map(function (n) { return ctx.measureText(n).width + itemPad; });
-      var total = widths.reduce(function (a, b) { return a + b; }, 0);
-      var room = W - xStart - 2;
-      var minGap = compact ? 8 : 10;
-      var items = [];
-      if (total + minGap * (names.length - 1) <= room) {
-        var gap = Math.min(maxGap, (room - total) / (names.length - 1));
-        var x = xStart + (room - (total + gap * (names.length - 1))) / 2;
-        names.forEach(function (n, i) {
-          items.push({ n: n, x: x, y: y, w: widths[i] });
-          x += widths[i] + gap;
-        });
-      } else {
-        var col = room / names.length;
-        names.forEach(function (n, i) {
-          var cx = xStart + col * (i + .5);
-          var row = i % 2 ? direction * (L.ch + 10) : 0;
-          items.push({ n: n, x: Math.max(2, Math.min(W - 2 - widths[i], cx - widths[i] / 2)), y: y + row, w: widths[i] });
-        });
-      }
-      items.forEach(function (it) { it.cx = it.x + it.w / 2; });
-      return items;
+      var room = Math.min(W - 4, maxWidth);
+      var mid = W / 2, half = room / 2 - room / names.length / 2;
+      var step = (compact ? L.ch + 8 : L.ch + 14) * direction;
+      return names.map(function (n, i) {
+        // -1 … 1 across the row, pushed outwards (power > 1) so the outer
+        // items get more room and their wires don't run into their neighbours'
+        var t = names.length > 1 ? i / (names.length - 1) * 2 - 1 : 0;
+        if (pull && pull[n]) t *= pull[n];            // nudge a given item towards the centre
+        var cx = mid + Math.sign(t) * Math.pow(Math.abs(t), SPREAD) * half;
+        var x = Math.max(2, Math.min(W - 2 - widths[i], cx - widths[i] / 2));
+        return { n: n, x: x, y: y + (i % 2 ? step : 0), w: widths[i], cx: x + widths[i] / 2 };
+      });
     }
 
     // ON YOUR DESK: plain white words, each with a dot the wires start from
     L.dotGap = compact ? 13 : 17;                       // text centre → its dot
-    var srcY = oy + (L.inline ? 22 : 40);
-    L.labelTopY = L.inline ? srcY : oy + 12;
-    L.src = placeRow(SOURCES, srcY, 0, 9999, 1);
+    var srcY = oy + (compact ? 30 : 44);
+    L.labelTopY = oy + (compact ? 8 : 12);
+    // Creatives sits a bit inwards so its line doesn't run into Campaigns'
+    L.src = placeRow(SOURCES, srcY, 0, compact ? 9999 : 700, 1, { Creatives: .72 });
     L.src.forEach(function (s) { s.dotY = s.y + L.dotGap; });
     var srcBottom = Math.max.apply(null, L.src.map(function (s) { return s.dotY; }));
 
     // YOUR BUSINESS: dashed pills, caption on the same line (or under them)
-    var depY = oy + Hc - (L.inline ? 30 : 54) - L.ch / 2;
-    L.labelBottomY = L.inline ? depY : oy + Hc - 30;
-    L.counterY = L.inline ? depY + L.ch / 2 + 16 : oy + Hc - 10;
-    L.dep = placeRow(DEPARTMENTS, depY, pad, compact ? 18 : 40, -1);
+    var depY = oy + Hc - 6 - L.ch / 2;
+    // With SAS (large screens): the business row comes up ~15%, shorter lines
+    if (window.innerWidth >= 1024) depY -= BIZ_RAISE * tween.sas * (depY - srcY);
+    L.dep = placeRow(DEPARTMENTS, depY, pad, compact ? 9999 : 560, -1);
     var depTop = Math.min.apply(null, L.dep.map(function (d) { return d.y; })) - L.ch / 2;
 
     // Centre line of the flow = middle of the item rows (the captions on the
@@ -352,24 +404,72 @@
     var via = Math.max(tween.team, tween.sas);
     L.you = { r: compact ? Math.max(22, Math.min(28, m * .075)) : Math.max(28, Math.min(48, m * .075)), x: rowCentre };
     L.mid = { r: compact ? Math.max(18, Math.min(24, m * .06)) : Math.max(22, Math.min(38, m * .06)), x: rowCentre };
-    var centre = (srcBottom + depTop) / 2;
-    var pair = L.mid.r * 1.6 + L.you.r * 1.9 + (compact ? 26 : 48);   // node centre → you centre
-    L.mid.y = centre - pair / 2;
-    L.you.y = centre + (pair / 2) * via;
+    // Team pair sits higher (room for the business); SAS pair sits lower (room for the desk lines)
+    var centre = srcBottom + (depTop - srcBottom) * (compact
+      ? .52                                            // phones: pair centred, short lines below
+      : .5 - .12 * tween.team + (window.innerWidth >= 1024 ? SAS_DROP : 0) * tween.sas);
+    // The team or SAS sits above you; you move down to make room
+    // (a little tighter with the team, so its track leaves air above and below)
+    // With SAS: tighter on phones (lots of lines); large screens get a taller canvas instead (sections.css)
+    var pair = (L.mid.r * 1.8 + L.you.r * 1.9 + (compact ? 30 : 56)) * (1 - .22 * tween.team + (compact ? -.44 : -.34) * tween.sas);   // SAS and you 30% closer, still centred
+    // Phones: the pair sits on a diagonal (team / SAS up-left, you down-right)
+    // instead of one above the other, so the diagram is much shorter
+    var tilt = compact ? SIDE_TILT : 0;
+    var hx = Math.sin(tilt) * pair / 2, hy = Math.cos(tilt) * pair / 2;
+    L.mid.x = rowCentre - hx * (1.25 + 1 * tween.sas);   // SAS further left: room for a round link to you
+    L.mid.y = centre - hy;
+    L.you.x = rowCentre + hx * .75 * via;
+    L.you.y = centre + hy * via + (compact ? 12 * tween.sas : 0);   // phones: you a bit lower with SAS
     // Top of the person's head (see drawPerson) and the point under "You"
     L.headTop = L.you.y - L.you.r * .9;
     L.feet = L.you.y + L.you.r * 1.05;
 
     // Every route is computed once; drawing and dots share it
-    var spreadYou = L.you.r * .32, spreadMid = L.mid.r * .5;
+    var spreadYou = L.you.r * .45, spreadMid = L.mid.r * .7;   // wider landing spots: lines stay apart
     L.wSrcYou = L.src.map(function (s) { return wireConverge(s.cx, s.dotY, L.you.x, L.headTop - 4, spreadYou, L.srcSpan); });
     L.wSrcMid = L.src.map(function (s) { return wireConverge(s.cx, s.dotY, L.mid.x, L.mid.y - L.mid.r * 1.05, spreadMid, L.srcSpan); });
-    // Starts below the team's name so it never crosses it; wYouMid is the
-    // same line travelled upwards (you handing questions back to the team)
-    L.wMidYou = wireVertical(rowCentre, L.mid.y + L.mid.r * 1.35, L.headTop - 4);
-    L.wYouMid = wireVertical(rowCentre, L.headTop - 4, L.mid.y + L.mid.r * 1.35);
+    // SAS → you
+    // Phones: out of SAS's right side, curving down onto your head
+    var sx = L.mid.x + L.mid.r * 1.25, sy = L.mid.y;
+    L.wMidYou = compact
+      ? bezier(sx, sy, sx + (L.you.x - sx) * .75, sy, L.you.x, sy + (L.headTop - sy) * .3, L.you.x, L.headTop - 3)
+      : wireVertical(rowCentre, L.mid.y + L.mid.r * 1.35, L.headTop - 4);
     L.wYouDep = L.dep.map(function (d) { return wireDiverge(L.you.x, L.feet, d.cx, d.y - L.ch / 2, spreadYou, L.depSpan); });
 
+    // Your team: a circular track. The three people sit close together at
+    // its top, you at its bottom. Dots run down either side to you and back.
+    var nodeR = L.you.r * (compact ? .5 : .44);
+    var orbit = {
+      x: (L.mid.x + L.you.x) / 2, y: (L.mid.y + L.you.y) / 2,
+      r: Math.max(20, Math.hypot(L.you.x - L.mid.x, L.you.y - L.mid.y) / 2)
+    };
+    L.orbit = orbit;
+    L.team = { nodeR: nodeR };
+    var spread = Math.min(.55, (nodeR * 2.3) / orbit.r);          // angle between neighbours
+    var aTeam = Math.atan2(L.mid.y - orbit.y, L.mid.x - orbit.x);   // straight up, or up-left on phones
+    L.nodes = [-1, 0, 1].map(function (k) {
+      var a = aTeam + k * spread;
+      return { a: a, x: orbit.x + Math.cos(a) * orbit.r, y: orbit.y + Math.sin(a) * orbit.r };
+    });
+    L.nodeOf = L.src.map(function (s, i) { return Math.min(2, Math.floor(i / L.src.length * 3)); });
+    L.wSrcNode = L.src.map(function (s, i) {
+      var n = L.nodes[L.nodeOf[i]];
+      return wireConverge(s.cx, s.dotY, n.x, n.y - nodeR, nodeR * .9, L.srcSpan);
+    });
+    // Down to you along the left (side 0) or right (side 1) half of the
+    // track, and the same ways back up. Index = person * 2 + side.
+    var bottom = aTeam + Math.PI;                         // where you sit on the track
+    L.wDown = []; L.wUp = [];
+    L.nodes.forEach(function (n) {
+      [0, 1].forEach(function (side) {
+        var a1 = side === 0 ? bottom - Math.PI * 2 : bottom;   // one way round or the other
+        var down = arcPath(orbit.x, orbit.y, orbit.r, n.a, a1);
+        L.wDown.push(down);
+        L.wUp.push(down.slice().reverse().map(function (w) {
+          return bezier(w[6], w[7], w[4], w[5], w[2], w[3], w[0], w[1]);
+        }));
+      });
+    });
   }
 
   /* ---------- Simulation ---------- */
@@ -387,35 +487,44 @@
     particles.push(p);
   }
 
-  // Is the link to business part j open right now?
+  // Is the link to business part j open right now? (always, with SAS)
   function isOpen(j) {
     if (phase === 2) return true;
     return ((time + j * PERIOD[phase] / 4) % PERIOD[phase]) < OPEN_FOR[phase];
   }
 
-  // Hand one decision from "You" down to the business: straight through if
-  // that link is open, otherwise it walks to the queue in front of it
+  // Send one decision from "You" down to a part of the business. If its
+  // link is open it goes through; if paused it joins the red queue at the
+  // end of the line (or, when that is full, the business keeps waiting).
+  // Before SAS, "Tasks done" stays far behind "Stuck on you" (about 1 : 6):
+  // a decision only gets through while that is still true
+  var DONE_RATIO = 6;
+  function canFinish() {
+    return phase === 2 || (passed + 1) * DONE_RATIO <= stuckTotal();
+  }
+
   function passDown() {
     var j = Math.floor(Math.random() * L.dep.length);
-    if (isOpen(j)) spawn('wYouDep', j, 'g', 'dep');
+    if (isOpen(j) && canFinish()) spawn('wYouDep', j, 'g', 'dep');
     else if (queue[j] < QUEUE_MAX) spawn('wYouDep', j, 'w', 'queue');
+    else waiting[j] += 1;
   }
 
   function arrive(p) {
     if (p.to === 'you') {
       if (p.k === 'q') {
         pile = Math.min(L.pileMax, pile + 1);
-        if (Math.random() < .3) passDown();
-        // With a team, you hand some questions straight back: ping-pong
-        if (phase === 1 && Math.random() < .35) spawn('wYouMid', undefined, 'q', 'team');
+        if (Math.random() < (phase === 1 ? .1 : .25)) passDown();
+        // With your team, you hand questions straight back: ping-pong
+        if (phase === 1 && Math.random() < .6) spawn('wUp', Math.floor(Math.random() * 6), 'q', 'node');
       } else if (p.k === 'd') {
         glow = 1;
         spawn('wYouDep', Math.floor(Math.random() * L.dep.length), 'g', 'dep');
       }
-    } else if (p.to === 'team') {
-      // The team keeps what it can; once full, questions bounce back to you
-      if (Math.random() < .25 + .75 * tween.ring) spawn('wMidYou', undefined, 'q', 'you');
-      else if (Math.random() < .4) passDown();
+    } else if (p.to === 'node') {
+      // Round the track to you, left or right; very little ever gets done
+      var k = p.route === 'wSrcNode' ? L.nodeOf[p.i] : Math.floor(p.i / 2);
+      if (Math.random() < .9) spawn('wDown', k * 2 + (Math.random() < .5 ? 0 : 1), 'q', 'you');
     } else if (p.to === 'sas') {
       // SAS turns every few questions into one prepared decision for you
       sasCount++;
@@ -423,8 +532,13 @@
       if (sasCount % 3 === 0) spawn('wMidYou', undefined, 'd', 'you');
     } else if (p.to === 'queue') {
       queue[p.i] = Math.min(QUEUE_MAX, queue[p.i] + 1);
+      bump[p.i] = 1;
     } else if (p.to === 'dep') {
       passed++;
+      done[p.i]++;
+      justDone[p.i] = 1;
+      bump[p.i] = 1;
+      waiting[p.i] = Math.max(0, waiting[p.i] - 1);
     }
   }
 
@@ -439,14 +553,14 @@
     tween.tall += (target.tall - tween.tall) * Math.min(1, dt * 2.2);
     L.sasAt = tween.sas + tween.team;   // the pair layout moves with either node
     if (Math.abs(tween.tall - tallBefore) > .0005 || Math.abs(L.sasAt - (sasBefore || 0)) > .0005) layoutContent();
-    tween.ring = phase === 1 ? Math.min(1, tween.ring + dt * .22) : Math.max(0, tween.ring - dt * 1.5);   // team fills up
 
     spawnAcc += SPAWN_RATE[phase] * flowRamp() * dt;
     while (spawnAcc >= 1) {
       spawnAcc--;
       var i = Math.floor(Math.random() * L.src.length);
       if (phase === 0) spawn('wSrcYou', i, 'q', 'you');
-      else spawn('wSrcMid', i, 'q', phase === 1 ? 'team' : 'sas');
+      else if (phase === 1) spawn('wSrcNode', i, 'q', 'node');
+      else spawn('wSrcMid', i, 'q', 'sas');
     }
 
     // With SAS the business gets your attention straight away (green)
@@ -458,24 +572,32 @@
       }
     }
 
-    // Queues drain once their link reopens: each waiting dot moves on
+    justDone = justDone.map(function (v) { return Math.max(0, v - dt / 1.1); });
+    bump = bump.map(function (v) { return Math.max(0, v - dt / .55); });
+
+    // A link that opens lets its queue through, one dot at a time
     queue.forEach(function (n, j) {
-      if (n > 0 && isOpen(j)) {
-        queueAcc[j] += 4 * dt;
-        while (queueAcc[j] >= 1 && queue[j] > 0) {
-          queueAcc[j]--;
-          queue[j]--;
-          var released = { route: 'wYouDep', i: j, t: GATE_T - .04, k: 'g', to: 'dep' };
-          released.speed = (compact ? 170 : 260) / (wireLength(L.wYouDep[j]) + 1);
-          particles.push(released);
-        }
+      if (n <= 0 || !isOpen(j) || !canFinish()) return;
+      queueAcc[j] += (phase === 2 ? 6 : 1.5) * dt;   // slow trickle while paused most of the time
+      while (queueAcc[j] >= 1 && queue[j] > 0) {
+        queueAcc[j]--;
+        queue[j]--;
+        var released = { route: 'wYouDep', i: j, t: GATE_T, k: 'g', to: 'dep' };
+        released.speed = (compact ? 170 : 260) / (wireLength(L.wYouDep[j]) + 1);
+        particles.push(released);
       }
+    });
+
+    // Tasks pile up in every part of the business until SAS is in
+    waiting = waiting.map(function (w, j) {
+      if (phase === 2) return Math.max(0, w - WAIT_CLEAR * dt);
+      return w + WAIT_GROWTH[phase] * WAIT_WEIGHT[j] * flowRamp() * dt;
     });
 
     for (var k = particles.length - 1; k >= 0; k--) {
       var p = particles[k];
       p.t += p.speed * dt;
-      var end = p.to === 'queue' ? GATE_T - .04 * (queue[p.i] + 1) : 1;
+      var end = p.to === 'queue' ? GATE_T - .035 * (queue[p.i] + 1) : 1;
       if (p.t >= end) {
         particles.splice(k, 1);
         arrive(p);
@@ -488,7 +610,7 @@
   }
 
   /* ---------- Drawing ---------- */
-  var LABEL_COLOR = 'rgba(255,255,255,.85)';   // all captions white for now
+  var LABEL_COLOR = '#FFFFFF';   // all captions pure white
 
   // Captions are fixed: they name the two ends of the flow, nothing more
   function drawLabels() {
@@ -496,28 +618,30 @@
     ctx.globalAlpha = appear(0, .5);
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'left';
-    ctx.font = monoFont(L.labelSize, 700);
-    if ('letterSpacing' in ctx) ctx.letterSpacing = '1px';
+    ctx.font = monoFont(L.labelSize, 800);
+    track(LABEL_TRACKING);
     ctx.fillStyle = LABEL_COLOR;
-    ctx.fillText('ON YOUR DESK:', 0, L.labelTopY);
-    ctx.fillText('YOUR BUSINESS:', 0, L.labelBottomY);
+    var topX = Math.min.apply(null, L.src.map(function (s) { return s.x; }));
+    ctx.fillText('ON YOUR DESK:', topX, L.labelTopY);
 
-    // Counter: decisions through vs decisions waiting
-    var waiting = Math.round(pile + queue.reduce(function (a, b) { return a + b; }, 0));
-    ctx.font = monoFont(compact ? 11 : 12, 500);
-    var x = 0, y = L.counterY;
-    ctx.fillStyle = COLORS.green;
-    ctx.fillText('✓ ' + passed + ' through', x, y);
-    x += ctx.measureText('✓ ' + passed + ' through').width + 16;
-    ctx.fillStyle = waiting ? COLORS.redLight : 'rgba(255,255,255,.6)';
-    ctx.fillText('‖ ' + waiting + ' waiting', x, y);
+    // YOUR BUSINESS: above Product (phones: flush left, like ON YOUR DESK), on a plate of the background colour so
+    // the wire into Product passes behind the words, not through them
+    var product = L.dep[0];
+    var upper = Math.min.apply(null, L.dep.map(function (d) { return d.y; }));
+    var bx = compact ? topX : product.x, by = upper - L.ch / 2 - (compact ? 19 : 16);   // phones: clear of the badges
+    var bw = ctx.measureText('YOUR BUSINESS:').width;
+    ctx.fillStyle = COLORS.bg;
+    ctx.fillRect(bx - 6, by - L.labelSize * .75, bw + 12, L.labelSize * 1.5);
+    ctx.fillStyle = LABEL_COLOR;
+    ctx.fillText('YOUR BUSINESS:', bx, by);
+    var bottomX = bx;
     ctx.restore();
   }
 
   // Where does a route end, and what colour does it turn into there?
   function endColorFor(to) {
     if (to === 'sas') return '#FFFFFF';
-    if (to === 'team') return '#FFFFFF';
+    if (to === 'node') return '#FFFFFF';
     return loadColor();
   }
 
@@ -527,22 +651,26 @@
 
     L.src.forEach(function (s, i) {
       var on = appear(.35 + i * .14, .6);
-      strokeWire(L.wSrcYou[i], loadColor(), .45 * (1 - via) * on, LINE, null, 'end');
-      strokeWire(L.wSrcMid[i], midEnd, .45 * via * on, LINE, null, 'end');
+      strokeWire(L.wSrcYou[i], '#FFFFFF', .45 * (1 - via) * on, LINE, null, 'end');
+      strokeWire(L.wSrcMid[i], midEnd, .45 * tween.sas * on, LINE, null, 'end');
+      strokeWire(L.wSrcNode[i], '#FFFFFF', .45 * tween.team * on, LINE, null, 'end');
     });
 
-    strokeWire(L.wMidYou, tween.sas > .5 ? COLORS.green : '#FFFFFF', .55 * via, LINE);
+    strokeWire(L.wMidYou, COLORS.green, .55 * tween.sas, LINE, null, 'end');
 
-    // To the business: dashed white while it stalls, solid once it runs.
-    // Queued decisions wait in a line just above each part of the business.
+
+    // To the business
     L.wYouDep.forEach(function (w, j) {
       var on = appear(1.4 + j * .12, .6);
-      strokeWire(w, '#FFFFFF', .8 * on, LINE, tween.lit > .6 ? null : [4, 6], 'start');
+      // Solid like every other line. "On hold" is told by the red tint,
+      // the blinking pause and the red queue; white once the business runs.
+      strokeWire(w, tween.lit > .5 ? '#FFFFFF' : COLORS.redLight, .8 * on, LINE, null, 'start');
+      // Stuck decisions: a red queue right before the paused business part
       for (var k = 0; k < Math.round(queue[j]); k++) {
-        var q = pointOnWire(w, GATE_T - .04 * (k + 1));
-        ctx.fillStyle = COLORS.orange;
+        var q = pointOnWire(w, GATE_T - .035 * (k + 1));
+        ctx.fillStyle = COLORS.red;
         ctx.beginPath();
-        ctx.arc(q[0], q[1], compact ? 2.4 : 3, 0, Math.PI * 2);
+        ctx.arc(q[0], q[1], compact ? 2.6 : 3.2, 0, Math.PI * 2);
         ctx.fill();
       }
     });
@@ -557,10 +685,10 @@
       if (p.k === 'd') {
         color = COLORS.green;                           // prepared decision from SAS
         size = compact ? 3.4 : 4.4;
+      } else if (p.k === 'w') {
+        color = COLORS.red;                             // heading for the queue
       } else if (p.k === 'g') {
         color = phase === 2 ? COLORS.green : '#FFFFFF';  // a trickle of your time, then real flow
-      } else if (p.k === 'w') {
-        color = COLORS.orange;                          // a decision heading for the queue
       } else {
         // Questions leave white and take on the colour of where they land
         var heat = Math.max(0, (p.t - .45) / .55);
@@ -586,6 +714,7 @@
   // Plain white words; the dot under each word is where its questions leave
   function drawSources() {
     ctx.font = font(600, L.fs);
+    track(ITEM_TRACKING);
     L.src.forEach(function (s, i) {
       var p = appear(.2 + i * .14, .45);
       if (p <= 0) return;
@@ -594,7 +723,7 @@
       ctx.save();
       ctx.globalAlpha = p;
       ctx.translate(0, (1 - p) * -8);                   // drops in from above
-      ctx.fillStyle = 'rgba(255,255,255,.92)';
+      ctx.fillStyle = '#FFFFFF';
       centeredText(s.n, s.cx, s.y);
 
       ctx.shadowColor = 'rgba(255,255,255,' + (.9 * flash).toFixed(3) + ')';
@@ -609,37 +738,45 @@
 
   // "Your team": three people who fill up (dim → white, bottom to top) as
   // the work lands on them. Full = "FULL", and questions bounce on to you.
-  function drawFilledPerson(x, y, r, level) {
-    drawPerson(x, y, r, 'rgba(255,255,255,.28)');
-    if (level <= 0) return;
-    var top = y - r * .78, bottom = y + r * .5;          // person's height span
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(x - r, bottom - (bottom - top) * level, r * 2, (bottom - top) * level + 1);
-    ctx.clip();
-    drawPerson(x, y, r, '#FFFFFF');
-    ctx.restore();
-  }
-
+  // Your team: the circular track, your three people at its top
   function drawTeamNode() {
-    if (tween.team <= .01) return;
-    var mid = L.mid, r = mid.r;
+    if (tween.team <= .01 || !L.nodes) return;
+    var O = L.orbit, nr = L.team.nodeR;
 
     ctx.save();
     ctx.globalAlpha = tween.team;
 
-    // They fill one after another
-    var fill = tween.ring * 3;
-    drawFilledPerson(mid.x - r * .75, mid.y, r * .85, Math.min(1, fill));
-    drawFilledPerson(mid.x, mid.y, r * .85, Math.min(1, Math.max(0, fill - 1)));
-    drawFilledPerson(mid.x + r * .75, mid.y, r * .85, Math.min(1, Math.max(0, fill - 2)));
+    ctx.lineWidth = LINE;
+    ctx.strokeStyle = 'rgba(255,255,255,.45)';
+    ctx.setLineDash([4, 6]);
+    ctx.beginPath();
+    ctx.arc(O.x, O.y, O.r, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
 
-    ctx.fillStyle = '#FFFFFF';
-    ctx.textAlign = 'center';
+    L.nodes.forEach(function (n) {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, nr * 1.05, 0, Math.PI * 2);
+      ctx.fillStyle = COLORS.bg;                      // the track passes behind them
+      ctx.fill();
+      drawPerson(n.x, n.y + nr * .1, nr * 1.05, '#FFFFFF');
+    });
+
+    // "Your team" beside the group, outside the track: on the right on large
+    // screens, on the left on phones (the counts sit on the right there)
     ctx.textBaseline = 'middle';
-    ctx.font = font(700, compact ? 13 : 15);
-    var label = tween.ring > .97 ? 'Your team · full' : 'Your team';
-    ctx.fillText(label, mid.x, mid.y + r * .95);
+    ctx.font = font(700, compact ? 12 : 14);
+    var tw = ctx.measureText('Your team').width, th = compact ? 18 : 22;
+    var side = compact ? L.nodes.reduce(function (a, n) { return n.x < a.x ? n : a; }) : L.nodes[2];
+    // Phones: left of the leftmost of the three and a little higher, clear
+    // of the wires and the dots on the track
+    var tx = compact ? Math.max(2, side.x - nr * 1.7 - tw) : side.x + nr * 1.6;
+    var ty = compact ? side.y - nr * 1.1 : side.y - nr * .2;
+    ctx.textAlign = 'left';
+    ctx.fillStyle = COLORS.bg;
+    ctx.fillRect(tx - 5, ty - th / 2, tw + 10, th);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText('Your team', tx, ty);
     ctx.restore();
   }
 
@@ -784,14 +921,14 @@
       if (a <= 0) continue;
       var slot = L.slots[i];
       ctx.globalAlpha = a;
-      ctx.fillStyle = i < 16 ? COLORS.orange : COLORS.red;
+      ctx.fillStyle = i < RED_AT ? COLORS.orange : COLORS.red;
       ctx.beginPath();
       ctx.arc(you.x + slot[0], you.y + slot[1], dotSize * (.4 + .6 * a), 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    var overloaded = pile > 16;
+    var overloaded = pile > RED_AT;
     var strain = overloaded && !reduceMotion ? Math.sin(time * 6) * Math.min(.06, pile / 400) : 0;
 
     // Green glow when a prepared decision arrives from SAS
@@ -812,7 +949,7 @@
     ctx.translate(you.x, you.y);
     ctx.scale((.85 + .15 * on) * (1 + strain), (.85 + .15 * on) * (1 + strain));
     // Icon and label share one colour: white, turning red as the pile overflows
-    var tone = overloaded ? mix('#FFFFFF', COLORS.redLight, Math.min(1, (pile - 16) / 16)) : '#FFFFFF';
+    var tone = overloaded ? mix('#FFFFFF', COLORS.redLight, Math.min(1, (pile - RED_AT) / 12)) : '#FFFFFF';
     drawPerson(0, -you.r * .08, you.r, tone);
     ctx.fillStyle = tone;
     ctx.font = font(700, compact ? 16 : 20);
@@ -824,6 +961,7 @@
 
   function drawDepartments() {
     ctx.font = font(600, L.fs);
+    track(ITEM_TRACKING);
     ctx.textAlign = 'left';
     // Words and frames are always clearly white
     var a = .85;
@@ -843,19 +981,35 @@
       ctx.fillStyle = '#FFFFFF';
       centeredText(d.n, d.x + d.w / 2, d.y);
 
-      // Corner badge: ✓ while its link is open, ‖ while it waits
-      var open = isOpen(j);
-      var cx = d.x + d.w - 2, cy = d.y - L.ch / 2 + 2, br = compact ? 7 : 8;
-      ctx.fillStyle = open ? COLORS.green : COLORS.redLight;
+      // Badge: red pause (‖) while the business waits, ✓ once it runs.
+      // It sits top-centre, right where the line comes in, and bounces
+      // whenever something arrives (a task done or a decision queuing).
+      var ok = tween.lit > .5 || justDone[j] > 0;   // ✓ the moment a task arrives (it's counted), ‖ otherwise
+      var cx = d.cx, cy = d.y - L.ch / 2 - (compact ? 3 : 2);
+      var b = bump[j], kick = b > 0 && !reduceMotion ? Math.sin((1 - b) * Math.PI * 3) * b : 0;
+      var br = (compact ? 7 : 8) * (1 + .45 * kick);
+      if (!ok && !reduceMotion) {
+        // Alarm: the pause blinks with a red pulse ring (parts out of step)
+        var beat = .5 + .5 * Math.sin(time * 5 + j * 1.3);
+        ctx.save();
+        ctx.globalAlpha = p * (.15 + .35 * beat);
+        ctx.fillStyle = COLORS.red;
+        ctx.beginPath();
+        ctx.arc(cx, cy, br + 3 + 5 * beat, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        ctx.globalAlpha = p * (.55 + .45 * beat);
+      }
+      ctx.fillStyle = ok ? COLORS.green : COLORS.red;
       ctx.beginPath();
       ctx.arc(cx, cy, br, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = COLORS.bg;
-      ctx.fillStyle = COLORS.bg;
+      ctx.fillStyle = '#FFFFFF';
       ctx.lineWidth = 1.8;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      if (open) {
+      if (ok) {
         ctx.beginPath();
         ctx.moveTo(cx - br * .45, cy + br * .02);
         ctx.lineTo(cx - br * .1, cy + br * .38);
@@ -872,9 +1026,9 @@
   function draw() {
     if (!W || !L.src) return;
     ctx.clearRect(0, 0, W, H);
-    drawLabels();
     drawWires();
     drawParticles();
+    drawLabels();
     drawSources();
     drawTeamNode();
     drawSasNode();
@@ -889,13 +1043,35 @@
     tween.lit = target.lit;
     tween.tall = target.tall;
     layoutContent();
-    tween.ring = phase === 1 ? 1 : 0;
     pile = Math.min(L.pileMax || 30, [36, 30, 0][phase]);
-    queue = phase === 2 ? [0, 0, 0, 0] : [4, 3, 5, 4];
+    waiting = phase === 2 ? [0, 0, 0, 0] : [12, 9, 14, 8];
+    queue = phase === 2 ? [0, 0, 0, 0] : [6, 4, 7, 5];
+    done = phase === 2 ? [24, 19, 21, 17] : [2, 1, 3, 1];
     passed = [3, 9, 120][phase];
     particles = [];
     glow = phase === 2 ? .6 : 0;
     draw();
+    updateStats(true);
+  }
+
+  /* ---------- Big counts under the diagram ---------- */
+  var statEls = {
+    done: document.querySelector('[data-stat="done"]'),
+    stuck: document.querySelector('[data-stat="stuck"]')
+  };
+  var statsAt = 0;
+
+  function stuckTotal() {
+    var sum = function (arr) { return arr.reduce(function (a, b) { return a + b; }, 0); };
+    return Math.round(pile + sum(queue) + sum(waiting));
+  }
+
+  function updateStats(force) {
+    if (!statEls.done || (!force && time - statsAt < .2)) return;
+    statsAt = time;
+    statEls.done.textContent = passed;
+    // Stuck = what piles up on you + what the business is waiting on
+    statEls.stuck.textContent = stuckTotal();
   }
 
   /* ---------- Scroll steps ---------- */
@@ -913,7 +1089,6 @@
     stateLabel.textContent = STATES[i];
     canvas.setAttribute('aria-label', ARIA[i]);
 
-
     steps.forEach(function (s) { s.classList.toggle('on', +s.getAttribute('data-i') === i); });
     dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
 
@@ -924,7 +1099,13 @@
   // Stacked layout (< 1024px): the stage covers the top, so the line is lower.
   function pickStep() {
     var stacked = window.innerWidth < 1024;
-    var line = window.innerHeight * (stacked ? .8 : .55);
+    var line = window.innerHeight * .55;
+    if (stacked) {
+      // Halfway down the free space under the sticky diagram, so the step
+      // whose text you are reading is the one the diagram shows
+      var below = stage.getBoundingClientRect().bottom;
+      line = below + (window.innerHeight - below) * .5;
+    }
     var index = 0;
     steps.forEach(function (s) {
       if (s.getBoundingClientRect().top < line) index = +s.getAttribute('data-i');
@@ -947,9 +1128,10 @@
       var dt = Math.min(.05, (now - lastFrame) / 1000);
       lastFrame = now;
       time = now / 1000;
-      if (running && W) {
+      if (running && !closed && W) {
         simulate(dt);
         draw();
+        updateStats();
       }
       requestAnimationFrame(loop);
     });
@@ -963,6 +1145,20 @@
 
   window.addEventListener('resize', redraw);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+
+  // Phones / tablets: × closes the diagram (and stops it); the pill brings it back
+  var closed = false;
+  var toggle = stage.querySelector('.stage-toggle');
+  if (toggle) {
+    var hideText = toggle.querySelector('.stage-toggle__hide');
+    toggle.addEventListener('click', function () {
+      closed = !closed;
+      stage.classList.toggle('is-closed', closed);
+      toggle.setAttribute('aria-expanded', String(!closed));
+      hideText.hidden = closed;
+      if (!closed) redraw();
+    });
+  }
 
   // Pause the animation while the stage is off screen
   if ('IntersectionObserver' in window) {

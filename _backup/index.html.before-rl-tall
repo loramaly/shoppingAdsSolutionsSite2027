@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Shopping Ads Solutions · Growth for eCommerce founders</title>
+  <meta name="description" content="We take the daily work of acquisition and retention off your desk. You keep the decisions that are yours, and they reach you ready.">
+  <meta name="theme-color" content="#111320">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap">
+
+  <!-- Styles: load order matters (tokens → layout → components → sections) -->
+  <link rel="stylesheet" href="css/base.css?v=259">
+  <link rel="stylesheet" href="css/header.css?v=259">
+  <link rel="stylesheet" href="css/sections.css?v=259">
+
+  <!-- Scripts: deferred, run after the HTML is parsed -->
+  <script src="js/navigation.js?v=259" defer></script>
+  <script src="js/hero-network.js?v=259" defer></script>
+  <script src="js/sections.js?v=259" defer></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Shared SVG gradient, referenced as url(#g1) by several diagrams -->
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#E1569B"/><stop offset="1" stop-color="#F2893A"/></linearGradient>
+  </defs>
+</svg>
+
+<!-- ================= SITE HEADER =================
+     Sticky on every screen size. Desktop: logo · current chapter · CTA · "Chapters" menu.
+     Mobile: logo · hamburger. The menu holds all chapters and the CTA. -->
+<header class="site-header" id="site-header">
+  <div class="wrap site-header__bar">
+    <a class="logo" href="https://shoppingadssolutions.com/" aria-label="Shopping Ads Solutions, home"><img src="assets/logos/logoShopping.svg" alt="" width="377" height="257"></a>
+
+    <p class="site-header__chapter" aria-hidden="true">
+      <span class="site-header__num" data-chapter-num>01</span>
+      <span data-chapter-name>Your week</span>
+    </p>
+
+    <div class="site-header__actions">
+      <a class="btn btn--small site-header__cta" href="#start">Request a Growth Audit</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+        <span class="menu-toggle__icon" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="menu-toggle__label">Chapters</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="site-menu" id="site-menu" aria-label="Chapters">
+    <div class="wrap site-menu__inner">
+      <ol class="site-menu__list">
+        <li><a href="#ch-moment"><span class="site-menu__num">01</span>Your week</a></li>
+        <li><a href="#ch-brands"><span class="site-menu__num">02</span>Niches, markets</a></li>
+        <li><a href="#ch-week"><span class="site-menu__num">03</span>What changes</a></li>
+        <li><a href="#ch-pain"><span class="site-menu__num">04</span>The pain</a></li>
+        <li><a href="#ch-want"><span class="site-menu__num">05</span>What you want</a></li>
+        <li><a href="#ch-doubt"><span class="site-menu__num">06</span>The doubt</a></li>
+        <li><a href="#ch-creative"><span class="site-menu__num">07</span>The method</a></li>
+        <li><a href="#ch-labs"><span class="site-menu__num">08</span>SAS Labs</a></li>
+        <li><a href="#ch-proof"><span class="site-menu__num">09</span>The proof</a></li>
+        <li><a href="#ch-fit"><span class="site-menu__num">10</span>The fit</a></li>
+        <li><a href="#ch-start"><span class="site-menu__num">11</span>First step</a></li>
+        <li><a href="#ch-people"><span class="site-menu__num">12</span>The people</a></li>
+      </ol>
+      <div class="site-menu__foot">
+        <a class="btn" href="#start">Request a Growth Audit</a>
+        <p class="site-menu__note">A short scoping call, then a paid audit.</p>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="site-menu-backdrop" data-menu-close hidden></div>
+
+<!-- Side rail: extra chapter navigation, only on very wide screens (≥1800px) -->
+<nav class="rail" aria-label="Chapter rail">
+  <a href="#ch-moment">Your week</a>
+  <a href="#ch-brands">Niches, markets</a>
+  <a href="#ch-week">What changes</a>
+  <a href="#ch-pain">The pain</a>
+  <a href="#ch-want">What you want</a>
+  <a href="#ch-doubt">The doubt</a>
+  <a href="#ch-creative">The method</a>
+  <a href="#ch-labs">SAS Labs</a>
+  <a href="#ch-proof">The proof</a>
+  <a href="#ch-fit">The fit</a>
+  <a href="#ch-start">First step</a>
+  <a href="#ch-people">The people</a>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<!-- ================= 1. HERO · YOUR WEEK (scroll story) ================= -->
+<section class="scrolly-sec" id="ch-moment" aria-label="Your week, now and with SAS">
+  <div class="glow" aria-hidden="true">
+    <div class="orb orb--violet"></div>
+    <div class="orb orb--orange"></div>
+  </div>
+  <div class="wrap scrolly" id="scrolly">
+    <div class="step s0 on" data-i="0">
+      <p class="label">For eCommerce founders running paid ads</p>
+      <h1>Your Business Grew.<br><mark class="hl">But<svg class="hl__ink" viewBox="0 0 120 40" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="hlFill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF6A4D" stop-opacity=".42"/><stop offset=".55" stop-color="#FF4FA0" stop-opacity=".5"/><stop offset="1" stop-color="#FF2FC8" stop-opacity=".62"/></linearGradient><linearGradient id="hlEdge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".78" stop-color="#C2187E" stop-opacity="0"/><stop offset="1" stop-color="#C2187E" stop-opacity=".5"/></linearGradient><filter id="hlRough" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".9 .08" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.6"/></filter></defs><g filter="url(#hlRough)"><path d="M9 10 L40 7.6 L80 5.8 L111 4.6 Q119 5 119.4 19 Q119.6 34 112 36.2 L70 37.4 L30 38.2 L6 38.6 L9.5 34 L3.5 31 L8 27.5 L2.5 23.5 L7.5 19.5 L3 15.5 L8 13 Z" fill="url(#hlFill)"/><path d="M9 10 L40 7.6 L80 5.8 L111 4.6 Q119 5 119.4 19 Q119.6 34 112 36.2 L70 37.4 L30 38.2 L6 38.6 L9.5 34 L3.5 31 L8 27.5 L2.5 23.5 L7.5 19.5 L3 15.5 L8 13 Z" fill="url(#hlEdge)"/><path d="M14 16.5 L112 12.5" stroke="#fff" stroke-opacity=".07" stroke-width="2.2"/><path d="M12 28 L114 25.5" stroke="#FF2FC8" stroke-opacity=".14" stroke-width="2.6"/></g></svg></mark> every decision still comes <span class="draw-line">Back To You<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3.19 13.98 L6.75 13.34 L10.39 12.73 L14.12 12.16 L17.93 11.61 L21.82 11.10 L25.79 10.62 L29.84 10.17 L33.96 9.76 L38.16 9.37 L42.42 9.01 L46.77 8.68 L51.18 8.38 L55.65 8.12 L60.20 7.88 L64.81 7.67 L69.48 7.49 L74.22 7.34 L79.01 7.22 L83.87 7.13 L88.78 7.07 L93.75 7.03 L98.77 7.03 L103.85 7.05 L108.98 7.10 L114.16 7.18 L119.38 7.29 L124.65 7.42 L129.97 7.59 L135.33 7.78 L140.74 8.00 L146.19 8.24 L151.67 8.52 L157.19 8.82 L162.75 9.15 L168.35 9.51 L173.98 9.89 L179.63 10.30 L185.32 10.74 L191.04 11.20 L196.79 11.69 A2.70 2.70 0 0 1 197.21 6.31 L197.21 6.31 L191.43 5.93 L185.68 5.57 L179.96 5.24 L174.28 4.93 L168.62 4.65 L163.00 4.40 L157.41 4.18 L151.87 3.98 L146.36 3.81 L140.89 3.66 L135.46 3.54 L130.07 3.45 L124.73 3.38 L119.44 3.34 L114.19 3.33 L108.99 3.35 L103.84 3.39 L98.75 3.46 L93.71 3.56 L88.72 3.68 L83.79 3.84 L78.91 4.02 L74.10 4.23 L69.35 4.46 L64.66 4.72 L60.03 5.02 L55.47 5.33 L50.98 5.68 L46.56 6.06 L42.20 6.46 L37.92 6.89 L33.71 7.35 L29.57 7.84 L25.51 8.35 L21.52 8.89 L17.62 9.46 L13.79 10.06 L10.05 10.69 L6.39 11.34 L2.81 12.02 A1.00 1.00 0 0 1 3.19 13.98 Z"/></svg></span>.</h1>
+      <svg class="lead-arrow" viewBox="0 0 24 28" width="28" height="33" aria-hidden="true"><path d="M12 3v21.6M19 17.6l-7 7-7-7"/></svg>
+      <!-- Large screens -->
+      <p class="body body--lead hero-wide">We handle the daily work of acquisition and retention. <span class="lead-soft">You get clear performance reports, so you stay in control.</span></p>
+      <!-- Phones and small tablets (≤ 900px): shorter -->
+      <p class="body body--lead hero-narrow">We handle profitable acquisition &amp; retention.</p>
+      <p class="body body--lead body--lead-next hero-narrow">You get your <strong>TIME BACK</strong>.</p>
+      <div class="row"><a class="btn" href="#start">Request a Growth Audit</a></div>
+      <p class="trustline"><a href="https://www.google.com/maps/place/Shopping+Ads+Solutions/@31.4062525,35.0817938,7z/data=!4m8!3m7!1s0x607f9d1fe3a3b5cf:0x5220f282aeccd70f!8m2!3d31.4062525!4d35.0817938!9m1!1b1!16s%2Fg%2F11ty26y1ww"><span class="stars" aria-hidden="true">★★★★★</span> <b>5.0</b> on Google</a><span><b>$300M+</b> in client sales from campaigns we've managed</span></p>
+      <div class="partners is-logos-only">
+        <p class="label label--muted">Official partners:</p>
+        <div class="prow">
+          <span class="pb" title="Meta Business Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/meta.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">Meta</span></span><span class="pb__type">Business Partner</span></span>
+          <span class="pb" title="Google Ads Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/googleads.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">Google Ads</span></span><span class="pb__type">Partner</span></span>
+          <span class="pb" title="TikTok Ads Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/tiktok.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">TikTok</span></span><span class="pb__type">Ads Partner</span></span>
+          <span class="pb" title="Shopify Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/shopify.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">Shopify</span></span><span class="pb__type">Partner</span></span>
+          <span class="pb" title="Loox Partner"><span class="pb__brand pb__brand--word">loox</span><span class="pb__type">Partner</span></span>
+          <span class="pb" title="WordPress Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/wordpress.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">WordPress</span></span><span class="pb__type">Partner</span></span></div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <!-- Phones / tablets: close the diagram (×), or bring it back -->
+      <button class="stage-toggle" type="button" aria-controls="stage-in" aria-expanded="true">
+        <svg class="stage-toggle__x" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <span class="stage-toggle__text">Show the animation</span>
+        <span class="visually-hidden stage-toggle__hide">Hide the animation</span>
+      </button>
+      <div class="stage-in" id="stage-in">
+        <canvas id="net" role="img" aria-label="Questions from campaigns, creatives, reports, budgets, retention and alerts flow to you."></canvas>
+        <!-- Big live counts under the diagram (filled by hero-network.js) -->
+        <dl class="stage-stats" aria-hidden="true">
+          <div class="is-stuck"><dt>Stuck<br>on you</dt><dd data-stat="stuck">0</dd></div>
+          <div class="is-done"><dt>Tasks<br>done</dt><dd data-stat="done">0</dd></div>
+        </dl>
+        <!-- Step caption: read by screen readers only; the diagram shows the change -->
+        <p id="stage-state" class="visually-hidden" aria-live="polite">Now · questions flow to you</p>
+      </div>
+    </div>
+
+    <div class="step" data-i="1">
+      <p class="label label--bad">01. The bottleneck</p>
+      <h2>Every Question Waits for You.</h2>
+      <ul class="step-points">
+        <li>Every decision needs your input.</li>
+        <li>Important answers come too late.</li>
+        <li>No time to dig into the details.</li>
+      </ul>
+    </div>
+
+    <div class="step" data-i="2">
+      <p class="label label--bad">02. The ceiling</p>
+      <h2>Your Team Has a Ceiling.</h2>
+      <ul class="step-points">
+        <li>One marketer can't master every channel.</li>
+        <li>Limited time means fewer tests and missed opportunities.</li>
+        <li>Growth slows. More work lands on you.</li>
+      </ul>
+    </div>
+
+    <div class="step" data-i="3">
+      <p class="label label--good">03. The solution</p>
+      <h2>The Work Routes Through Us.</h2>
+      <ul class="step-points">
+        <li>Specialists across media, creative, tracking, and retention.</li>
+        <li>Daily execution, with the details checked first.</li>
+        <li>Clear, data-backed recommendations, ready for your decision.</li>
+      </ul>
+    </div>
+
+    <div class="step" data-i="4">
+      <p class="label label--good">Back to leading</p>
+      <h2>You Run the Business Again.</h2>
+      <p class="body">Product, operations, finance, people.<br>Your time goes where only you can decide.</p>
+      <div class="row"><a class="btn" href="#start">Request a Growth Audit</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. NICHES + MARKETS ================= -->
+<section id="ch-brands" aria-labelledby="b-h">
+  <div class="wrap">
+    <div class="nm-head">
+      <div>
+        <p class="label">Who we work with</p>
+        <h2 id="b-h" class="h2">8 Niches. 3 Markets.</h2>
+        <p class="sub">Established eCommerce brands. These are the categories and countries we've run campaigns in.</p>
+      </div>
+      <div class="budget">
+        <p class="bl">Client ad budgets, per year</p>
+        <p class="bv">$78K <span>to</span> $5M</p>
+        <svg viewBox="0 0 320 50" aria-hidden="true"><g stroke="rgba(255,255,255,.18)" stroke-width="1"><line x1="49.2" x2="49.2" y1="10" y2="26"/><line x1="140.4" x2="140.4" y1="10" y2="26"/><line x1="179.6" x2="179.6" y1="10" y2="26"/></g>
+          <line x1="10" x2="310" y1="18" y2="18" stroke="rgba(255,255,255,.12)" stroke-width="6" stroke-linecap="round"/>
+          <line x1="35.2" x2="270.8" y1="18" y2="18" stroke="url(#g1)" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="35.2" cy="18" r="5.5" fill="#fff"/><circle cx="270.8" cy="18" r="5.5" fill="#fff"/>
+          <g class="bt"><text x="49.2" y="44" text-anchor="middle">$100K</text><text x="140.4" y="44" text-anchor="middle">$500K</text><text x="179.6" y="44" text-anchor="middle">$1M</text></g></svg>
+      </div>
+    </div>
+
+    <div class="subhead"><p class="label">Markets</p><span></span></div>
+    <div class="mkt">
+      <div class="wmap" id="wmap" data-m="">
+        <svg viewBox="40 0 860 405" role="img" aria-label="World map with the United States, Canada and Israel highlighted, and routes from Israel to North America.">
+          <g id="mapdots"></g>
+          <path class="arc flow" d="M716 149 Q 496 36 277 124"/>
+          <path class="arc flow" d="M716 149 Q 470 -12 259 66"/>
+          <g class="pin u" transform="translate(277 124)"><circle class="ring" r="6"/><circle class="core" r="4.5"/></g>
+          <g class="pin c" transform="translate(259 66)"><circle class="ring" r="6"/><circle class="core" r="4.5"/></g>
+          <g class="pin i" transform="translate(716 149)"><circle class="ring" r="8"/><circle class="core" r="6.5"/></g>
+          <g class="ml"><text x="282" y="160" text-anchor="middle">UNITED STATES</text><text x="252" y="38" text-anchor="middle">CANADA</text><text x="734" y="155">ISRAEL</text></g>
+        </svg>
+      </div>
+      <div class="mcards">
+        <div class="mc" data-m="u" tabindex="0" style="--c:#F2893A"><span class="mi"><i></i>01</span><h3>United States</h3><p>Primary market</p><span class="clock"><b data-tz="America/New_York">--:--</b>New York</span></div>
+        <div class="mc" data-m="i" tabindex="0" style="--c:#B8A6F5"><span class="mi"><i></i>02</span><h3>Israel</h3><p>Our home base</p><span class="clock"><b data-tz="Asia/Jerusalem">--:--</b>Tel Aviv</span></div>
+        <div class="mc" data-m="c" tabindex="0" style="--c:#E1569B"><span class="mi"><i></i>03</span><h3>Canada</h3><p>Active market</p><span class="clock"><b data-tz="America/Toronto">--:--</b>Toronto</span></div>
+      </div>
+    </div>
+
+    <div class="subhead"><p class="label">Our Clients</p><span></span></div>
+    <div class="niches">
+      <article class="nc big" data-n="home"><div class="nt"><b>9 brands</b></div><h3>Home &amp; Garden</h3><div class="lg">
+          <img src="assets/logos/sealy.svg" alt="Sealy" loading="lazy" style="--h:25.2">
+          <img src="assets/logos/hoya.svg" alt="Hoya" loading="lazy" style="--h:19.8">
+          <span class="wm" title="Placeholder: Electra logo file needed">Electra</span><img src="assets/logos/hollandia.svg" alt="Hollandia" loading="lazy" style="--h:15.8">
+          <img src="assets/logos/aeroflex.svg" alt="Aeroflex" loading="lazy" style="--h:20.7">
+          <img src="assets/logos/gama-sonic.svg" alt="Gama Sonic" loading="lazy" style="--h:17.9">
+          <img src="assets/logos/fine-lab.svg" alt="Fine Lab" loading="lazy" style="--h:29">
+          <img src="assets/logos/sharon-tchetchik.svg" alt="Sharon Tchetchik" loading="lazy" style="--h:23.8">
+          <img src="assets/logos/goolliart.svg" alt="Goolliart" loading="lazy" style="--h:20.1"></div></article>
+      <article class="nc" data-n="beauty"><div class="nt"><b>3 brands</b></div><h3>Cosmetics &amp; Care</h3><div class="lg">
+          <img src="assets/logos/sahara-hair.svg" alt="Sahara Hair" loading="lazy" style="--h:22.3">
+          <img src="assets/logos/glam42.svg" alt="GLAM42" loading="lazy" style="--h:13.1">
+          <span class="wm" title="Placeholder: GLO24K logo file needed" style="--s:1.3">GLO24K</span></div></article>
+      <article class="nc" data-n="jewelry"><div class="nt"><b>3 brands</b></div><h3>Jewelry &amp; Accessories</h3><div class="lg">
+          <img src="assets/logos/mondo.svg" alt="Mondo" loading="lazy" style="--h:14.0">
+          <img src="assets/logos/hot-crown.svg" alt="Hot Crown" loading="lazy" style="--h:13.0">
+          <img src="assets/logos/ga-jewelry-story.svg" alt="GA Jewelry Story" loading="lazy" style="--h:28.0"></div></article>
+      <article class="nc" data-n="fashion"><div class="nt"><b>2 brands</b></div><h3>Fashion &amp; Apparel</h3><div class="lg">
+          <img src="assets/logos/calypsa.svg" alt="Calypsa" loading="lazy" style="--h:19.3">
+          <img src="assets/logos/invision.svg" alt="InVision" loading="lazy" style="--h:12.0"></div></article>
+      <article class="nc" data-n="health"><div class="nt"><b>2 brands</b></div><h3>Health &amp; Wellness</h3><div class="lg">
+          <img src="assets/logos/hygear.svg" alt="HyGear" loading="lazy" style="--h:19.7">
+          <img src="assets/logos/feelbach.svg" alt="FeelBach" loading="lazy" style="--h:21.1"></div></article>
+      <article class="nc" data-n="gifting"><div class="nt"><b>2 brands</b></div><h3>Gifting</h3><div class="lg">
+          <img src="assets/logos/paint-your-life.svg" alt="Paint Your Life" loading="lazy" style="--h:17.4">
+          <img src="assets/logos/piece-of-the-holy-land.svg" alt="Piece of the Holy Land" loading="lazy" style="--h:28.0"></div></article>
+      <article class="nc" data-n="pets"><div class="nt"><b>1 brand</b></div><h3>Pets</h3><div class="lg">
+          <img src="assets/logos/shopipet.svg" alt="ShopiPet" loading="lazy" style="--h:28.5"></div></article>
+      <article class="nc" data-n="hospitality"><div class="nt"><b>1 brand</b></div><h3>Hospitality</h3><div class="lg">
+          <span class="wm" title="Placeholder: Domus Negev logo file needed" style="--s:1.1">Domus Negev</span></div></article>
+      <a class="nc ask" href="#start"><h3>Not on the list?</h3><p>Tell us your niche on the call. We'll say plainly if we're the right fit.</p><span class="btn btn--small go">Request a Growth Audit</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. OTHER WEEKS (now / with SAS) ================= -->
+<section id="ch-week" aria-labelledby="w-h">
+  <div class="wrap">
+    <h2 id="w-h" class="h2">What Changes With SAS.</h2>
+
+    <!-- Four topics. Each card: category, heading, then BEFORE SAS and
+         WITH SAS side by side (stacked on narrow cards). The small
+         pictures support the text; same scale in both states. -->
+    <div class="week">
+
+      <article class="chg">
+        <p class="chg-cat">Profitability</p>
+        <h3>From Rising Costs<br>to Smarter Growth.</h3>
+        <div class="cmp">
+          <div class="cmp-col is-before">
+            <p class="cmp-k">Before SAS</p>
+            <p class="cmp-t">More spend. Less profit.</p>
+            <svg class="cmp-v" viewBox="11 0 200 90" role="img" aria-label="Illustration: ad spend rises while profit declines.">
+              <g class="frame"><line class="grid" x1="22" x2="192" y1="29" y2="29"/><line class="grid" x1="22" x2="192" y1="50" y2="50"/><path class="ax" d="M22 6 V 72 H 192"/><text class="axl" x="16" y="12" text-anchor="end">$</text><text class="axl" x="192" y="84" text-anchor="end">Time</text></g>
+              <path class="draw ln-spend" d="M22 64 C 80 58 130 34 190 12"/>
+              <path class="draw ln-bad" d="M22 36 C 80 28 120 32 190 64"/>
+              <circle class="cross" cx="121" cy="37" r="4"/>
+            </svg>
+          </div>
+          <div class="cmp-col is-with">
+            <p class="cmp-k">With SAS</p>
+            <p class="cmp-t">Scaling guided by profitability.</p>
+            <svg class="cmp-v" viewBox="11 0 200 90" role="img" aria-label="Illustration: spend grows in step with profit.">
+              <g class="frame"><line class="grid" x1="22" x2="192" y1="29" y2="29"/><line class="grid" x1="22" x2="192" y1="50" y2="50"/><path class="ax" d="M22 6 V 72 H 192"/><text class="axl" x="16" y="12" text-anchor="end">$</text><text class="axl" x="192" y="84" text-anchor="end">Time</text></g>
+              <path class="draw ln-spend" d="M22 64 C 80 58 130 48 190 38"/>
+              <path class="draw ln-good" d="M22 46 C 80 38 130 26 190 12"/>
+            </svg>
+          </div>
+        </div>
+        <p class="chg-key"><span><i class="k-spend"></i>Ad spend</span><span><i class="k-profit"></i>Profit</span></p>
+      </article>
+
+      <article class="chg">
+        <p class="chg-cat">Tracking &amp; Reporting</p>
+        <h3>From Conflicting Numbers<br>to Clear Decisions.</h3>
+        <div class="cmp">
+          <div class="cmp-col is-before">
+            <p class="cmp-k">Before SAS</p>
+            <p class="cmp-t">The platform and store disagree.</p>
+            <svg class="cmp-v" viewBox="30 0 200 90" role="img" aria-label="Illustration: the platform and the store report different results.">
+              <line class="axis" x1="30" x2="170" y1="72" y2="72"/>
+              <path class="bar-a" d="M48 72 V20 Q48 14 54 14 H76 Q82 14 82 20 V72 Z"/>
+              <path class="bar-b" d="M118 72 V44 Q118 38 124 38 H146 Q152 38 152 44 V72 Z"/>
+              <text class="neq" x="100" y="52" text-anchor="middle">≠</text>
+              <text class="cap" x="65" y="86" text-anchor="middle">Platform</text>
+              <text class="cap" x="135" y="86" text-anchor="middle">Store</text>
+            </svg>
+          </div>
+          <div class="cmp-col is-with">
+            <p class="cmp-k">With SAS</p>
+            <p class="cmp-t">Decisions grounded in store results.</p>
+            <svg class="cmp-v" viewBox="30 0 200 90" role="img" aria-label="Illustration: store results are the basis for decisions; the platform gap is understood.">
+              <line class="axis" x1="30" x2="170" y1="72" y2="72"/>
+              <path class="bar-ghost" d="M48 72 V20 Q48 14 54 14 H76 Q82 14 82 20 V72 Z"/>
+              <path class="bar-good" d="M118 72 V44 Q118 38 124 38 H146 Q152 38 152 44 V72 Z"/>
+              <path class="tick" d="M126 55 l5 5 l10 -11"/>
+              <text class="cap" x="65" y="86" text-anchor="middle">Platform</text>
+              <text class="cap" x="135" y="86" text-anchor="middle">Store</text>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="chg">
+        <p class="chg-cat">Inventory &amp; Scaling</p>
+        <h3>From Wasted Spend<br>to Smarter Scaling.</h3>
+        <div class="cmp">
+          <div class="cmp-col is-before">
+            <p class="cmp-k">Before SAS</p>
+            <p class="cmp-t">Ads keep running as key items sell out.</p>
+            <svg class="cmp-v" viewBox="11 0 200 90" role="img" aria-label="Illustration: into the peak season, ad spend keeps rising while sellable stock runs out.">
+              <g class="frame"><line class="grid" x1="22" x2="192" y1="29" y2="29"/><line class="grid" x1="22" x2="192" y1="50" y2="50"/><path class="ax" d="M22 6 V 72 H 192"/><text class="axl" x="16" y="12" text-anchor="end">$</text><text class="axl" x="192" y="84" text-anchor="end">Time</text></g>
+              <rect class="waste" x="150" y="6" width="42" height="66"/>
+              <line class="peak" x1="150" x2="150" y1="6" y2="72"/>
+              <path class="ln-stock" d="M22 12 C 80 16 130 38 190 66"/>
+              <path class="draw ln-spend" d="M22 64 C 80 58 130 34 190 12"/>
+              <circle class="cross" cx="118" cy="38" r="4"/>
+            </svg>
+          </div>
+          <div class="cmp-col is-with">
+            <p class="cmp-k">With SAS</p>
+            <p class="cmp-t">Ad spend follows sellable stock.</p>
+            <svg class="cmp-v" viewBox="11 0 200 90" role="img" aria-label="Illustration: into the peak season, ad spend eases as sellable stock runs low.">
+              <g class="frame"><line class="grid" x1="22" x2="192" y1="29" y2="29"/><line class="grid" x1="22" x2="192" y1="50" y2="50"/><path class="ax" d="M22 6 V 72 H 192"/><text class="axl" x="16" y="12" text-anchor="end">$</text><text class="axl" x="192" y="84" text-anchor="end">Time</text></g>
+              <line class="peak" x1="150" x2="150" y1="6" y2="72"/>
+              <path class="ln-stock" d="M22 12 C 80 16 130 38 190 66"/>
+              <path class="draw ln-good" d="M22 64 C 70 56 115 44 140 42 S 178 58 190 68"/>
+            </svg>
+          </div>
+        </div>
+        <p class="chg-key"><span><i class="k-stock"></i>Sellable stock</span><span><i class="k-spend"></i>Ad spend</span><span><i class="k-peak"></i>Peak season</span></p>
+      </article>
+
+      <article class="chg">
+        <p class="chg-cat">Ownership &amp; Continuity</p>
+        <h3>From Scattered Information<br>to Clear Ownership.</h3>
+        <div class="cmp">
+          <div class="cmp-col is-before">
+            <p class="cmp-k">Before SAS</p>
+            <p class="cmp-t">Your media buyer leaves. Knowledge gets scattered.</p>
+            <svg class="cmp-v cmp-v--own" viewBox="2.4 0 170 112" role="img" aria-label="Illustration: accounts, data and test history scattered, with no clear owner.">
+              <circle class="who" cx="20" cy="56" r="17"/><text class="who-q" x="20" y="64" text-anchor="middle">?</text>
+              <path class="link is-loose" d="M35 48 L 92 20 M37 56 H 92 M35 64 L 92 92"/>
+              <circle class="dot" cx="92" cy="20" r="3.5"/><circle class="dot" cx="92" cy="56" r="3.5"/><circle class="dot" cx="92" cy="92" r="3.5"/>
+              <text class="nt" x="102" y="24.5">Accounts</text><text class="nt" x="102" y="60.5">Data</text><text class="nt" x="102" y="96.5">Tests</text>
+            </svg>
+          </div>
+          <div class="cmp-col is-with">
+            <p class="cmp-k">With SAS</p>
+            <p class="cmp-t">Your accounts stay yours. Every test is documented.</p>
+            <svg class="cmp-v cmp-v--own" viewBox="2.4 0 170 112" role="img" aria-label="Illustration: accounts, data and tests all connected to you, the owner.">
+              <circle class="who is-owner" cx="20" cy="56" r="17"/>
+              <g class="owner"><circle cx="20" cy="50" r="5"/><path d="M11 67 Q11 58 20 58 Q29 58 29 67 Z"/></g>
+              <path class="link" d="M35 48 L 92 20 M37 56 H 92 M35 64 L 92 92"/>
+              <circle class="dot" cx="92" cy="20" r="3.5"/><circle class="dot" cx="92" cy="56" r="3.5"/><circle class="dot" cx="92" cy="92" r="3.5"/>
+              <text class="nt" x="102" y="24.5">Accounts</text><text class="nt" x="102" y="60.5">Data</text><text class="nt" x="102" y="96.5">Tests</text>
+            </svg>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <p class="chg-note">Illustrative comparisons. Not actual performance results.</p>
+  </div>
+</section>
+
+<!-- ================= 4. THE PAIN · symptoms → causes ================= -->
+<section id="ch-pain" aria-labelledby="s-h">
+  <div class="wrap">
+    <p class="label">The pain</p>
+    <h2 id="s-h" class="h2">Most Symptoms Share a Few Causes.</h2>
+    <p class="sub">Pick what you're seeing. More budget rarely fixes any of these.</p>
+    <div class="tree" id="tree">
+      <svg class="links" id="links" aria-hidden="true"></svg>
+      <div class="col">
+        <h3 class="visually-hidden">What you see</h3>
+        <p class="tap-tip" aria-hidden="true"><span class="tip-touch">Tap a symptom</span><span class="tip-mouse">Point at a symptom</span></p>
+        <button class="sym" type="button" data-s="s1" aria-pressed="true">ROAS looks fine. Profit doesn't.</button>
+        <button class="sym" type="button" data-s="s2" aria-pressed="false">Creatives burn out in weeks.</button>
+        <button class="sym" type="button" data-s="s3" aria-pressed="false">Every budget increase breaks efficiency.</button>
+        <button class="sym" type="button" data-s="s4" aria-pressed="false">Reports disagree with each other.</button>
+        <button class="sym" type="button" data-s="s5" aria-pressed="false">Everything waits for you.</button>
+      </div>
+      <div class="gap" aria-hidden="true"></div>
+      <div class="col">
+        <h3>What's usually underneath</h3>
+        <div class="cause" data-c="c1">Optimizing to the wrong signal<small>Platforms learn from what tracking feeds them.</small></div>
+        <div class="cause" data-c="c3">Margin isn't in the decision<small>Revenue gets bought; profit doesn't follow.</small></div>
+        <div class="cause" data-c="c4">Stock and ads aren't connected<small>Budget chases products buyers can't get.</small></div>
+        <div class="cause" data-c="c2">No message-testing system<small>New ads, same argument.</small></div>
+        <div class="cause" data-c="c5">No agreed decision rights<small>Work is delegated, ownership isn't.</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. WHAT YOU WANT · jobs + red line ================= -->
+<section id="ch-want" aria-labelledby="j-h">
+  <div class="wrap">
+    <p class="label">What you want</p>
+    <h2 id="j-h" class="h2">Grow, Without Crossing Your Red Line.</h2>
+    <div class="jobs">
+      <div class="job"><svg class="ji ji-rewind" viewBox="0 0 84 84" aria-hidden="true">
+        <defs><linearGradient id="jGA1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9100"/><stop offset=".55" stop-color="#FF4FA0"/><stop offset="1" stop-color="#8E4BEA"/></linearGradient></defs>
+        <circle cx="42" cy="42" r="32" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="5"/>
+        <circle class="ring" cx="42" cy="42" r="32" fill="none" stroke="url(#jGA1)" stroke-width="5" stroke-linecap="round"/>
+        <g class="ticks" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".7">
+          <line x1="42" y1="16" x2="42" y2="20"/><line x1="68" y1="42" x2="64" y2="42"/><line x1="42" y1="68" x2="42" y2="64"/><line x1="16" y1="42" x2="20" y2="42"/>
+        </g>
+        <line class="hand-m" x1="42" y1="42" x2="42" y2="22" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        <line class="hand-h" x1="42" y1="42" x2="54" y2="42" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="42" cy="42" r="3.5" fill="#fff"/>
+        <path class="back" d="M9 22 l2 9 l8 -4" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg><h3>Your Time Back</h3><p>Fewer questions, better prepared ones.</p></div>
+      <div class="job"><svg class="ji ji-climb" viewBox="0 0 84 84" aria-hidden="true">
+        <defs>
+          <linearGradient id="jGA2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FF9100"/><stop offset=".5" stop-color="#FF4FA0"/><stop offset="1" stop-color="#8E4BEA"/></linearGradient>
+          <linearGradient id="jGA2a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8E4BEA" stop-opacity=".45"/><stop offset="1" stop-color="#8E4BEA" stop-opacity="0"/></linearGradient>
+        <linearGradient id="jFadeg" x1="10" y1="0" x2="72" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".78" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="jFade"><rect x="0" y="0" width="84" height="84" fill="url(#jFadeg)"/></mask></defs>
+        <g stroke="rgba(255,255,255,.12)" stroke-width="1.5"><line x1="10" y1="72" x2="76" y2="72"/><line x1="10" y1="52" x2="76" y2="52"/><line x1="10" y1="32" x2="76" y2="32"/></g>
+        <path class="area" mask="url(#jFade)" d="M10 64 L28 48 L42 56 L70 20 V72 H10 Z" fill="url(#jGA2a)"/>
+        <path class="line" d="M10 64 L28 48 L42 56 L70 20" fill="none" stroke="url(#jGA2)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="arrow" d="M58 18 H72 V32" fill="none" stroke="#8E4BEA" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle class="rider" r="5" fill="#fff"/>
+      </svg><h3>Profitable Growth</h3><p>More customers at a margin you accept.</p></div>
+      <div class="job"><svg class="ji ji-target2" viewBox="0 0 84 84" aria-hidden="true">
+        <defs><linearGradient id="jGT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9100"/><stop offset=".55" stop-color="#FF4FA0"/><stop offset="1" stop-color="#8E4BEA"/></linearGradient></defs>
+        <circle cx="42" cy="42" r="32" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="5"/>
+        <circle class="ring" cx="42" cy="42" r="32" fill="none" stroke="url(#jGT)" stroke-width="5" stroke-linecap="round"/>
+        <circle class="mid" cx="42" cy="42" r="19" fill="none" stroke="#fff" stroke-width="3" opacity=".75"/>
+        <circle class="core" cx="42" cy="42" r="7" fill="#fff"/>
+        <circle class="hit" cx="42" cy="42" r="7" fill="none" stroke="#fff" stroke-width="2"/>
+        <g class="dart">
+          <line x1="42" y1="42" x2="68" y2="16" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+          <path d="M68 16 l1 -8 M68 16 l8 -1" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        </g>
+      </svg><h3>One Number to Trust</h3><p>Decisions made on store results.</p></div>
+    </div>
+
+    <div class="redline">
+      <div class="rl-chart">
+      <p class="rl-msg visually-hidden" id="rl-msg" aria-live="polite">Room to scale profitably.</p>
+      <div class="rl-plot">
+      <span class="rl-tip" id="rl-tip" aria-hidden="true">Drag the budget</span>
+      <svg viewBox="0 0 900 340" role="img" aria-label="Illustration: return per dollar falls as spend rises; past the agreed red line, growth costs margin">
+        <defs>
+          <linearGradient id="rlg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8B5CF6" stop-opacity=".45"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient>
+          <clipPath id="rlclip"><rect id="rl-clip" x="40" y="0" width="300" height="340"/></clipPath>
+          <!-- the handle: a lilac bead, lighter on top (same as the slider) -->
+          <linearGradient id="rlBead" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D6CBFF"/><stop offset="1" stop-color="#9B7BF2"/></linearGradient>
+          <linearGradient id="rlBeadBad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC2C8"/><stop offset="1" stop-color="#F2505F"/></linearGradient>
+          <filter id="rlShadow" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity=".45"/></filter>
+        </defs>
+        <g stroke="rgba(255,255,255,.07)"><line x1="40" x2="880" y1="210" y2="210"/><line x1="40" x2="880" y1="130" y2="130"/><line x1="40" x2="880" y1="50" y2="50"/></g>
+        <path id="rl-area" clip-path="url(#rlclip)" fill="url(#rlg)"/>
+        <path id="rl-curve" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        <line x1="40" x2="880" id="rl-red" stroke="#FF5C6A" stroke-width="1.5" stroke-dasharray="7 6"/>
+        <line id="rl-v" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-dasharray="3 5"/>
+        <!-- x axis as a thin arrow, like the hero's -->
+        <path class="rl-axis" d="M40 290 H 874 M867 285 L 874 290 L 867 295"/>
+        <line class="rl-axis-on" id="rl-axis-on" x1="40" x2="40" y1="290" y2="290"/>
+        <text class="rl-axl" x="874" y="322" text-anchor="end">More spend</text>
+        <g class="rl-knob" id="rl-knob" filter="url(#rlShadow)"><circle id="rl-dot" r="13" fill="url(#rlBead)" stroke="#fff" stroke-width="3"/></g>
+      </svg>
+      <!-- Callouts beside the chart: a frame that points at what it explains -->
+      <p class="rl-note rl-note--curve" id="rl-note-curve"><b>Return per $1</b><span>falls as spend grows</span></p>
+      <p class="rl-note rl-note--red" id="rl-note-red"><b>Your red line</b><span>agreed with you</span></p>
+      </div>
+      <div class="rl-range" id="rl-range">
+        <div class="rl-track">
+          <label for="rl-slider" class="rl-note rl-note--budget">Monthly budget</label>
+          <span class="rl-tip rl-tip--drag" id="rl-drag" aria-hidden="true">Drag</span>
+          <input class="slider" id="rl-slider" type="range" min="0" max="100" value="38" aria-describedby="rl-msg">
+        </div>
+      </div>
+      <div class="rl-foot">
+        <p class="rl-foot-strong">Our success fee is capped at that line, so spend past it hurts us too.</p>
+        <p class="rl-foot-note">Illustrative curve. Your real line comes from your margins.</p>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. THE DOUBT · objections ================= -->
+<section id="ch-doubt" aria-labelledby="o-h">
+  <div class="wrap">
+    <p class="label">The doubt</p>
+    <h2 id="o-h" class="h2">You've Heard it Before.</h2>
+    <!-- Each doubt as a quote; our answer arrives under it ("typing…" first) -->
+    <div class="dbt" id="obj">
+      <div class="dbt-card">
+        <blockquote class="dbt-q"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><p>Agencies just want more of my budget.</p></blockquote>
+        <p class="dbt-a"><span class="dbt-mark" aria-hidden="true"></span><span>Our success fee is <b>capped at your profitability threshold</b>. Spend past it earns us nothing.</span></p>
+      </div>
+      <div class="dbt-card">
+        <blockquote class="dbt-q"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><p>I'll lose control of my own marketing.</p></blockquote>
+        <p class="dbt-a"><span class="dbt-mark" aria-hidden="true"></span><span><b>3 lanes, in writing</b>: yours, ours, decided together. Your accounts, your data.</span></p>
+      </div>
+      <div class="dbt-card">
+        <blockquote class="dbt-q"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><p>They'll believe whatever the platform says.</p></blockquote>
+        <p class="dbt-a"><span class="dbt-mark" aria-hidden="true"></span><span>We <b>reconcile to your store's orders</b> before we change a budget.</span></p>
+      </div>
+      <div class="dbt-card">
+        <blockquote class="dbt-q"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><p>I'll end up with a junior on my account.</p></blockquote>
+        <p class="dbt-a"><span class="dbt-mark" aria-hidden="true"></span><span><b>The people on the first call</b> are the people doing the work.</span></p>
+      </div>
+      <div class="dbt-card">
+        <blockquote class="dbt-q"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><p>It'll take months before anything happens.</p></blockquote>
+        <p class="dbt-a"><span class="dbt-mark" aria-hidden="true"></span><span>Audit first. A ranked <b>protect, stop, fix, test</b> list within the first 30 days.</span></p>
+      </div>
+      <div class="dbt-card">
+        <blockquote class="dbt-q"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><p>Another agency promising ROAS.</p></blockquote>
+        <p class="dbt-a"><span class="dbt-mark" aria-hidden="true"></span><span>We don't. <b>Nobody can honestly promise it</b> in advance.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. THE METHOD · growth chart + creative loop ================= -->
+<section id="ch-creative" aria-labelledby="cr-h">
+  <div class="wrap">
+    <p class="label">The method</p>
+    <h2 id="cr-h" class="h2">Every Creative Starts with a Buying Decision.</h2>
+    <p class="sub">We find why the right customer would choose your product, make ads that communicate that reason, and let tests and commercial evidence shape the next brief.</p>
+
+    <div class="cr-panel" id="crp-growth">
+    <div class="subhead cr-title"><h3 class="label">The Growth</h3><span></span></div>
+    <div class="gw" id="gw">
+      <div class="gw-head">
+        <h3>Most Tests Lose. The Few That Win Pay for All of Them.</h3>
+        <p class="sub">Losing tests are stopped early, while they're still cheap, and each one still teaches the next brief. Winners get the budget and keep earning. That imbalance is where the growth comes from.</p>
+      </div>
+      <div class="gw-board">
+        <!-- What is happening right now: changes as the tests play -->
+        <p class="gw-msg" id="gw-msg" aria-live="polite"></p>
+        <div class="gw-plot">
+        <svg viewBox="44 20 840 270" role="img" aria-label="Illustration: 30 tests. Most lose a little and are stopped early. 3 winners are scaled and keep earning every period after. The running total dips below break-even, then curves upward.">
+          <defs>
+            <!-- soft gradients for the bars -->
+            <linearGradient id="gwWin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8DF5C3"/><stop offset="1" stop-color="#36C287"/></linearGradient>
+            <linearGradient id="gwEarn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4ADE9B" stop-opacity=".42"/><stop offset="1" stop-color="#4ADE9B" stop-opacity=".18"/></linearGradient>
+            <linearGradient id="gwLoss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0505F"/><stop offset="1" stop-color="#FF9AA3"/></linearGradient>
+          </defs>
+          <line class="gw-zero" x1="48" x2="880" y1="190" y2="190"/>
+          <text class="gw-axl" x="48" y="180">Break-even</text>
+          <g class="gw-bars">
+            <g class="gw-b loss" data-i="0"><path d="M53.9 190 H69.9 V198.6 Q69.9 200.6 67.9 200.6 H55.9 Q53.9 200.6 53.9 198.6 Z"/></g>
+            <g class="gw-b loss" data-i="1"><path d="M81.6 190 H97.6 V196.8 Q97.6 198.8 95.6 198.8 H83.6 Q81.6 198.8 81.6 196.8 Z"/></g>
+            <g class="gw-b loss" data-i="2"><path d="M109.3 190 H125.3 V201.2 Q125.3 203.2 123.3 203.2 H111.3 Q109.3 203.2 109.3 201.2 Z"/></g>
+            <g class="gw-b loss" data-i="3"><path d="M137.1 190 H153.1 V197.7 Q153.1 199.7 151.1 199.7 H139.1 Q137.1 199.7 137.1 197.7 Z"/></g>
+            <g class="gw-b loss" data-i="4"><path d="M164.8 190 H180.8 V199.4 Q180.8 201.4 178.8 201.4 H166.8 Q164.8 201.4 164.8 199.4 Z"/></g>
+            <g class="gw-b loss" data-i="5"><path d="M192.5 190 H208.5 V196.8 Q208.5 198.8 206.5 198.8 H194.5 Q192.5 198.8 192.5 196.8 Z"/></g>
+            <g class="gw-b loss" data-i="6"><path d="M220.3 190 H236.3 V200.3 Q236.3 202.3 234.3 202.3 H222.3 Q220.3 202.3 220.3 200.3 Z"/></g>
+            <g class="gw-b loss" data-i="7"><path d="M248 190 H264 V198.6 Q264 200.6 262 200.6 H250 Q248 200.6 248 198.6 Z"/></g>
+            <g class="gw-b win" data-i="8"><path d="M275.7 190 V140.2 Q275.7 137.2 278.7 137.2 H288.7 Q291.7 137.2 291.7 140.2 V190 Z"/><text x="283.7" y="127.2" text-anchor="middle">WINNER</text></g>
+            <g class="gw-b loss" data-i="9"><path class="er" d="M303.5 190 V184.1 Q303.5 182.1 305.5 182.1 H317.5 Q319.5 182.1 319.5 184.1 V190 Z"/><path d="M303.5 190 H319.5 V197.7 Q319.5 199.7 317.5 199.7 H305.5 Q303.5 199.7 303.5 197.7 Z"/></g>
+            <g class="gw-b loss" data-i="10"><path class="er" d="M331.2 190 V184.1 Q331.2 182.1 333.2 182.1 H345.2 Q347.2 182.1 347.2 184.1 V190 Z"/><path d="M331.2 190 H347.2 V201.2 Q347.2 203.2 345.2 203.2 H333.2 Q331.2 203.2 331.2 201.2 Z"/></g>
+            <g class="gw-b loss" data-i="11"><path class="er" d="M358.9 190 V184.1 Q358.9 182.1 360.9 182.1 H372.9 Q374.9 182.1 374.9 184.1 V190 Z"/><path d="M358.9 190 H374.9 V196.8 Q374.9 198.8 372.9 198.8 H360.9 Q358.9 198.8 358.9 196.8 Z"/></g>
+            <g class="gw-b loss" data-i="12"><path class="er" d="M386.7 190 V184.1 Q386.7 182.1 388.7 182.1 H400.7 Q402.7 182.1 402.7 184.1 V190 Z"/><path d="M386.7 190 H402.7 V199.4 Q402.7 201.4 400.7 201.4 H388.7 Q386.7 201.4 386.7 199.4 Z"/></g>
+            <g class="gw-b loss" data-i="13"><path class="er" d="M414.4 190 V184.1 Q414.4 182.1 416.4 182.1 H428.4 Q430.4 182.1 430.4 184.1 V190 Z"/><path d="M414.4 190 H430.4 V198.6 Q430.4 200.6 428.4 200.6 H416.4 Q414.4 200.6 414.4 198.6 Z"/></g>
+            <g class="gw-b loss" data-i="14"><path class="er" d="M442.1 190 V184.1 Q442.1 182.1 444.1 182.1 H456.1 Q458.1 182.1 458.1 184.1 V190 Z"/><path d="M442.1 190 H458.1 V200.3 Q458.1 202.3 456.1 202.3 H444.1 Q442.1 202.3 442.1 200.3 Z"/></g>
+            <g class="gw-b loss" data-i="15"><path class="er" d="M469.9 190 V184.1 Q469.9 182.1 471.9 182.1 H483.9 Q485.9 182.1 485.9 184.1 V190 Z"/><path d="M469.9 190 H485.9 V196.8 Q485.9 198.8 483.9 198.8 H471.9 Q469.9 198.8 469.9 196.8 Z"/></g>
+            <g class="gw-b loss" data-i="16"><path class="er" d="M497.6 190 V184.1 Q497.6 182.1 499.6 182.1 H511.6 Q513.6 182.1 513.6 184.1 V190 Z"/><path d="M497.6 190 H513.6 V197.7 Q513.6 199.7 511.6 199.7 H499.6 Q497.6 199.7 497.6 197.7 Z"/></g>
+            <g class="gw-b loss" data-i="17"><path class="er" d="M525.3 190 V184.1 Q525.3 182.1 527.3 182.1 H539.3 Q541.3 182.1 541.3 184.1 V190 Z"/><path d="M525.3 190 H541.3 V199.4 Q541.3 201.4 539.3 201.4 H527.3 Q525.3 201.4 525.3 199.4 Z"/></g>
+            <g class="gw-b win" data-i="18"><path class="er" d="M553.1 182.1 H569.1 V190 H553.1 Z"/><path d="M553.1 182.1 V132.3 Q553.1 129.3 556.1 129.3 H566.1 Q569.1 129.3 569.1 132.3 V182.1 Z"/><text x="561.1" y="119.3" text-anchor="middle">WINNER</text></g>
+            <g class="gw-b loss" data-i="19"><path class="er" d="M580.8 190 V176.2 Q580.8 174.2 582.8 174.2 H594.8 Q596.8 174.2 596.8 176.2 V190 Z"/><path d="M580.8 190 H596.8 V198.6 Q596.8 200.6 594.8 200.6 H582.8 Q580.8 200.6 580.8 198.6 Z"/></g>
+            <g class="gw-b loss" data-i="20"><path class="er" d="M608.5 190 V176.2 Q608.5 174.2 610.5 174.2 H622.5 Q624.5 174.2 624.5 176.2 V190 Z"/><path d="M608.5 190 H624.5 V196.8 Q624.5 198.8 622.5 198.8 H610.5 Q608.5 198.8 608.5 196.8 Z"/></g>
+            <g class="gw-b loss" data-i="21"><path class="er" d="M636.3 190 V176.2 Q636.3 174.2 638.3 174.2 H650.3 Q652.3 174.2 652.3 176.2 V190 Z"/><path d="M636.3 190 H652.3 V201.2 Q652.3 203.2 650.3 203.2 H638.3 Q636.3 203.2 636.3 201.2 Z"/></g>
+            <g class="gw-b loss" data-i="22"><path class="er" d="M664 190 V176.2 Q664 174.2 666 174.2 H678 Q680 174.2 680 176.2 V190 Z"/><path d="M664 190 H680 V197.7 Q680 199.7 678 199.7 H666 Q664 199.7 664 197.7 Z"/></g>
+            <g class="gw-b loss" data-i="23"><path class="er" d="M691.7 190 V176.2 Q691.7 174.2 693.7 174.2 H705.7 Q707.7 174.2 707.7 176.2 V190 Z"/><path d="M691.7 190 H707.7 V199.4 Q707.7 201.4 705.7 201.4 H693.7 Q691.7 201.4 691.7 199.4 Z"/></g>
+            <g class="gw-b loss" data-i="24"><path class="er" d="M719.5 190 V176.2 Q719.5 174.2 721.5 174.2 H733.5 Q735.5 174.2 735.5 176.2 V190 Z"/><path d="M719.5 190 H735.5 V198.6 Q735.5 200.6 733.5 200.6 H721.5 Q719.5 200.6 719.5 198.6 Z"/></g>
+            <g class="gw-b win" data-i="25"><path class="er" d="M747.2 174.2 H763.2 V190 H747.2 Z"/><path d="M747.2 174.2 V124.4 Q747.2 121.4 750.2 121.4 H760.2 Q763.2 121.4 763.2 124.4 V174.2 Z"/><text x="755.2" y="111.4" text-anchor="middle">WINNER</text></g>
+            <g class="gw-b loss" data-i="26"><path class="er" d="M774.9 190 V168.2 Q774.9 166.2 776.9 166.2 H788.9 Q790.9 166.2 790.9 168.2 V190 Z"/><path d="M774.9 190 H790.9 V200.3 Q790.9 202.3 788.9 202.3 H776.9 Q774.9 202.3 774.9 200.3 Z"/></g>
+            <g class="gw-b loss" data-i="27"><path class="er" d="M802.7 190 V168.2 Q802.7 166.2 804.7 166.2 H816.7 Q818.7 166.2 818.7 168.2 V190 Z"/><path d="M802.7 190 H818.7 V196.8 Q818.7 198.8 816.7 198.8 H804.7 Q802.7 198.8 802.7 196.8 Z"/></g>
+            <g class="gw-b loss" data-i="28"><path class="er" d="M830.4 190 V168.2 Q830.4 166.2 832.4 166.2 H844.4 Q846.4 166.2 846.4 168.2 V190 Z"/><path d="M830.4 190 H846.4 V198.6 Q846.4 200.6 844.4 200.6 H832.4 Q830.4 200.6 830.4 198.6 Z"/></g>
+            <g class="gw-b loss" data-i="29"><path class="er" d="M858.1 190 V168.2 Q858.1 166.2 860.1 166.2 H872.1 Q874.1 166.2 874.1 168.2 V190 Z"/><path d="M858.1 190 H874.1 V197.7 Q874.1 199.7 872.1 199.7 H860.1 Q858.1 199.7 858.1 197.7 Z"/></g></g>
+          <path class="gw-line" id="gw-line" d=""/>
+          <circle class="gw-dot" id="gw-dot" r="6" cx="48" cy="190"/>
+        </svg>
+        <span class="rl-tip gw-total" id="gw-tag" aria-hidden="true">Total so far</span>
+        </div>
+        <!-- The control (title above the slider), then the key, last -->
+        <div class="gw-ctl">
+          <div class="gw-row">
+            <label for="gw-r" class="visually-hidden">Tests run: <span id="gw-n">30</span> of 30</label>
+            <div class="rl-track gw-track">
+              <span class="rl-tip rl-tip--drag" id="gw-drag" aria-hidden="true">30 of 30 tests</span>
+              <input class="slider gw-slider" type="range" id="gw-r" min="1" max="30" value="30" aria-describedby="gw-msg">
+            </div>
+          </div>
+          <div class="gw-legend">
+            <span><i class="l"></i>Losing test, stopped early <b id="gw-l">27</b></span>
+            <span><i class="w"></i>Winning test <b id="gw-w">3</b></span>
+            <span><i class="e"></i>Winners still earning</span>
+            <span><i class="t"></i>Total so far: <b id="gw-t">above break-even</b></span>
+            <span><i class="z"></i>Break-even</span>
+          </div>
+        </div>
+      </div>
+      <p class="gw-cap">Illustrative. Real win rates vary by brand, product and channel, and no single test is guaranteed to win. That's why losing tests are kept small.</p>
+    </div>
+    </div>
+    <div class="cr-panel" id="crp-loop">
+    <div class="subhead cr-title"><h3 class="label">The Loop</h3><span></span></div>
+    <div class="cl" id="cl">
+      <div class="cl-ring">
+        <svg viewBox="0 0 640 580" role="img" aria-label="The creative loop. Understand and Hypothesis lead into a loop of Create, Test, Measure, Learn and Next brief, which returns to Create. When an assumption breaks, Next brief returns to Hypothesis.">
+          <defs><marker id="clArr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" fill="#B8A6F5"/></marker></defs>
+          <g class="cl-paths">
+            <path class="cl-seg" id="cls-0-1" d="M92 132 L92 300"/>
+            <path class="cl-seg" id="cls-1-2" d="M92 300 L235.0 300.0"/>
+            <path class="cl-seg" id="cls-2-3" d="M235.0 300.0 A165 165 0 0 1 349.0 143.1"/>
+            <path class="cl-seg" id="cls-3-4" d="M349.0 143.1 A165 165 0 0 1 533.5 203.0"/>
+            <path class="cl-seg" id="cls-4-5" d="M533.5 203.0 A165 165 0 0 1 533.5 397.0"/>
+            <path class="cl-seg" id="cls-5-6" d="M533.5 397.0 A165 165 0 0 1 349.0 456.9"/>
+            <path class="cl-seg" id="cls-6-2" d="M349.0 456.9 A165 165 0 0 1 235.0 300.0"/>
+            <path class="cl-seg" id="cls-6-1" d="M349.0 456.9 C229.0 514.9 114 470 92 300"/></g>
+          <circle class="cl-track" cx="400" cy="300" r="165"/>
+          <circle class="cl-track2 flow" cx="400" cy="300" r="165"/>
+          <path class="cl-lead" d="M92 132 L92 300 L235.0 300.0" style="stroke-linejoin:round"/>
+          <path class="cl-lead2 flow" d="M92 132 L92 300 L235.0 300.0"/>
+          <path class="cl-back" d="M335.0 476.9 C219.0 526.9 114 470 92 334" marker-end="url(#clArr)"/>
+          <text class="cl-backlab" x="150" y="532" text-anchor="middle">WHEN AN</text><text class="cl-backlab" x="150" y="550" text-anchor="middle">ASSUMPTION BREAKS</text>
+          <text class="cl-start" x="92" y="92" text-anchor="middle">START HERE</text>
+          <circle class="cl-comet" id="cl-comet" r="7" cx="92" cy="132"/>
+          <text class="cl-lab" data-i="0" x="128.0" y="137.0" text-anchor="start">Understand</text>
+          <text class="cl-lab" data-i="1" x="92.0" y="352.0" text-anchor="middle">Hypothesis</text>
+          <text class="cl-lab" data-i="2" x="212.0" y="274.0" text-anchor="end">Create</text>
+          <text class="cl-lab" data-i="3" x="349.0" y="103.1" text-anchor="middle">Test</text>
+          <text class="cl-lab" data-i="4" x="563.5" y="208.0" text-anchor="start">Measure</text>
+          <text class="cl-lab" data-i="5" x="563.5" y="402.0" text-anchor="start">Learn</text>
+          <text class="cl-lab" data-i="6" x="349.0" y="504.9" text-anchor="middle">Next brief</text>
+          <g class="cl-node" data-i="0" transform="translate(92.0 132.0)" tabindex="0" role="button" aria-label="Step 1: Understand"><circle r="25"/><text y="5" text-anchor="middle">01</text></g>
+          <g class="cl-node" data-i="1" transform="translate(92.0 300.0)" tabindex="0" role="button" aria-label="Step 2: Hypothesis"><circle r="25"/><text y="5" text-anchor="middle">02</text></g>
+          <g class="cl-node" data-i="2" transform="translate(235.0 300.0)" tabindex="0" role="button" aria-label="Step 3: Create"><circle r="25"/><text y="5" text-anchor="middle">03</text></g>
+          <g class="cl-node" data-i="3" transform="translate(349.0 143.1)" tabindex="0" role="button" aria-label="Step 4: Test"><circle r="25"/><text y="5" text-anchor="middle">04</text></g>
+          <g class="cl-node" data-i="4" transform="translate(533.5 203.0)" tabindex="0" role="button" aria-label="Step 5: Measure"><circle r="25"/><text y="5" text-anchor="middle">05</text></g>
+          <g class="cl-node" data-i="5" transform="translate(533.5 397.0)" tabindex="0" role="button" aria-label="Step 6: Learn"><circle r="25"/><text y="5" text-anchor="middle">06</text></g>
+          <g class="cl-node" data-i="6" transform="translate(349.0 456.9)" tabindex="0" role="button" aria-label="Step 7: Next brief"><circle r="25"/><text y="5" text-anchor="middle">07</text></g>
+          <text class="cl-cn" id="cl-cn" x="400" y="282" text-anchor="middle">01 / 07</text>
+          <text class="cl-ct" id="cl-ct" x="400" y="322" text-anchor="middle">Understand</text>
+          <text class="cl-cs" x="400" y="352" text-anchor="middle">LOOP: 03 TO 07</text>
+        </svg>
+      </div>
+      <div class="cl-panel">
+        <article class="cl-step on" data-i="0"><p class="cl-k"><b>01</b> / 07 · Understand</p><h3>Understand the buying decision</h3><p class="cl-d">We start from your data and the story behind each number. Then the buyer of this exact product: what they want, what they compare it with, what makes them hesitate, how aware they already are, and what your competitors already tell them. We come back here when the product, market or season changes.</p><div class="cl-ex"><span>Example · commuter bag</span><p>Commuter bag. Buyers carry a laptop to work every day and are comparing bags. Their doubt: will my laptop actually fit?</p></div></article>
+        <article class="cl-step" data-i="1"><p class="cl-k"><b>02</b> / 07 · Hypothesis</p><h3>Write one testable reason</h3><p class="cl-d">One reason the right customer would choose this product, written down before anything is made. Big levers come first for quick wins: product focus, audiences and unit economics. Then the message, piece by piece. It gets rewritten when a test breaks it.</p><div class="cl-ex"><span>Example · commuter bag</span><p>“For commuters considering this bag, showing laptop fit and everyday organization may sell it better than a general lifestyle image.”</p></div></article>
+        <article class="cl-step" data-i="2"><p class="cl-k"><b>03</b> / 07 · Create</p><h3>Build the ad around that reason</h3><p class="cl-d">Concept, angle, hook, copy, visual, proof, offer and call to action all serve the hypothesis. Made from your product photos, footage and brand assets, with editing and AI-assisted tools. People review every asset.</p><div class="cl-ex"><span>Example · commuter bag</span><p>Proof: the laptop sliding into the bag. Hook: “Fits your laptop. And your day.”</p></div></article>
+        <article class="cl-step" data-i="3"><p class="cl-k"><b>04</b> / 07 · Test</p><h3>Ask one clear question</h3><p class="cl-d">Each test has a clear question, a fair comparison and a measurement goal, and runs until there is enough evidence to decide.</p><div class="cl-ex"><span>Example · commuter bag</span><p>Laptop fit demonstration against a general lifestyle image.</p></div></article>
+        <article class="cl-step" data-i="4"><p class="cl-k"><b>05</b> / 07 · Measure</p><h3>Judge it by the business</h3><p class="cl-d">Attention shows how people reacted. New customers, what they cost and the contribution they leave decide whether it is worth scaling. Results are read in context: timing, spend, placement, audience and the page after the click.</p><div class="cl-ex"><span>Example · commuter bag</span><p>A high click rate alone doesn't win. We check whether the clicks became new customers at a cost the margin can carry.</p></div></article>
+        <article class="cl-step" data-i="5"><p class="cl-k"><b>06</b> / 07 · Learn</p><h3>Separate a lead from proof</h3><p class="cl-d">We compare what we planned, what actually appeared in the ad and what happened. A pattern is a lead, not proof. Missing data, thin evidence and a true zero are 3 different things.</p><div class="cl-ex"><span>Example · commuter bag</span><p>If the laptop was hard to see in the ad, the hypothesis was never really tested.</p></div></article>
+        <article class="cl-step" data-i="6"><p class="cl-k"><b>07</b> / 07 · Next brief</p><h3>Feed the next brief</h3><p class="cl-d">Refine what's promising and build useful variations, then go straight back to Create. If a test broke the hypothesis, we return to step 02 and write a new one.</p><div class="cl-ex"><span>Example · commuter bag</span><p>Next: the same idea with the laptop clearly in frame, plus a new hook on organization.</p></div></article>
+        <div class="cl-nav"><button type="button" id="cl-prev" aria-label="Previous step">←</button><button type="button" id="cl-next" aria-label="Next step">→</button><span class="cl-tag">Illustrative example</span></div>
+      </div>
+    </div>
+    </div>
+
+    <div class="cl-facts">
+      <div><p class="cl-fk">Made from your materials</p><p>Product photos, footage and brand assets, plus editing and AI-assisted tools. People check every asset for product accuracy, brand fit and approved claims.</p></div>
+      <div><p class="cl-fk">Variations with a purpose</p><p>Each one asks a real question: another objection, benefit, proof, hook, composition or offer.</p></div>
+      <div><p class="cl-fk">Scoped separately</p><p>On-location shoots, creator sourcing and large productions get their own agreed scope.</p></div>
+      <div><p class="cl-fk">Upfront about limits</p><p>What we do well and what we don't, said before we start.</p></div>
+    </div>
+    <p class="mpunch cr-punch">No guesswork. Experience, skill and intuition, checked against <span class="mk">real numbers.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 13 C 50 4, 120 3, 197 9" fill="none" stroke="#F2893A" stroke-width="5" stroke-linecap="round"/></svg></span></p>
+  </div>
+</section>
+
+<!-- ================= 8. SAS LABS ================= -->
+<section id="ch-labs" aria-labelledby="lb-h">
+  <div class="wrap">
+    <p class="label">SAS Labs</p>
+    <h2 id="lb-h" class="h2">Every Creative Keeps its Reasons.</h2>
+    <p class="sub">SAS Labs is our in-house back office. It ties each ad to the brief behind it, what actually ended up in it, and what happened when it ran. Learning survives a new season or a new strategist, and you don't have to be the memory.</p>
+
+    <div class="lb" id="lb" data-l="int">
+      <div class="lb-ad">
+        <div class="lb-mock"><svg viewBox="0 0 300 375" role="img" aria-label="Illustrative ad: a commuter bag with the headline Fits your laptop. And your day.">
+            <defs><linearGradient id="lbbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1EBE2"/><stop offset="1" stop-color="#E2D8CB"/></linearGradient></defs>
+            <rect width="300" height="375" rx="18" fill="url(#lbbg)"/>
+            <text x="24" y="46" fill="#1B1D2A" style="font:800 24px var(--display)">Fits your laptop.</text>
+            <text x="24" y="76" fill="#1B1D2A" style="font:800 24px var(--display)">And your day.</text>
+            <ellipse cx="146" cy="300" rx="104" ry="12" fill="rgba(0,0,0,.12)"/>
+            <rect x="96" y="150" width="104" height="10" rx="3" fill="#C9CCD3"/>
+            <path d="M104 166 C 104 120, 188 120, 188 166" fill="none" stroke="#2B2F3A" stroke-width="7" stroke-linecap="round"/>
+            <rect x="62" y="158" width="168" height="136" rx="18" fill="#2B2F3A"/>
+            <rect x="62" y="158" width="168" height="22" rx="10" fill="#353A47"/>
+            <rect x="128" y="210" width="36" height="8" rx="4" fill="#4A5060"/>
+            <rect x="238" y="246" width="30" height="40" rx="5" fill="#FFFFFF"/>
+            <rect x="238" y="240" width="30" height="9" rx="3" fill="#7A5A44"/>
+            <rect x="24" y="320" width="118" height="34" rx="17" fill="#1B1D2A"/>
+            <text x="83" y="342" text-anchor="middle" fill="#fff" style="font:700 13px var(--display)">Shop the bag</text>
+          </svg>
+          <span class="lb-pin p-int" style="left:22%;top:62%">1</span>
+          <span class="lb-pin p-int" style="left:64%;top:40%">2</span>
+          <span class="lb-pin p-int" style="left:80%;top:9%">3</span>
+          <span class="lb-pin p-int" style="left:52%;top:91%">4</span>
+          <span class="lb-pin p-obs" style="left:22%;top:62%">1</span>
+          <span class="lb-pin p-obs warn" style="left:64%;top:40%">2</span>
+          <span class="lb-pin p-obs" style="left:80%;top:9%">3</span>
+          <span class="lb-pin p-obs new" style="left:92%;top:60%">5</span><div class="lb-ran"><b>Ran</b><span>Placement, dates and spend logged</span></div></div>
+        <p class="lb-cap">Illustrative example. Automated tagging starts with static images.</p>
+      </div>
+      <div class="lb-side">
+        <div class="bigtoggle lb-tog" role="group" aria-label="Show layer">
+          <button type="button" data-l="int" aria-pressed="true">Intended</button><button type="button" data-l="obs" aria-pressed="false">Observed</button><button type="button" data-l="mea" aria-pressed="false">Measured</button>
+        </div>
+        <div class="lb-layer" data-l="int">
+          <p class="lb-lk">In the brief</p>
+          <ol class="lb-list">
+            <li><i>1</i><span><b>Product</b> Commuter bag</span></li>
+            <li><i>2</i><span><b>Proof</b> Show the laptop fitting inside</span></li>
+            <li><i>3</i><span><b>Hook</b> Fits your laptop. And your day.</span></li>
+            <li><i>4</i><span><b>Call to action</b> Shop the bag</span></li>
+          </ol>
+          <p class="lb-more"><b>Customer</b> daily laptop commuters · <b>Awareness</b> comparing bags · <b>Hypothesis</b> laptop fit beats a lifestyle shot</p>
+        </div>
+        <div class="lb-layer" data-l="obs">
+          <p class="lb-lk">In the finished ad</p>
+          <ol class="lb-list">
+            <li class="ok"><i>1</i><span><b>Matches</b> Bag shown, three-quarter view</span></li>
+            <li class="warn"><i>2</i><span><b>Unclear</b> Laptop barely visible. The requested proof didn't land.</span></li>
+            <li class="ok"><i>3</i><span><b>Matches</b> Headline is the planned hook</span></li>
+            <li class="new"><i>5</i><span><b>Not planned</b> Coffee cup in frame. Worth a look.</span></li>
+          </ol>
+        </div>
+        <div class="lb-layer" data-l="mea">
+          <p class="lb-lk">When it ran</p>
+          <ul class="lb-list lb-m">
+            <li><span><b>Attention</b> How people reacted. Diagnostic only.</span></li>
+            <li><span><b>New customers</b> And what each one cost</span></li>
+            <li><span><b>Contribution</b> After product, discount, returns and ad cost</span></li>
+            <li><span><b>Evidence</b> Enough to decide, too thin, or missing</span></li>
+          </ul>
+          <div class="lb-verdict"><b>Verdict</b> The laptop proof never showed clearly, so the hypothesis is still open. <b>Next brief:</b> retest it with the laptop in frame.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lb-goals">
+      <p class="lb-gk">What it all answers to</p>
+      <div class="lb-grid">
+        <div><b>New-customer cost</b><span>Cost per real new customer, with the cost basis defined</span></div>
+        <div><b>Contribution</b><span>After product cost, discounts, returns, fulfillment, fees and ads</span></div>
+        <div><b>ROAS and MER</b><span>Read alongside margin and customer mix</span></div>
+        <div><b>Customer value</b><span>Repeat buying, where order data allows</span></div>
+        <div><b>Payback</b><span>How fast a customer earns back what they cost</span></div>
+      </div>
+      <p class="lb-note">The goals the method works toward, not promised results. What we can track depends on each client's data.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 9. THE PROOF · cases ================= -->
+<section id="ch-proof" aria-labelledby="p-h">
+  <div class="wrap">
+    <p class="label">The proof</p>
+    <h2 id="p-h" class="h2">We Check Before We Change.</h2>
+    <p class="sub">3 published cases, anonymized with client approval. Each one says what the data did not prove.</p>
+    <div class="specs">
+      <article class="board pv spec">
+        <p class="label label--violet">Meta · platform alert</p>
+        <h3>A rep said ROAS was falling.</h3>
+        <svg viewBox="0 0 520 240" role="img" aria-label="Account-wide purchase ROAS rose from 2.28 to 3.64 between August 15 and 21">
+            <g stroke="rgba(255,255,255,.07)"><line x1="40" x2="500" y1="200" y2="200"/><line x1="40" x2="500" y1="155" y2="155"/><line x1="40" x2="500" y1="110" y2="110"/><line x1="40" x2="500" y1="65" y2="65"/><line x1="40" x2="500" y1="20" y2="20"/></g>
+            <text x="32" y="204" text-anchor="end">0</text><text x="32" y="159" text-anchor="end">1</text><text x="32" y="114" text-anchor="end">2</text><text x="32" y="69" text-anchor="end">3</text><text x="32" y="24" text-anchor="end">4</text>
+            <line class="draw" x1="120" y1="97.4" x2="420" y2="36.2" stroke="url(#g1)" stroke-width="4.5" stroke-linecap="round"/>
+            <circle cx="120" cy="97.4" r="7" fill="#E1569B"/><circle cx="420" cy="36.2" r="8" fill="#F2893A"/>
+            <text x="120" y="124" text-anchor="middle" style="fill:#fff;font-size:20px;font-weight:700">2.28</text>
+            <text x="420" y="64" text-anchor="middle" style="fill:#fff;font-size:21px;font-weight:700">3.64</text>
+            <text x="120" y="226" text-anchor="middle">AUG 15</text><text x="420" y="226" text-anchor="middle">AUG 21</text>
+          </svg>
+        <dl class="what"><dt>Found</dt><dd>Account spend up about 10%, purchase ROAS up from 2.28 to 3.64. Store sales up 38% year over year.</dd><dt>Not proved</dt><dd>That the alert was wrong, or that Meta caused the growth.</dd></dl>
+        <a href="https://shoppingadssolutions.com/meta-roas-alert-later-account-point/">Read the case</a>
+      </article>
+      <article class="board pv spec">
+        <p class="label label--violet">Google Ads · solar lighting</p>
+        <h3>More spend, less revenue.</h3>
+        <svg viewBox="0 0 580 240" role="img" aria-label="Branded clicks fell from about 982 to 190 while generic clicks rose from about 650 to 1,185">
+            <g stroke="rgba(255,255,255,.07)"><line x1="40" x2="500" y1="200" y2="200"/><line x1="40" x2="500" y1="140" y2="140"/><line x1="40" x2="500" y1="80" y2="80"/><line x1="40" x2="500" y1="20" y2="20"/></g>
+            <text x="32" y="204" text-anchor="end">0</text><text x="32" y="144" text-anchor="end">400</text><text x="32" y="84" text-anchor="end">800</text><text x="32" y="24" text-anchor="end">1.2K</text>
+            <line class="draw" x1="120" y1="102.5" x2="420" y2="22.3" stroke="#8B5CF6" stroke-width="3.5" stroke-linecap="round"/>
+            <line class="draw" x1="120" y1="52.7" x2="420" y2="171.5" stroke="#F2893A" stroke-width="4.5" stroke-linecap="round"/>
+            <circle cx="120" cy="102.5" r="6" fill="#8B5CF6"/><circle cx="420" cy="22.3" r="6" fill="#8B5CF6"/><circle cx="120" cy="52.7" r="7" fill="#F2893A"/><circle cx="420" cy="171.5" r="7" fill="#F2893A"/>
+            <text x="106" y="57" text-anchor="end" style="fill:#F7A06A;font-size:18px;font-weight:700">982</text><text x="106" y="107" text-anchor="end" style="fill:#B8A6F5;font-size:18px;font-weight:700">650</text>
+            <text x="432" y="176" style="fill:#F7A06A;font-size:18px;font-weight:700">190 branded</text><text x="432" y="27" style="fill:#B8A6F5;font-size:18px;font-weight:700">1,185 generic</text>
+            <text x="120" y="226" text-anchor="middle">2025</text><text x="420" y="226" text-anchor="middle">2026</text>
+          </svg>
+        <dl class="what"><dt>Found</dt><dd>Spend nearly doubled, store net sales fell about 10%. Orders above $1,000 fell from 8 to 3.</dd><dt>Not proved</dt><dd>A single cause. It changed what we tested first.</dd></dl>
+        <a href="https://shoppingadssolutions.com/more-google-ads-spend-less-revenue/">Read the case</a>
+      </article>
+      <article class="board pv spec">
+        <p class="label label--violet">Google Shopping · swimwear</p>
+        <h3>Best sizes sold out. Ads kept running.</h3>
+        <svg viewBox="0 0 520 240" role="img" aria-label="Illustrative: if sizes M and L carried 70 percent of demand and sold out, 30 percent stays covered">
+            <text x="20" y="40" style="fill:#fff;font-size:19px;font-weight:700">Share of historical demand</text>
+            <rect x="20" y="64" width="480" height="70" rx="14" fill="rgba(255,255,255,.05)"/>
+            <rect x="20" y="64" width="332" height="70" rx="14" fill="#F2893A" fill-opacity=".15" stroke="#F2893A" stroke-width="2" stroke-dasharray="7 6"/>
+            <rect x="358" y="64" width="142" height="70" rx="14" fill="#8B5CF6"/>
+            <text x="186" y="105" text-anchor="middle" style="fill:#F7A06A;font-size:17px;font-weight:700">M + L · 70% · sold out</text>
+            <text x="429" y="105" text-anchor="middle" style="fill:#fff;font-size:17px;font-weight:700">30%</text>
+            <text x="20" y="172">FEED STILL SAYS "IN STOCK": XS · S · XL</text>
+            <text class="ill-note" x="20" y="226">Illustrative model from the case.</text>
+          </svg>
+        <dl class="what"><dt>We run</dt><dd>A rule that pulls a design from ads once its important sizes are gone.</dd><dt>Not proved</dt><dd>A measured lift. The account view is context only.</dd></dl>
+        <a href="https://shoppingadssolutions.com/google-ads-out-of-stock-sizes-fashion/">Read the case</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10. THE FIT · checklist + meter ================= -->
+<section id="ch-fit" aria-labelledby="f-h">
+  <div class="wrap">
+    <p class="label">The partnership</p>
+    <h2 id="f-h" class="h2">Is This a Fit? Be Honest. We Will Be.</h2>
+    <p class="sub">We work with a small number of brands, and we're paid partly on results. That only works with owners who see it the same way.</p>
+    <div class="fit">
+      <div class="checks" id="checks">
+        <label class="ck"><input type="checkbox"><span class="box" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#111320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Paid ads are already a real line in my P&amp;L.</label>
+        <label class="ck"><input type="checkbox"><span class="box" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#111320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>I know my margins, or I want to.</label>
+        <label class="ck"><input type="checkbox"><span class="box" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#111320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>I want a partner with a stake in the result, not hours.</label>
+        <label class="ck"><input type="checkbox"><span class="box" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#111320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>I'll invest in a paid audit before a long contract.</label>
+        <label class="ck"><input type="checkbox"><span class="box" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#111320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>I can share access to ads, analytics and store data.</label>
+        <label class="ck"><input type="checkbox"><span class="box" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#111320" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>I'll make the decisions that are mine, on time.</label>
+      </div>
+      <div class="board meter">
+        <svg viewBox="0 0 240 150" role="img" aria-labelledby="verdict">
+          <defs><linearGradient id="mg" x1="0" x2="1"><stop offset="0" stop-color="#E1569B"/><stop offset="1" stop-color="#4ADE9B"/></linearGradient></defs>
+          <path d="M20 130 A 100 100 0 0 1 220 130" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="16" stroke-linecap="round"/>
+          <path id="arc" d="M20 130 A 100 100 0 0 1 220 130" fill="none" stroke="url(#mg)" stroke-width="16" stroke-linecap="round" stroke-dasharray="314.2" stroke-dashoffset="314.2" style="transition:stroke-dashoffset .6s ease"/>
+          <text id="score" x="120" y="122" text-anchor="middle" style="fill:#fff;font-family:var(--display);font-size:38px;font-weight:800">0/6</text>
+        </svg>
+        <p class="verdict" id="verdict">Tick what's true.</p>
+        <p class="why" id="why">There are no wrong answers. Some just mean "not yet".</p>
+        <div class="notfit">
+          <span class="label label--bad">Probably not a fit if you want</span>
+          <p>The cheapest option on the market</p>
+          <p>Guaranteed ROAS before we've seen the data</p>
+          <p>A free audit first</p>
+          <p>Hands to execute, without judgment</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11. FIRST STEP · timeline ================= -->
+<section id="ch-start" aria-labelledby="h-h">
+  <div class="wrap">
+    <p class="label">The first step</p>
+    <h2 id="h-h" class="h2">Audit First.<br>Then We Earn the Rest.</h2>
+    <div class="tl" id="tl">
+      <div class="tl-ph" aria-hidden="true"><span class="p1">Before you commit</span><span class="pg"></span><span class="p2">Working together</span></div>
+      <ol class="tl-row">
+        <li class="tl-fillwrap" aria-hidden="true"><i class="tl-fill"></i></li>
+        <li class="tl-i c-call"><span class="tl-mph">Before you commit</span><div class="tl-tr" aria-hidden="true"><i class="dot"></i></div><span class="when">Week 0</span><h3>Scoping call</h3><p>Agree what the audit covers and its fee.</p></li>
+        <li class="tl-i c-audit"><div class="tl-tr" aria-hidden="true"><i class="bar"></i></div><span class="when">Paid</span><h3>Deep-dive audit</h3><p>Ads beside store, stock and orders. Credited if we continue.</p></li>
+        <li class="tl-i c-gate"><div class="tl-tr" aria-hidden="true"><i class="gate"></i></div><span class="when">Decision</span><h3>You decide</h3><p>Continue, or stop here.</p></li>
+        <li class="tl-i c-trk"><span class="tl-mph v">Working together</span><div class="tl-tr" aria-hidden="true"><i class="bar"></i></div><span class="when">If we continue</span><h3>Tracking validation</h3><p>Confirm the numbers can be trusted.</p></li>
+        <li class="tl-i c-base"><div class="tl-tr" aria-hidden="true"><i class="bar"></i></div><span class="when">Days 1 to 30</span><h3>Baseline</h3><p>Protect, stop, fix, test.</p></li>
+        <li class="tl-i c-on"><div class="tl-tr" aria-hidden="true"><i class="ticks"><b class="wk"></b><b class="bw"></b></i></div><span class="when">Ongoing</span><h3>Weekly, then biweekly</h3><p>Decisions, owners, blockers.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 12. THE PEOPLE ================= -->
+<section id="ch-people" aria-labelledby="m-h">
+  <div class="wrap">
+    <p class="label">The people</p>
+    <h2 id="m-h" class="h2">The People on the Call Do the Work.</h2>
+    <div class="people">
+      <figure class="p p--lead">
+          <img src="assets/team/cutout/michael.png" alt="Michael Chachashvili" width="560" height="700" loading="lazy" decoding="async"><h3>Michael</h3><span>Founder · Acquisition</span></figure>
+      <figure class="p">
+          <img src="assets/team/cutout/larisa.png" alt="Larisa" width="560" height="700" loading="lazy" decoding="async"><h3>Larisa</h3><span>Creative strategy</span></figure>
+      <figure class="p">
+          <img src="assets/team/cutout/chyrine.png" alt="Chyrine" width="560" height="700" loading="lazy" decoding="async"><h3>Chyrine</h3><span>Creative</span></figure>
+      <figure class="p">
+          <img src="assets/team/cutout/irena.png" alt="Irena" width="560" height="700" loading="lazy" decoding="async"><h3>Irena</h3><span>Retention</span></figure>
+    </div>
+    <div class="quotes">
+      <figure class="qt"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><blockquote>Their service saved me valuable time and made my work far more efficient.</blockquote><figcaption><b>Gad Swed</b><span>Owner, Sahara</span></figcaption></figure>
+      <figure class="qt"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><blockquote>I felt he was a real partner in my business, in how much he cared.</blockquote><figcaption><b>Ariyeh Even Haim</b><span>FeelBach</span></figcaption></figure>
+      <figure class="qt"><svg class="dbt-qm" viewBox="0 0 28 20" aria-hidden="true"><path d="M7.5 20C3.6 20 1 17.2 1 13.4 1 7.4 5.2 2.2 11.2.4l1 2.2C9 4 7.2 6.2 6.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S11 20 7.5 20ZM21.5 20c-3.9 0-6.5-2.8-6.5-6.6 0-6 4.2-11.2 10.2-13l1 2.2C23 4 21.2 6.2 20.8 8.6c.4-.1.9-.2 1.4-.2 3.2 0 5.6 2.4 5.6 5.6S25 20 21.5 20Z"/></svg><blockquote>Michel was consistently available, dedicated, and extremely professional.</blockquote><figcaption><b>Guy Bar</b><span>HYGEAR</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 13. CLOSE · audit form ================= -->
+<section class="close" id="start" aria-labelledby="c-h">
+  <div class="wrap close-grid">
+    <div class="close-col">
+      <p class="label label--on-brand">Deep-dive growth audit</p>
+      <h2 id="c-h">See Your Whole System Before You Change it.</h2>
+      <p class="sub">A short scoping call, then a paid audit of your ads, tracking, stock and orders. Credited toward the contract if we continue.</p>
+      <div class="partners partners--close is-logos-only">
+        <p class="label label--on-brand">Official partners:</p>
+        <div class="prow">
+          <span class="pb light" title="Meta Business Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/meta.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">Meta</span></span><span class="pb__type">Business Partner</span></span>
+          <span class="pb light" title="Google Ads Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/googleads.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">Google Ads</span></span><span class="pb__type">Partner</span></span>
+          <span class="pb light" title="TikTok Ads Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/tiktok.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">TikTok</span></span><span class="pb__type">Ads Partner</span></span>
+          <span class="pb light" title="Shopify Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/shopify.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">Shopify</span></span><span class="pb__type">Partner</span></span>
+          <span class="pb light" title="Loox Partner"><span class="pb__brand pb__brand--word">loox</span><span class="pb__type">Partner</span></span>
+          <span class="pb light" title="WordPress Partner"><span class="pb__brand"><img class="pb__mark" src="https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/wordpress.svg" alt="" width="20" height="20" loading="lazy"><span class="pb__name">WordPress</span></span><span class="pb__type">Partner</span></span></div>
+      </div>
+    </div>
+    <div class="close-col">
+      <form class="form" id="form" novalidate aria-describedby="f-msg">
+        <label for="f-n">Your name<input id="f-n" name="name" type="text" autocomplete="name" required aria-required="true"></label>
+        <label for="f-e">Work email<input id="f-e" name="email" type="email" autocomplete="email" required aria-required="true"></label>
+        <label for="f-s">Store website<input id="f-s" name="website" type="url" inputmode="url" autocomplete="url" placeholder="https://"></label>
+        <label for="f-b">Monthly ad spend<select id="f-b" name="spend"><option>Under $10K</option><option>$10K to $50K</option><option>$50K to $150K</option><option>Over $150K</option><option>Prefer not to say</option></select></label>
+        <label class="full ckp" for="f-p"><input id="f-p" name="privacy" type="checkbox" required aria-required="true"><span>I agree to the <a href="https://shoppingadssolutions.com/privacy-policy/">privacy policy</a>.</span></label>
+        <div class="full"><button class="btn" type="submit">Book the scoping call</button><p class="small" id="f-msg" role="status" aria-live="polite">A calendar opens after you send.</p></div>
+      </form>
+      <div class="thanks" id="thanks" tabindex="-1" hidden><p class="label label--ink">Received</p><h3>Thanks. Pick a time.</h3><p>On the live page the calendar opens here. We'll ask for account access only after you approve the audit scope.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <span>© Shopping Ads Solutions</span>
+    <span><a href="mailto:michael@shoppingadssolutions.com">michael@shoppingadssolutions.com</a> · <a href="https://shoppingadssolutions.com/he/" lang="he" hreflang="he">עברית</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
