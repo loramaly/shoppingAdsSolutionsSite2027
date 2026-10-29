@@ -227,12 +227,7 @@
 
 /* Hero copy has two versions: the long one for large screens, a shorter
    one for phones and small tablets (≤ 900px). Only one is ever displayed. */
-.hero-narrow { display: none; }
-
-@media (max-width: 900px) {
-  .hero-wide { display: none; }
-  .hero-narrow { display: block; }
-}
+.hero-wide { display: none; }   /* retired: the short copy now shows on all screens */
 
 /* Step points: short list with small ring bullets (instead of chips) */
 .step-points {
@@ -3796,3 +3791,188 @@
 .meter svg { width: min(400px, 100%); }
 .meter .verdict { margin-top: 14px; font-size: 32px; }
 .meter .why { font-size: 18px; }
+
+/* One note for everything illustrative on the page (replaces the separate
+   "Illustrative…" lines under the charts, the loop, SAS Labs and the cases) */
+.site-footer { border-top: 1px solid var(--line); }   /* a line between the page and the footer */
+
+/* One short, quiet line; the full note opens on "Read more" */
+.site-footer__note {
+  flex-basis: 100%;
+  max-width: 900px;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: .02em;
+  color: #fff;
+  opacity: .6;
+}
+.site-footer__note summary { cursor: pointer; list-style: none; }
+.site-footer__note summary::-webkit-details-marker { display: none; }
+.site-footer__note summary span { margin-left: 6px; text-decoration: underline; text-underline-offset: 3px; }
+.site-footer__note[open] summary span { display: none; }
+.site-footer__note p { margin-top: 6px; }
+
+/* The pain, v2: bigger symptoms on the left (1.5×), causes are titles only
+   (their small lines are gone), and every possible link is a coloured
+   dashed line that keeps running towards the causes. */
+.tree { grid-template-columns: minmax(0, 470px) minmax(48px, 260px) minmax(0, 380px); }
+.sym { padding: 16px 20px; font-size: clamp(19px, 1.1vw + 6px, 25px); line-height: 1.3; }
+.cause { font-size: 18px; }
+.links path.base {
+  stroke: rgba(184, 166, 245, .5);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 6;
+  animation: linkRun 1.2s linear infinite;
+}
+@keyframes linkRun { to { stroke-dashoffset: -20; } }
+@media (prefers-reduced-motion: reduce) { .links path.base { animation: none; } }
+@media (max-width: 767px) {
+  .sym { font-size: 19px; }
+}
+
+/* ==========================================================================
+   PINNED BLOCKS (What Changes, The Method) — like the hero: the block stays
+   on screen while you scroll and its steps change in place (text left,
+   picture right, same half / half split as the hero). sections.js sets
+   .on on the current step from the scroll position. Small screens: the
+   steps simply stack, nothing is pinned.
+   ========================================================================== */
+.pin-sec { padding-block: 0; }
+
+@media (min-width: 1024px) {
+  .spin { position: relative; height: calc(var(--n) * 85vh + 100vh - var(--header-h)); }
+  .pin-stage {
+    position: sticky;
+    top: var(--header-h);
+    display: flex;
+    align-items: center;
+    height: calc(100vh - var(--header-h));
+    overflow: hidden;
+  }
+  .pin-in { width: 100%; }
+
+  .pin-items { display: grid; margin-top: clamp(28px, 4vh, 48px); }
+  .pin-item {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    transition: opacity .5s cubic-bezier(.23, 1, .32, 1), transform .5s cubic-bezier(.23, 1, .32, 1), visibility 0s linear .5s;
+  }
+  .pin-item.on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+
+  /* progress: one dot per step */
+  .pin-dots { display: flex; gap: 8px; margin-top: clamp(20px, 3vh, 36px); }
+  .pin-dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, .25); transition: background .3s ease, width .3s ease; }
+  .pin-dots i.on { width: 24px; border-radius: 4px; background: #fff; }
+}
+
+@media (max-width: 1023px) {
+  .pin-sec { padding-block: clamp(56px, 8vw, 96px); }
+  .pin-items { display: grid; gap: 56px; margin-top: 32px; }
+  .pin-dots { display: none; }
+}
+
+/* ---- What Changes: text left, before / with SAS pictures right ---- */
+.pin-item:has(.pin-text) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: clamp(32px, 4vw, 72px); align-items: center; }
+.pin-text h3 { margin-top: 18px; font-size: clamp(26px, 1.6vw + 8px, 36px); line-height: 1.2; font-weight: 500; }
+.pin-text .chg-cat { margin: 0; padding: 0; border: 0; }
+.pin-ba { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px 20px; align-items: baseline; margin-top: 28px; }
+.pin-ba .cmp-k { white-space: nowrap; }
+.pin-ba .is-b { color: rgba(255, 255, 255, .6); }
+.pin-ba .is-w { color: var(--green); }
+.pin-bt { font-size: clamp(17px, 1.2vw + 2px, 20px); line-height: 1.45; color: #fff; }
+.pin-vis.cmp { margin-top: 0; align-items: start; }
+.pin-vis .cmp-v { max-width: none; padding-top: 14px; }
+.pin-vis .cmp-v--own { max-width: none; }
+.pin-vis .chg-key { grid-column: 1 / -1; }
+/* the pictures draw in each time their topic comes up */
+.pin-item .draw { animation: none; }
+.pin-item.on .draw { animation: draw 1.4s ease .15s forwards; }
+
+@media (max-width: 1023px) {
+  .pin-item:has(.pin-text) { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
+  .pin-item .draw { animation: draw 1.4s ease forwards; }
+}
+
+/* ---- The Method: the title on top, 01 / 02 change below it ---- */
+.spin--method .pin-head .h2 { max-width: none; }
+.spin--method .pin-head .sub { max-width: 640px; }
+
+/* 01: title + text left, the chart right, without its frame, smaller */
+.pin-item--growth .gw { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); column-gap: clamp(32px, 4vw, 72px); align-items: center; margin: 0; }
+.pin-item--growth .gw-head { margin: 0; }
+.pin-item--growth .gw-board { margin: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.pin-item--growth .gw-msg { font-size: clamp(17px, .8vw + 10px, 22px); min-height: 2.6em; }
+
+/* 02: the title, then the explanation left and the loop right */
+.pin-item--loop .cl { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); margin-top: clamp(16px, 2.5vh, 32px); }
+.pin-item--loop .cl-side { order: -1; }
+.pin-item--loop .cl-ring svg { max-height: 52vh; }
+
+@media (min-width: 1024px) {
+  .spin--method .pin-head .h2 { font-size: clamp(30px, 2.2vw + 8px, 42px); }
+  .spin--method .gw-head h3 { font-size: clamp(26px, 1.8vw + 8px, 38px) !important; }
+}
+
+@media (max-width: 1023px) {
+  .pin-item--growth .gw,
+  .pin-item--loop .cl { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
+  .pin-item--loop .cl-side { order: 0; }
+}
+
+.cr-punch { margin-top: clamp(40px, 6vw, 80px); padding-bottom: clamp(56px, 8vw, 120px); }
+
+/* Hero: a small rocket right after "Grew.", flying up and to the right with
+   a flickering flame; sized to the headline, sitting a little high */
+.rocket {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: -.06em;              /* tight to "Grew" so it reads as taking off from the word */
+  vertical-align: .08em;
+  animation: rkFly 2.6s ease-in-out infinite;
+}
+.rocket svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.rk-flame { transform-box: fill-box; transform-origin: 50% 0; animation: rkFlame .18s ease-in-out infinite alternate; }
+.rk-flame--in { animation-duration: .13s; }
+
+@keyframes rkFly {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(3px, -5px); }
+}
+@keyframes rkFlame {
+  from { transform: scaleY(.78); opacity: .85; }
+  to   { transform: scaleY(1.12); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rocket, .rk-flame { animation: none; }
+}
+
+/* What Changes, text side: the same eyebrow + title as the hero steps
+   ("02. The ceiling" / "Your Team Has a Ceiling."); the before / with SAS
+   sentences live under their pictures only (they were said twice) */
+.pin-text .chg-cat { opacity: 1; font-size: 14px; font-weight: 400; letter-spacing: .14em; }
+.pin-text h3 {
+  margin-top: 14px;
+  max-width: 16ch;
+  font-size: clamp(30px, 2.6vw + 8px, 46px);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+.pin-vis .cmp-t { min-height: 2.8em; }
+@media (max-width: 767px) {
+  .pin-text h3 { margin-top: 6px; font-size: 31px; font-weight: 700; }
+}
+
+/* Hero lead: the short copy on every screen; "We handle…" a touch heavier */
+.s0 .body--lead.hero-narrow:not(.body--lead-next) { font-weight: 600; }
+/* Hero lead +10% (desktop 28 → 31, phone 21 → 23) */
+.s0 .body--lead.hero-narrow { font-size: clamp(24px, 1.2vw + 12px, 31px); }
+@media (max-width: 767px) { .s0 .body--lead.hero-narrow { font-size: 23px; } }
+/* Hero trust facts (stars, $300M+) +10%: desktop 17 → 19, phones 16 → 18 */
+.s0 .trustline { font-size: 18px; }
+@media (min-width: 901px) { .s0 .trustline { font-size: 19px; } }

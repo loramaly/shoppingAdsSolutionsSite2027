@@ -104,6 +104,49 @@
 
 
   /* ==========================================================================
+     PINNED BLOCKS · What Changes, The Method
+     The block stays on screen (CSS sticky) while the page scrolls through
+     its tall wrapper; the scroll position picks the step that is shown.
+     ========================================================================== */
+  (function pins() {
+    var pins = $$('.spin');            // (not .pin: that is the map's location pins)
+    if (!pins.length) return;
+    var wideMQ = window.matchMedia('(min-width: 1024px)');
+
+    pins.forEach(function (pin) {
+      var items = $$('.pin-item', pin);
+      var dots = $$('.pin-dots i', pin);
+      var current = -1;
+
+      function show(k) {
+        if (k === current) return;
+        current = k;
+        items.forEach(function (it, n) { it.classList.toggle('on', n === k); });
+        dots.forEach(function (d, n) { d.classList.toggle('on', n === k); });
+      }
+
+      function update() {
+        if (!wideMQ.matches) { items.forEach(function (it) { it.classList.add('on'); }); current = -1; return; }
+        var r = pin.getBoundingClientRect();
+        var stage = $('.pin-stage', pin);
+        var travel = pin.offsetHeight - stage.offsetHeight;
+        var p = travel > 0 ? Math.min(.9999, Math.max(0, -r.top / travel)) : 0;
+        show(Math.floor(p * items.length));
+      }
+
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { ticking = false; update(); });
+      }, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    });
+  })();
+
+
+  /* ==========================================================================
      4. THE PAIN · symptoms linked to their causes
      ========================================================================== */
   (function symptomTree() {
@@ -121,7 +164,7 @@
     var NS = 'http://www.w3.org/2000/svg';
     var symptoms = $$('.sym', tree);
     var causes = $$('.cause', tree);
-    var active = 's1';
+    var active = null;               // nothing chosen at first; the cycle picks the first one
     var auto = !reduceMotion;
 
     function wide() { return window.innerWidth >= 768; }
@@ -217,7 +260,7 @@
     function paint(animate) {
       timers.forEach(clearTimeout);
       timers = [];
-      var on = CAUSES_OF[active];
+      var on = CAUSES_OF[active] || [];
       var still = animate === false || reduceMotion || !links.length;
 
       symptoms.forEach(function (s) {
@@ -311,13 +354,15 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawLinks);
 
     // Cycle through the symptoms until the visitor takes over
-    var order = ['s1', 's2', 's3', 's4', 's5'], i = 0;
-    setInterval(function () {
+    var order = ['s1', 's2', 's3', 's4', 's5'], i = -1;
+    function step() {
       if (!auto || !wide()) return;  // phones: nothing plays on its own
       i = (i + 1) % order.length;
       active = order[i];
       paint(true);
-    }, 3200);
+    }
+    setTimeout(step, 1200);          // the first symptom lights up on its own, then they cycle
+    setInterval(step, 3200);
   })();
 
 
